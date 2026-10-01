@@ -204,24 +204,188 @@
 
   .roulette-box{
     position:relative;
-    height:80px;
+    height:112px;
     overflow:hidden;
-    border-radius:18px;
-    border:1px solid var(--line);
-    background:#0d1830;
+    border-radius:24px;
+    border:1px solid #2d4477;
+    background:
+      radial-gradient(circle at 50% -15%, rgba(130,170,255,.28), rgba(130,170,255,0) 40%),
+      linear-gradient(180deg,#122247 0%,#0d1a37 46%,#0a1226 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.06),
+      0 16px 36px rgba(0,0,0,.28);
     margin-bottom:16px;
   }
+  .roulette-box::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      linear-gradient(90deg,rgba(255,255,255,.03),rgba(255,255,255,0) 16%,rgba(255,255,255,0) 84%,rgba(255,255,255,.03)),
+      repeating-linear-gradient(180deg,rgba(255,255,255,.025) 0 2px,transparent 2px 7px);
+    pointer-events:none;
+    z-index:1;
+  }
+  .roulette-focus{
+    position:absolute;
+    left:10px;
+    right:10px;
+    top:50%;
+    height:80px;
+    transform:translateY(-50%);
+    border-radius:20px;
+    border:2px solid rgba(124,165,255,.66);
+    background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.02));
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.05) inset,
+      0 0 18px rgba(92,134,232,.22),
+      inset 0 18px 24px rgba(255,255,255,.035),
+      inset 0 -12px 22px rgba(0,0,0,.16);
+    z-index:3;
+    pointer-events:none;
+  }
+  .roulette-pointer{
+    position:absolute;
+    top:50%;
+    width:0;
+    height:0;
+    transform:translateY(-50%);
+    z-index:4;
+    filter:drop-shadow(0 0 10px rgba(255,214,120,.38));
+    pointer-events:none;
+  }
+  .roulette-pointer.left{
+    left:12px;
+    border-top:12px solid transparent;
+    border-bottom:12px solid transparent;
+    border-left:18px solid #ffd36b;
+  }
+  .roulette-pointer.right{
+    right:12px;
+    border-top:12px solid transparent;
+    border-bottom:12px solid transparent;
+    border-right:18px solid #ffd36b;
+  }
   .roulette-center-line{
-    position:absolute;left:0;right:0;top:50%;height:0;border-top:2px solid rgba(255,255,255,.22);z-index:3;
+    position:absolute;
+    left:18px;
+    right:18px;
+    top:50%;
+    height:0;
+    border-top:1px dashed rgba(255,255,255,.18);
+    z-index:2;
+    pointer-events:none;
   }
-  .roulette-window-top,.roulette-window-bottom{display:none}
-  .roulette-list{position:absolute;left:0;right:0;top:0;transition:transform .08s linear}
+  .roulette-window-top,
+  .roulette-window-bottom{
+    display:block;
+    position:absolute;
+    left:0;
+    right:0;
+    height:24px;
+    z-index:5;
+    pointer-events:none;
+  }
+  .roulette-window-top{
+    top:0;
+    background:linear-gradient(180deg,rgba(10,18,38,.94) 0%,rgba(10,18,38,.78) 42%,rgba(10,18,38,0) 100%);
+  }
+  .roulette-window-bottom{
+    bottom:0;
+    background:linear-gradient(0deg,rgba(10,18,38,.94) 0%,rgba(10,18,38,.78) 42%,rgba(10,18,38,0) 100%);
+  }
+  .roulette-list{
+    position:absolute;
+    left:0;
+    right:0;
+    top:16px;
+    transition:transform .08s linear;
+    z-index:2;
+  }
   .roulette-item{
-    height:80px;display:grid;grid-template-rows:44px 36px;align-items:stretch;
-    text-align:center;padding:0;
+    height:80px;
+    display:grid;
+    grid-template-rows:44px 36px;
+    align-items:stretch;
+    text-align:center;
+    padding:0;
   }
-  .roulette-item strong{display:flex;align-items:center;justify-content:center;font-size:28px;letter-spacing:-1px;border-bottom:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.02)}
-  .roulette-item span{display:flex;align-items:center;justify-content:center;font-size:12px;color:#b8c8ea;padding:0 14px;background:rgba(255,255,255,.015)}
+  .roulette-item strong{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0 20px;
+    font-size:24px;
+    font-weight:1000;
+    letter-spacing:-.4px;
+    color:#ffffff;
+    text-shadow:0 1px 0 rgba(0,0,0,.28);
+    border-bottom:1px solid rgba(255,255,255,.10);
+    background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));
+  }
+  .roulette-item span{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0 16px;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.15px;
+    color:#c9d8fa;
+    background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));
+  }
+
+  .roulette-box.roulette-click-step .roulette-focus{
+    animation:rouletteClickFocus .16s ease-out;
+  }
+  .roulette-box.roulette-click-step .roulette-pointer.left{
+    animation:rouletteClickLeft .16s ease-out;
+  }
+  .roulette-box.roulette-click-step .roulette-pointer.right{
+    animation:rouletteClickRight .16s ease-out;
+  }
+  .roulette-box.roulette-click-step .roulette-list{
+    animation:rouletteClickList .16s ease-out;
+  }
+  .roulette-box.roulette-lock-step .roulette-focus{
+    animation:rouletteLockFocus .34s cubic-bezier(.16,.84,.22,1);
+  }
+  .roulette-box.roulette-lock-step .roulette-pointer.left{
+    animation:rouletteLockLeft .34s cubic-bezier(.16,.84,.22,1);
+  }
+  .roulette-box.roulette-lock-step .roulette-pointer.right{
+    animation:rouletteLockRight .34s cubic-bezier(.16,.84,.22,1);
+  }
+  @keyframes rouletteClickFocus{
+    0%{border-color:rgba(124,165,255,.66);box-shadow:0 0 18px rgba(92,134,232,.22)}
+    42%{border-color:#ffd36b;box-shadow:0 0 26px rgba(255,211,107,.30),inset 0 0 16px rgba(255,211,107,.08)}
+    100%{border-color:rgba(124,165,255,.66);box-shadow:0 0 18px rgba(92,134,232,.22)}
+  }
+  @keyframes rouletteClickLeft{
+    0%,100%{transform:translateY(-50%) translateX(0)}
+    42%{transform:translateY(-50%) translateX(5px) scale(1.15)}
+  }
+  @keyframes rouletteClickRight{
+    0%,100%{transform:translateY(-50%) translateX(0)}
+    42%{transform:translateY(-50%) translateX(-5px) scale(1.15)}
+  }
+  @keyframes rouletteClickList{
+    0%,100%{filter:brightness(1)}
+    42%{filter:brightness(1.16)}
+  }
+  @keyframes rouletteLockFocus{
+    0%{border-color:rgba(124,165,255,.66);box-shadow:0 0 18px rgba(92,134,232,.22)}
+    38%{border-color:#ffe29a;box-shadow:0 0 38px rgba(255,211,107,.48),inset 0 0 22px rgba(255,211,107,.13)}
+    100%{border-color:rgba(124,165,255,.66);box-shadow:0 0 18px rgba(92,134,232,.22)}
+  }
+  @keyframes rouletteLockLeft{
+    0%,100%{transform:translateY(-50%) translateX(0)}
+    38%{transform:translateY(-50%) translateX(8px) scale(1.34)}
+  }
+  @keyframes rouletteLockRight{
+    0%,100%{transform:translateY(-50%) translateX(0)}
+    38%{transform:translateY(-50%) translateX(-8px) scale(1.34)}
+  }
 
   .prepick-list{display:grid;grid-template-columns:1fr;gap:9px}
   .prepick-row{
@@ -320,6 +484,35 @@
     font-weight:900;
     letter-spacing:1px;
   }
+
+  .manager-rarity-chip{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-width:38px;padding:3px 8px;border-radius:999px;
+    font-size:10px;font-weight:1000;letter-spacing:1px;
+    border:1px solid rgba(255,255,255,.18);margin-bottom:6px;
+  }
+  .manager-choice-grid{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px;
+  }
+  .manager-choice-card{
+    position:relative;text-align:left;border-radius:18px;padding:14px;
+    border:1px solid #35517f;background:linear-gradient(145deg,#152746,#0c1830);
+    color:#eef4ff;cursor:pointer;transition:.18s ease;
+  }
+  .manager-choice-card:hover{transform:translateY(-2px);filter:brightness(1.08)}
+  .manager-choice-card strong{display:block;font-size:15px;margin-bottom:4px}
+  .manager-choice-card span{display:block;font-size:10px;color:#9fb2d5;line-height:1.45}
+  .manager-choice-card em{display:block;margin-top:8px;font-style:normal;font-size:11px;font-weight:900}
+  .manager-rarity-ur{border-color:#e7cf82!important;background:radial-gradient(circle at 80% 0,rgba(255,240,176,.22),transparent 30%),linear-gradient(145deg,#5a461c,#251d0c)!important}
+  .manager-rarity-ssr{border-color:#a98cff!important;background:radial-gradient(circle at 80% 0,rgba(190,162,255,.24),transparent 30%),linear-gradient(145deg,#382768,#17122d)!important}
+  .manager-rarity-sr{border-color:#68b7ff!important;background:radial-gradient(circle at 80% 0,rgba(110,190,255,.22),transparent 30%),linear-gradient(145deg,#173f67,#0d2039)!important}
+  .manager-rarity-r{border-color:#a9bacf!important;background:linear-gradient(145deg,#2b394b,#17212e)!important}
+  .manager-rarity-f{border-color:#6f7888!important;background:linear-gradient(145deg,#222831,#12161d)!important}
+  .manager-rarity-ur .manager-rarity-chip{color:#241a06;background:#f4d978}
+  .manager-rarity-ssr .manager-rarity-chip{color:#1d1038;background:#c8adff}
+  .manager-rarity-sr .manager-rarity-chip{color:#09213a;background:#8dcbff}
+  .manager-rarity-r .manager-rarity-chip{color:#18202a;background:#c4cedb}
+  .manager-rarity-f .manager-rarity-chip{color:#eceff4;background:#4a5260}
 
   .reveal-card{
     position:relative;overflow:hidden;width:min(340px,95%);padding:18px;border-radius:26px;border:1px solid #7293db;
@@ -920,12 +1113,18 @@
   }
   .slot.tier-legend b,.slot.tier-legend span,.slot.tier-legend .sub{color:#2a2010 !important}
   .roulette-item.legend-season-item{
-    background:linear-gradient(90deg, rgba(255,247,221,.06), rgba(255,220,120,.12), rgba(255,247,221,.06));
+    background:linear-gradient(180deg,rgba(101,77,31,.28),rgba(42,31,12,.16));
     border-top:1px solid rgba(255,233,168,.10);
     border-bottom:1px solid rgba(255,233,168,.10);
   }
-  .roulette-item.legend-season-item strong{color:#fff0bb}
-  .roulette-item.legend-season-item span{color:#ead7a0}
+  .roulette-item.legend-season-item strong{
+    color:#fff0bb;
+    background:linear-gradient(180deg,rgba(255,233,165,.13),rgba(113,85,29,.08));
+  }
+  .roulette-item.legend-season-item span{
+    color:#ead7a0;
+    background:linear-gradient(180deg,rgba(255,234,178,.06),rgba(97,75,28,.03));
+  }
 
   .goldenboot-reveal-flash{
     position:fixed;
@@ -1424,6 +1623,61 @@
   }
   .xi-manager-slot:not(.show) .manager-mini-tenure{color:#536588}
 
+  .xi-manager-slot.show.tier-platinum .manager-mini-label,
+  .xi-manager-slot.show.tier-platinum .manager-mini-meta,
+  .xi-manager-slot.show.tier-platinum .manager-mini-tenure{color:#eaf7ff}
+  .xi-manager-slot.show.tier-platinum .manager-mini-name{color:#ffffff}
+
+  .xi-manager-slot.show.tier-gold .manager-mini-label,
+  .xi-manager-slot.show.tier-gold .manager-mini-meta,
+  .xi-manager-slot.show.tier-gold .manager-mini-tenure{color:#ffe7a1}
+  .xi-manager-slot.show.tier-gold .manager-mini-name{color:#fff9e1}
+
+  .xi-manager-slot.show.tier-silver .manager-mini-label,
+  .xi-manager-slot.show.tier-silver .manager-mini-meta,
+  .xi-manager-slot.show.tier-silver .manager-mini-tenure{color:#d8e8ff}
+  .xi-manager-slot.show.tier-silver .manager-mini-name{color:#f7fbff}
+
+  .xi-manager-slot.show.tier-base .manager-mini-label,
+  .xi-manager-slot.show.tier-base .manager-mini-meta,
+  .xi-manager-slot.show.tier-base .manager-mini-tenure{color:#e3e8f0}
+  .xi-manager-slot.show.tier-base .manager-mini-name{color:#ffffff}
+
+  .xi-manager-slot.show.tier-legend .manager-mini-label,
+  .xi-manager-slot.show.tier-legend .manager-mini-meta,
+  .xi-manager-slot.show.tier-legend .manager-mini-tenure{color:#f3e1a6}
+  .xi-manager-slot.show.tier-legend .manager-mini-name{color:#fff8dc}
+
+  .manager-reveal-card.tier-platinum .reveal-name{color:#f5fbff}
+  .manager-reveal-card.tier-platinum .reveal-nation,
+  .manager-reveal-card.tier-platinum .reveal-tenure,
+  .manager-reveal-card.tier-platinum .manager-card-label{color:#e7f3ff}
+  .manager-reveal-card.tier-platinum .reveal-ovr{background:linear-gradient(180deg,#f3fbff,#cce2f6);color:#243956}
+
+  .manager-reveal-card.tier-gold .reveal-name{color:#fff7da}
+  .manager-reveal-card.tier-gold .reveal-nation,
+  .manager-reveal-card.tier-gold .reveal-tenure,
+  .manager-reveal-card.tier-gold .manager-card-label{color:#ffe39c}
+  .manager-reveal-card.tier-gold .reveal-ovr{background:linear-gradient(180deg,#fff1c4,#efcf68);color:#3e2d0a}
+
+  .manager-reveal-card.tier-silver .reveal-name{color:#f8fbff}
+  .manager-reveal-card.tier-silver .reveal-nation,
+  .manager-reveal-card.tier-silver .reveal-tenure,
+  .manager-reveal-card.tier-silver .manager-card-label{color:#d8e7ff}
+  .manager-reveal-card.tier-silver .reveal-ovr{background:linear-gradient(180deg,#edf5ff,#bfd4f5);color:#223452}
+
+  .manager-reveal-card.tier-base .reveal-name{color:#f4f7fb}
+  .manager-reveal-card.tier-base .reveal-nation,
+  .manager-reveal-card.tier-base .reveal-tenure,
+  .manager-reveal-card.tier-base .manager-card-label{color:#dbe2ec}
+  .manager-reveal-card.tier-base .reveal-ovr{background:linear-gradient(180deg,#eef1f7,#c8d0dd);color:#2b3240}
+
+  .manager-reveal-card.tier-legend .reveal-name{color:#fff9e3}
+  .manager-reveal-card.tier-legend .reveal-nation,
+  .manager-reveal-card.tier-legend .reveal-tenure,
+  .manager-reveal-card.tier-legend .manager-card-label{color:#f0dc9c}
+  .manager-reveal-card.tier-legend .reveal-ovr{background:linear-gradient(180deg,#fff6da,#f3d27c);color:#2f2208}
+
   .pitch{
     position:relative;height:530px;margin-top:12px;border-radius:22px;overflow:hidden;
     background:
@@ -1565,6 +1819,412 @@
     28%{transform:translate(-50%,-50%) scale(1)}
     75%{opacity:1}
     100%{opacity:0;transform:translate(-50%,-58%) scale(.96)}
+  }
+
+  .league-table-panel{
+    display:none;
+    margin-top:14px;
+    padding:12px;
+    border:1px solid #243a62;
+    border-radius:16px;
+    background:linear-gradient(145deg,rgba(15,27,52,.96),rgba(8,18,36,.96));
+    box-shadow:0 12px 30px rgba(0,0,0,.18);
+  }
+  .league-table-panel.show{display:block}
+  .league-table-panel.live{
+    border-color:#35578f;
+    box-shadow:0 12px 30px rgba(0,0,0,.18),0 0 0 1px rgba(92,137,224,.05);
+  }
+  .league-table-panel.table-pulse{
+    animation:leagueTablePulse .42s ease-out;
+  }
+  @keyframes leagueTablePulse{
+    0%{transform:scale(.992);filter:brightness(1.14)}
+    100%{transform:scale(1);filter:brightness(1)}
+  }
+  .league-table-head{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:8px;
+    margin-bottom:8px;
+  }
+  .league-table-title{
+    color:#f4f8ff;
+    font-size:11px;
+    font-weight:1000;
+    letter-spacing:1px;
+  }
+  .league-table-sub{
+    color:#7089b6;
+    font-size:9px;
+    font-weight:850;
+  }
+  .league-table{
+    width:100%;
+    border-collapse:collapse;
+    table-layout:fixed;
+  }
+  .league-table th{
+    padding:4px 3px;
+    border-bottom:1px solid rgba(255,255,255,.09);
+    color:#6f87af;
+    font-size:8px;
+    font-weight:950;
+    text-align:center;
+  }
+  .league-table th.team-col{text-align:left}
+  .league-table td{
+    padding:5px 3px;
+    border-bottom:1px solid rgba(255,255,255,.045);
+    color:#cbd8ef;
+    font-size:9px;
+    font-weight:800;
+    text-align:center;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .league-table td.team-col{
+    text-align:left;
+    color:#e6efff;
+    font-weight:900;
+  }
+  .league-table tr.spurs-row td{
+    background:rgba(94,137,224,.15);
+    color:#fff;
+    font-weight:1000;
+  }
+  .league-table tr.spurs-row td:first-child{
+    border-left:2px solid #79a1ff;
+  }
+  .league-table .pts-col{
+    color:#fff;
+    font-weight:1000;
+  }
+
+  /* European qualification / title zones */
+  .league-table tr.zone-champion td{
+    background:linear-gradient(90deg,rgba(197,148,38,.26),rgba(255,214,107,.13));
+    color:#ffe49a;
+    border-bottom-color:rgba(255,214,107,.18);
+  }
+  .league-table tr.zone-champion td.team-col,
+  .league-table tr.zone-champion .pts-col{color:#ffd76a}
+  .league-table tr.zone-champions td{
+    background:rgba(73,111,211,.12);
+    border-bottom-color:rgba(103,143,244,.13);
+  }
+  .league-table tr.zone-champions td.team-col,
+  .league-table tr.zone-champions .pts-col{color:#a9c4ff}
+  .league-table tr.zone-europa td{
+    background:rgba(212,118,47,.105);
+    border-bottom-color:rgba(232,142,73,.13);
+  }
+  .league-table tr.zone-europa td.team-col,
+  .league-table tr.zone-europa .pts-col{color:#ffc08a}
+  .league-table tr.zone-conference td{
+    background:rgba(54,157,118,.11);
+    border-bottom-color:rgba(77,186,143,.13);
+  }
+  .league-table tr.zone-conference td.team-col,
+  .league-table tr.zone-conference .pts-col{color:#94e4c2}
+  .league-table tr.zone-relegation td{
+    background:rgba(185,48,61,.12);
+    border-bottom-color:rgba(230,80,94,.14);
+  }
+  .league-table tr.zone-relegation td.team-col,
+  .league-table tr.zone-relegation .pts-col{color:#ff9ba5}
+  .league-table tr.spurs-row td{
+    box-shadow:inset 0 0 0 999px rgba(92,137,224,.055);
+    font-weight:1000;
+  }
+
+  .season-summary-rank.champion{
+    color:#ffd76a;
+    text-shadow:0 0 18px rgba(255,201,64,.36);
+    letter-spacing:-1px;
+  }
+
+
+  .winter-overlay{
+    position:fixed;
+    inset:0;
+    z-index:14000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    background:rgba(3,9,22,.88);
+    backdrop-filter:blur(8px);
+  }
+  .winter-overlay.show{display:flex}
+  .winter-modal{
+    width:min(720px,96vw);
+    max-height:88vh;
+    overflow:auto;
+    border:1px solid #35517f;
+    border-radius:26px;
+    padding:24px;
+    background:
+      radial-gradient(circle at 50% -10%,rgba(91,145,244,.20),transparent 38%),
+      linear-gradient(145deg,#111f3d,#09142a 68%,#071022);
+    box-shadow:0 30px 100px rgba(0,0,0,.55);
+  }
+  .winter-kicker{
+    color:#88a9e8;
+    font-size:10px;
+    font-weight:1000;
+    letter-spacing:2.2px;
+    text-align:center;
+  }
+  .winter-title{
+    margin:7px 0 4px;
+    color:#f5f8ff;
+    font-size:27px;
+    font-weight:1000;
+    text-align:center;
+    letter-spacing:-.7px;
+  }
+  .winter-sub{
+    color:#9bb0d8;
+    font-size:12px;
+    line-height:1.6;
+    text-align:center;
+  }
+  .winter-actions{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-top:20px;
+  }
+  .winter-actions button{
+    min-width:132px;
+    border-radius:14px;
+  }
+  .winter-actions .winter-decline{
+    background:#111c34;
+    border:1px solid #30466f;
+    color:#aebddd;
+  }
+  .winter-roulette{
+    position:relative;
+    height:92px;
+    overflow:hidden;
+    margin-top:18px;
+    border:1px solid #35517f;
+    border-radius:20px;
+    background:linear-gradient(180deg,#13264b,#0b1730);
+    box-shadow:inset 0 0 30px rgba(76,124,218,.10);
+  }
+  .winter-roulette::before,
+  .winter-roulette::after{
+    content:"";
+    position:absolute;
+    left:0;right:0;
+    height:24px;
+    z-index:3;
+    pointer-events:none;
+  }
+  .winter-roulette::before{top:0;background:linear-gradient(180deg,#0b1730,transparent)}
+  .winter-roulette::after{bottom:0;background:linear-gradient(0deg,#0b1730,transparent)}
+  .winter-roulette-focus{
+    position:absolute;
+    left:10px;right:10px;top:50%;
+    height:64px;
+    transform:translateY(-50%);
+    border:2px solid #6e99ef;
+    border-radius:16px;
+    box-shadow:0 0 18px rgba(89,140,240,.24);
+    z-index:2;
+    pointer-events:none;
+  }
+  .winter-roulette-list{
+    position:absolute;
+    left:0;right:0;top:14px;
+    z-index:1;
+  }
+  .winter-roulette-item{
+    height:64px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0 18px;
+    color:#f2f6ff;
+    font-size:18px;
+    font-weight:1000;
+    text-align:center;
+  }
+  .winter-event-card{
+    margin-top:18px;
+    padding:18px;
+    border:1px solid #2e4775;
+    border-radius:20px;
+    background:rgba(7,16,34,.72);
+  }
+  .winter-event-name{
+    color:#fff;
+    font-size:20px;
+    font-weight:1000;
+    text-align:center;
+  }
+  .winter-event-desc{
+    margin-top:6px;
+    color:#9db1d8;
+    font-size:12px;
+    line-height:1.55;
+    text-align:center;
+  }
+  .winter-target{
+    margin:14px auto 0;
+    padding:11px 13px;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:14px;
+    background:rgba(255,255,255,.04);
+    color:#dce7fb;
+    font-size:12px;
+    font-weight:850;
+    text-align:center;
+  }
+  .winter-grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:10px;
+    margin-top:14px;
+  }
+  .winter-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .winter-choice{
+    min-height:86px;
+    padding:12px 10px;
+    border:1px solid #38558a;
+    border-radius:16px;
+    background:linear-gradient(145deg,#16284c,#0e1a35);
+    color:#eff4ff;
+    cursor:pointer;
+    transition:.16s transform,.16s border-color,.16s box-shadow;
+  }
+  .winter-choice:hover{
+    transform:translateY(-2px);
+    border-color:#77a2f4;
+    box-shadow:0 10px 24px rgba(0,0,0,.24);
+  }
+  .winter-choice-name{
+    font-size:14px;
+    font-weight:1000;
+    line-height:1.2;
+  }
+  .winter-choice-season{
+    margin-top:5px;
+    color:#8fa8d6;
+    font-size:11px;
+    font-weight:850;
+  }
+  .winter-choice.current{
+    border-color:#5f76a4;
+    background:linear-gradient(145deg,#182641,#111a2d);
+  }
+  .winter-choice.disabled{
+    opacity:.36;
+    cursor:not-allowed;
+    pointer-events:none;
+  }
+  .winter-result{
+    margin-top:16px;
+    padding:15px;
+    border:1px solid rgba(116,226,165,.25);
+    border-radius:16px;
+    background:rgba(55,143,99,.10);
+    color:#dff9e9;
+    font-size:13px;
+    font-weight:850;
+    line-height:1.65;
+    text-align:center;
+  }
+  .winter-result.bad{
+    border-color:rgba(255,118,128,.25);
+    background:rgba(179,55,66,.10);
+    color:#ffd9dc;
+  }
+  @media(max-width:680px){
+    .winter-grid,.winter-grid.two{grid-template-columns:1fr}
+    .winter-modal{padding:18px}
+  }
+
+  .champion-celebration{
+    position:fixed;
+    inset:0;
+    z-index:13000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    pointer-events:none;
+    background:radial-gradient(circle at center,rgba(255,207,77,.16),rgba(5,10,22,.72) 58%,rgba(4,8,18,.88));
+    animation:championCelebrationFade 3.5s ease forwards;
+    overflow:hidden;
+  }
+  .champion-celebration-card{
+    position:relative;
+    z-index:2;
+    min-width:min(78vw,520px);
+    padding:34px 38px 30px;
+    border:1px solid rgba(255,220,126,.72);
+    border-radius:28px;
+    background:
+      radial-gradient(circle at top,rgba(255,227,146,.20),transparent 46%),
+      linear-gradient(145deg,rgba(72,51,13,.97),rgba(28,23,13,.97));
+    box-shadow:0 28px 100px rgba(0,0,0,.56),0 0 55px rgba(255,196,55,.25);
+    text-align:center;
+    animation:championCardIn .75s cubic-bezier(.14,.84,.2,1) both;
+  }
+  .champion-celebration-kicker{
+    color:#e8c96d;
+    font-size:11px;
+    font-weight:1000;
+    letter-spacing:3px;
+  }
+  .champion-celebration-title{
+    margin-top:7px;
+    color:#ffe08a;
+    font-size:clamp(48px,9vw,96px);
+    font-weight:1000;
+    line-height:.92;
+    letter-spacing:-4px;
+    text-shadow:0 0 26px rgba(255,204,72,.42);
+  }
+  .champion-celebration-sub{
+    margin-top:14px;
+    color:#fff1bf;
+    font-size:15px;
+    font-weight:900;
+  }
+  .champion-confetti{
+    position:absolute;
+    top:-10vh;
+    width:8px;
+    height:16px;
+    border-radius:2px;
+    background:#ffd76a;
+    opacity:.95;
+    animation:championConfettiFall var(--dur) linear var(--delay) forwards;
+    transform:translate3d(0,0,0) rotate(var(--rot));
+  }
+  .champion-confetti:nth-child(3n){background:#ffffff}
+  .champion-confetti:nth-child(4n){background:#8fb5ff}
+  .champion-confetti:nth-child(5n){background:#f2b84d}
+  @keyframes championCelebrationFade{
+    0%{opacity:0}
+    10%,78%{opacity:1}
+    100%{opacity:0;visibility:hidden}
+  }
+  @keyframes championCardIn{
+    0%{opacity:0;transform:translateY(22px) scale(.80)}
+    62%{opacity:1;transform:translateY(-4px) scale(1.035)}
+    100%{opacity:1;transform:translateY(0) scale(1)}
+  }
+  @keyframes championConfettiFall{
+    0%{transform:translate3d(0,-10vh,0) rotate(var(--rot));opacity:0}
+    8%{opacity:1}
+    100%{transform:translate3d(var(--drift),115vh,0) rotate(calc(var(--rot) + 720deg));opacity:.9}
   }
 
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
@@ -2007,47 +2667,71 @@
     padding:34px 14px;text-align:center;color:#738ab5;font-size:12px
   }
   .billboard-register{
-    margin-top:14px;
-    padding:14px;
-    border:1px solid #2b426e;
-    border-radius:18px;
-    background:#0c1930;
+    margin-top:16px;
+    padding:18px;
+    border:1px solid #d5c7a9;
+    border-radius:20px;
+    background:
+      radial-gradient(circle at 100% 0,rgba(255,255,255,.75),transparent 34%),
+      linear-gradient(145deg,#fffdf5,#f4eddc);
+    box-shadow:0 12px 28px rgba(0,0,0,.16), inset 0 0 0 1px rgba(255,255,255,.55);
   }
   .billboard-register-title{
-    color:#fff;font-size:14px;font-weight:1000;letter-spacing:.3px
+    color:#1d2a42;font-size:15px;font-weight:1000;letter-spacing:.25px
   }
   .billboard-register-preview{
-    margin-top:6px;color:#879bc3;font-size:10px;line-height:1.6
+    margin-top:7px;color:#665e50;font-size:11px;line-height:1.65;font-weight:800
   }
   .billboard-register-row{
-    display:flex;gap:8px;margin-top:10px
+    display:flex;gap:8px;margin-top:12px
   }
   .billboard-nickname{
     flex:1;min-width:0;
-    border:1px solid #344b76;
-    background:#071226;
-    color:#fff;
+    border:1px solid #c9baa0;
+    background:rgba(255,255,255,.9);
+    color:#17243a;
     border-radius:12px;
     padding:11px 12px;
     outline:none;
     font-size:12px;font-weight:850
   }
-  .billboard-nickname:focus{border-color:#6e91d4}
+  .billboard-nickname::placeholder{color:#9b907d}
+  .billboard-nickname:focus{
+    border-color:#7f6d4d;
+    box-shadow:0 0 0 3px rgba(127,109,77,.10)
+  }
   .billboard-submit{
     flex:0 0 auto;
     border:0;border-radius:12px;
-    background:#fff;color:#102652;
-    padding:0 16px;
+    background:#17284a;color:#fff;
+    padding:0 18px;
     font-size:11px;font-weight:1000;
-    cursor:pointer
+    cursor:pointer;
+    box-shadow:0 5px 14px rgba(23,40,74,.20)
   }
   .billboard-submit:disabled{opacity:.45;cursor:default}
   .billboard-status{
-    min-height:18px;margin-top:8px;
-    color:#95aad0;font-size:10px;font-weight:850
+    min-height:18px;margin-top:9px;
+    color:#766d5f;font-size:10px;font-weight:900
   }
-  .billboard-status.ok{color:#9ce3c7}
-  .billboard-status.error{color:#ff9c9c}
+  .billboard-status.ok{color:#227552}
+  .billboard-status.error{color:#b84545}
+  .season-end-actions{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:12px;
+  }
+  .season-restart-small{
+    border:1px solid #334a72;
+    background:#101d35;
+    color:#9eb0d2;
+    border-radius:10px;
+    padding:7px 10px;
+    font-size:9px;
+    font-weight:900;
+    cursor:pointer;
+  }
+  .season-restart-small:hover{color:#fff;border-color:#5272a8}
   @media(max-width:650px){
     .quick-menu{right:10px;top:10px;gap:6px}
     .billboard-fab,.quick-info-btn{min-width:124px;padding:9px 11px;font-size:9px}
@@ -2315,6 +2999,9 @@
       </div>
 
       <div class="roulette-box">
+        <div class="roulette-focus"></div>
+        <div class="roulette-pointer left"></div>
+        <div class="roulette-pointer right"></div>
         <div class="roulette-center-line"></div>
         <div class="roulette-window-top"></div>
         <div class="roulette-window-bottom"></div>
@@ -2367,6 +3054,7 @@
       </div>
 
       <div id="seasonPreview" class="season-preview empty">선택된 시즌 포스터가 여기에 표시됩니다.</div>
+      <div id="leagueTablePanel" class="league-table-panel"></div>
 
       <button id="simBtn" style="display:none" style="width:100%;margin-top:14px" disabled>38경기 시뮬레이션</button>
 
@@ -2381,8 +3069,13 @@
 
 <div id="gameOverOverlay" class="gameover-overlay">
   <div class="gameover-title">GAME OVER</div>
-  <div class="gameover-sub">솔 캠벨</div>
   <button id="gameOverRestart" class="gameover-restart">처음부터 다시</button>
+</div>
+
+<div id="winterTransferOverlay" class="winter-overlay" aria-hidden="true">
+  <div class="winter-modal">
+    <div id="winterTransferContent"></div>
+  </div>
 </div>
 
 <script>
@@ -2455,24 +3148,24 @@ const seasons = [
   makeSeason("2004/05", "자크 상티니→마르틴 욜 · 리그 9위 · FA컵 8강", [["Paul Robinson","GK",82],["Noé Pamarot","RB",77],["Noureddine Naybet","CB",79],["Ledley King","CB",85],["Erik Edman","LB",79],["Andy Reid","LW",78],["Michael Carrick","CM",83],["Pedro Mendes","CM",80],["Sean Davies","RW",77],["Robbie Keane","CAM",84],["Jermain Defoe","ST",84]], seasonPosterMap["2004/05"]),
   makeSeason("2005/06", "마르틴 욜 · 리그 5위 · FA컵 32강", [["Paul Robinson","GK",83],["Paul Stalteri","RB",78],["Michael Dawson","CB",80],["Ledley King","CB",87],["Young-Pyo Lee","LB",79],["Edgar Davids","LW",84],["Michael Carrick","CM",84],["Jermaine Jenas","CM",80],["Aaron Lennon","RW",79],["Mido","CAM",83],["Robbie Keane","ST",84]], seasonPosterMap["2005/06"]),
   makeSeason("2006/07", "마르틴 욜 · 리그 5위 · UEFA컵 8강", [["Paul Robinson","GK",82],["Pascal Chimbonda","RB",80],["Michael Dawson","CB",81],["Ledley King","CB",85],["Young-Pyo Lee","LB",79],["Steed Malbranque","LW",80],["Didier Zokora","CM",80],["Jermaine Jenas","CM",81],["Aaron Lennon","RW",81],["Dimitar Berbatov","CAM",88],["Robbie Keane","ST",83]], seasonPosterMap["2006/07"]),
-  makeSeason("2007/08", "마르틴 욜→후안데 라모스 · 리그 11위 · 리그컵 우승", [["Paul Robinson","GK",81],["Pascal Chimbonda","RB",79],["Michael Dawson","CB",82],["Younès Kaboul","CB",80],["Young-Pyo Lee","LB",81],["Steed Malbranque","LW",80],["Didier Zokora","CM",79],["Jermaine Jenas","CM",81],["Aaron Lennon","RW",82],["Dimitar Berbatov","CAM",87],["Robbie Keane","ST",85,["Jonathan Woodgate","CB",85]]], seasonPosterMap["2007/08"]),
+  makeSeason("2007/08", "마르틴 욜→후안데 라모스 · 리그 11위 · 리그컵 우승", [["Paul Robinson","GK",81],["Pascal Chimbonda","RB",79],["Michael Dawson","CB",82],["Younès Kaboul","CB",80],["Young-Pyo Lee","LB",81],["Steed Malbranque","LW",80],["Didier Zokora","CM",79],["Jermaine Jenas","CM",81],["Aaron Lennon","RW",82],["Dimitar Berbatov","CAM",87],["Robbie Keane","ST",85],["Jonathan Woodgate","CB",85]], seasonPosterMap["2007/08"]),
   makeSeason("2008/09", "후안데 라모스→해리 레드냅 · 리그 8위 · 리그컵 준우승", [["Heurelho Gomes","GK",80],["Vedran Ćorluka","RB",81],["Jonathan Woodgate","CB",83],["Ledley King","CB",84],["Benoît Assou-Ekotto","LB",80],["Luka Modrić","LW",84],["Didier Zokora","CM",78],["Jermaine Jenas","CM",80],["Aaron Lennon","RW",83],["Roman Pavlyuchenko","CAM",82],["Darren Bent","ST",81]], seasonPosterMap["2008/09"]),
-  makeSeason("2009/10", "해리 레드냅 · 리그 4위 · FA컵 4강", [["Heurelho Gomes","GK",82],["Vedran Ćorluka","RB",81],["Michael Dawson","CB",84],["Sébastien Bassong","CB",80],["Benoît Assou-Ekotto","LB",81],["Gareth Bale","LW",84],["Wilson Palacios","CM",80],["Tom Huddlestone","CM",81],["Aaron Lennon","RW",84],["Peter Crouch","CAM",84],["Jermain Defoe","ST",86,["Luka Modrić","CM",85],["Ledley King","CB",84]]], seasonPosterMap["2009/10"]),
-  makeSeason("2010/11", "해리 레드냅 · 리그 5위 · 챔피언스리그 8강", [["Heurelho Gomes","GK",81],["Alan Hutton","RB",79],["Michael Dawson","CB",84],["William Gallas","CB",83],["Benoît Assou-Ekotto","LB",81],["Gareth Bale","LW",89],["Wilson Palacios","CM",79],["Luka Modrić","CM",86],["Aaron Lennon","RW",84],["Rafael van der Vaart","CAM",86],["Peter Crouch","ST",84,["Sandro","CM",80]]], seasonPosterMap["2010/11"]),
+  makeSeason("2009/10", "해리 레드냅 · 리그 4위 · FA컵 4강", [["Heurelho Gomes","GK",82],["Vedran Ćorluka","RB",81],["Michael Dawson","CB",84],["Sébastien Bassong","CB",80],["Benoît Assou-Ekotto","LB",81],["Gareth Bale","LW",84],["Wilson Palacios","CM",80],["Tom Huddlestone","CM",81],["Aaron Lennon","RW",84],["Peter Crouch","CAM",84],["Jermain Defoe","ST",86],["Luka Modrić","CM",85],["Ledley King","CB",84]], seasonPosterMap["2009/10"]),
+  makeSeason("2010/11", "해리 레드냅 · 리그 5위 · 챔피언스리그 8강", [["Heurelho Gomes","GK",81],["Alan Hutton","RB",79],["Michael Dawson","CB",84],["William Gallas","CB",83],["Benoît Assou-Ekotto","LB",81],["Gareth Bale","LW",89],["Wilson Palacios","CM",79],["Luka Modrić","CM",86],["Aaron Lennon","RW",84],["Rafael van der Vaart","CAM",86],["Peter Crouch","ST",84],["Sandro","CM",80]], seasonPosterMap["2010/11"]),
   makeSeason("2011/12", "해리 레드냅 · 리그 4위 · FA컵 4강", [["Brad Friedel","GK",82],["Kyle Walker","RB",85],["Younès Kaboul","CB",81],["Ledley King","CB",83],["Benoît Assou-Ekotto","LB",82],["Gareth Bale","LW",90],["Scott Parker","CM",85],["Luka Modrić","CM",87],["Aaron Lennon","RW",85],["Rafael van der Vaart","CAM",85],["Emmanuel Adebayor","ST",84]], seasonPosterMap["2011/12"]),
   makeSeason("2012/13", "안드레 빌라스보아스 · 리그 5위 · 유로파리그 8강", [["Hugo Lloris","GK",85],["Kyle Walker","RB",84],["Michael Dawson","CB",82],["Jan Vertonghen","CB",87],["Benoît Assou-Ekotto","LB",80],["Sandro","CM",82],["Mousa Dembélé","CM",85],["Aaron Lennon","RW",82],["Clint Dempsey","CAM",82],["Gareth Bale","LW",93],["Jermain Defoe","ST",85]], seasonPosterMap["2012/13"]),
-  makeSeason("2013/14", "빌라스보아스→팀 셔우드 · 리그 6위 · 유로파리그 16강", [["Hugo Lloris","GK",86],["Kyle Walker","RB",84],["Michael Dawson","CB",81],["Jan Vertonghen","CB",85],["Danny Rose","LB",81],["Paulinho","CM",81],["Mousa Dembélé","CM",84],["Aaron Lennon","RW",81],["Christian Eriksen","CAM",86],["Gylfi Sigurdsson","LW",81],["Roberto Soldado","ST",79,["Emmanuel Adebayor","ST",82]]], seasonPosterMap["2013/14"]),
+  makeSeason("2013/14", "빌라스보아스→팀 셔우드 · 리그 6위 · 유로파리그 16강", [["Hugo Lloris","GK",86],["Kyle Walker","RB",84],["Michael Dawson","CB",81],["Jan Vertonghen","CB",85],["Danny Rose","LB",81],["Paulinho","CM",81],["Mousa Dembélé","CM",84],["Aaron Lennon","RW",81],["Christian Eriksen","CAM",86],["Gylfi Sigurdsson","LW",81],["Roberto Soldado","ST",79],["Emmanuel Adebayor","ST",82]], seasonPosterMap["2013/14"]),
   makeSeason("2014/15", "마우리시오 포체티노 · 리그 5위 · 리그컵 준우승", [["Hugo Lloris","GK",87],["Kyle Walker","RB",83],["Eric Dier","CB",80],["Jan Vertonghen","CB",85],["Danny Rose","LB",83],["Ryan Mason","CM",80],["Nabil Bentaleb","CM",79],["Erik Lamela","RW",82],["Christian Eriksen","CAM",87],["Nacer Chadli","LW",80],["Harry Kane","ST",90]], seasonPosterMap["2014/15"]),
-  makeSeason("2015/16", "마우리시오 포체티노 · 리그 3위 · 유로파리그 16강", [["Hugo Lloris","GK",87],["Kyle Walker","RB",85],["Toby Alderweireld","CB",90],["Jan Vertonghen","CB",87],["Danny Rose","LB",86],["Eric Dier","CM",83],["Mousa Dembélé","CM",87],["Erik Lamela","RW",84],["Dele Alli","CAM",89],["Christian Eriksen","LW",88],["Harry Kane","ST",91,["Heung-min Son","LW",84]]], seasonPosterMap["2015/16"]),
+  makeSeason("2015/16", "마우리시오 포체티노 · 리그 3위 · 유로파리그 16강", [["Hugo Lloris","GK",87],["Kyle Walker","RB",85],["Toby Alderweireld","CB",90],["Jan Vertonghen","CB",87],["Danny Rose","LB",86],["Eric Dier","CM",83],["Mousa Dembélé","CM",87],["Erik Lamela","RW",84],["Dele Alli","CAM",89],["Christian Eriksen","LW",88],["Harry Kane","ST",91],["Heung-min Son","LW",84]], seasonPosterMap["2015/16"]),
   makeSeason("2016/17", "마우리시오 포체티노 · 리그 2위 · FA컵 4강", [["Hugo Lloris","GK",88],["Kyle Walker","RB",87],["Toby Alderweireld","CB",90],["Jan Vertonghen","CB",89],["Ben Davies","LB",83],["Victor Wanyama","CM",84],["Eric Dier","CM",86],["Christian Eriksen","RW",90],["Dele Alli","CAM",90],["Heung-min Son","LW",90],["Harry Kane","ST",93]], seasonPosterMap["2016/17"]),
   makeSeason("2017/18", "마우리시오 포체티노 · 리그 3위 · FA컵 4강", [["Hugo Lloris","GK",87],["Kieran Trippier","RB",84],["Davinson Sánchez","CB",83],["Jan Vertonghen","CB",90],["Ben Davies","LB",85],["Mousa Dembélé","CM",85],["Eric Dier","CM",83],["Christian Eriksen","RW",90],["Dele Alli","CAM",87],["Heung-min Son","LW",89],["Harry Kane","ST",93]], seasonPosterMap["2017/18"]),
-  makeSeason("2018/19", "마우리시오 포체티노 · 리그 4위 · 챔피언스리그 준우승", [["Hugo Lloris","GK",89],["Kieran Trippier","RB",83],["Toby Alderweireld","CB",88],["Jan Vertonghen","CB",87],["Ben Davies","LB",82],["Harry Winks","CM",80],["Moussa Sissoko","CM",84],["Lucas Moura","RW",86],["Christian Eriksen","CAM",88],["Heung-min Son","LW",92],["Harry Kane","ST",89,["Dele Alli","CAM",85],["Danny Rose","LB",84]]], seasonPosterMap["2018/19"]),
-  makeSeason("2019/20", "포체티노→주제 무리뉴 · 리그 6위 · 챔피언스리그 16강", [["Hugo Lloris","GK",87],["Serge Aurier","RB",81],["Toby Alderweireld","CB",86],["Davinson Sánchez","CB",82],["Ben Davies","LB",81],["Harry Winks","CM",79],["Moussa Sissoko","CM",81],["Lucas Moura","RW",84],["Dele Alli","CAM",84],["Heung-min Son","LW",90],["Harry Kane","ST",92,["Giovani Lo Celso","CAM",82],["Steven Bergwijn","LW",81],["Tanguy Ndombele","CM",81]]], seasonPosterMap["2019/20"]),
-  makeSeason("2020/21", "주제 무리뉴→라이언 메이슨 · 리그 7위 · 리그컵 준우승", [["Hugo Lloris","GK",87],["Matt Doherty","RB",79],["Toby Alderweireld","CB",85],["Eric Dier","CB",81],["Ben Davies","LB",80],["Pierre-Emile Højbjerg","CM",83],["Moussa Sissoko","CM",80],["Lucas Moura","RW",84],["Tanguy Ndombele","CAM",83],["Heung-min Son","LW",91],["Harry Kane","ST",95,["Gareth Bale","RW",87],["Sergio Reguilón","LB",82]]], seasonPosterMap["2020/21"]),
-  makeSeason("2021/22", "누누→안토니오 콘테 · 리그 4위 · 리그컵 4강", [["Hugo Lloris","GK",86],["Emerson Royal","RB",80],["Cristian Romero","CB",87],["Eric Dier","CB",82],["Ben Davies","LB",82],["Pierre-Emile Højbjerg","CM",82],["Rodrigo Bentancur","CM",83],["Lucas Moura","RW",83],["Sergio Reguilón","LW",80],["Heung-min Son","CAM",93],["Harry Kane","ST",94,["Dejan Kulusevski","RW",85]]], seasonPosterMap["2021/22"]),
+  makeSeason("2018/19", "마우리시오 포체티노 · 리그 4위 · 챔피언스리그 준우승", [["Hugo Lloris","GK",89],["Kieran Trippier","RB",83],["Toby Alderweireld","CB",88],["Jan Vertonghen","CB",87],["Ben Davies","LB",82],["Harry Winks","CM",80],["Moussa Sissoko","CM",84],["Lucas Moura","RW",86],["Christian Eriksen","CAM",88],["Heung-min Son","LW",92],["Harry Kane","ST",89],["Dele Alli","CAM",85],["Danny Rose","LB",84]], seasonPosterMap["2018/19"]),
+  makeSeason("2019/20", "포체티노→주제 무리뉴 · 리그 6위 · 챔피언스리그 16강", [["Hugo Lloris","GK",87],["Serge Aurier","RB",81],["Toby Alderweireld","CB",86],["Davinson Sánchez","CB",82],["Ben Davies","LB",81],["Harry Winks","CM",79],["Moussa Sissoko","CM",81],["Lucas Moura","RW",84],["Dele Alli","CAM",84],["Heung-min Son","LW",90],["Harry Kane","ST",92],["Giovani Lo Celso","CAM",82],["Steven Bergwijn","LW",81],["Tanguy Ndombele","CM",81]], seasonPosterMap["2019/20"]),
+  makeSeason("2020/21", "주제 무리뉴→라이언 메이슨 · 리그 7위 · 리그컵 준우승", [["Hugo Lloris","GK",87],["Matt Doherty","RB",79],["Toby Alderweireld","CB",85],["Eric Dier","CB",81],["Ben Davies","LB",80],["Pierre-Emile Højbjerg","CM",83],["Moussa Sissoko","CM",80],["Lucas Moura","RW",84],["Tanguy Ndombele","CAM",83],["Heung-min Son","LW",91],["Harry Kane","ST",95],["Gareth Bale","RW",87],["Sergio Reguilón","LB",82]], seasonPosterMap["2020/21"]),
+  makeSeason("2021/22", "누누→안토니오 콘테 · 리그 4위 · 리그컵 4강", [["Hugo Lloris","GK",86],["Emerson Royal","RB",80],["Cristian Romero","CB",87],["Eric Dier","CB",82],["Ben Davies","LB",82],["Pierre-Emile Højbjerg","CM",82],["Rodrigo Bentancur","CM",83],["Lucas Moura","RW",83],["Sergio Reguilón","LW",80],["Heung-min Son","CAM",93],["Harry Kane","ST",94],["Dejan Kulusevski","RW",85]], seasonPosterMap["2021/22"]),
   makeSeason("2022/23", "콘테→스텔리니→라이언 메이슨 · 리그 8위 · 챔피언스리그 16강", [["Hugo Lloris","GK",82],["Emerson Royal","RB",81],["Cristian Romero","CB",89],["Eric Dier","CB",78],["Ben Davies","LB",80],["Pierre-Emile Højbjerg","CM",82],["Rodrigo Bentancur","CM",84],["Dejan Kulusevski","RW",84],["Ivan Perišić","LW",84],["Heung-min Son","CAM",89],["Harry Kane","ST",95]], seasonPosterMap["2022/23"]),
-  makeSeason("2023/24", "엔지 포스테코글루 · 리그 5위 · FA컵 32강", [["Guglielmo Vicario","GK",85],["Pedro Porro","RB",85],["Cristian Romero","CB",87],["Micky van de Ven","CB",86],["Destiny Udogie","LB",85],["Yves Bissouma","CM",82],["Pape Matar Sarr","CM",82],["Dejan Kulusevski","RW",85],["James Maddison","CAM",87],["Brennan Johnson","LW",83],["Heung-min Son","ST",90,["Richarlison","ST",84]]], seasonPosterMap["2023/24"]),
-  makeSeason("2024/25", "엔지 포스테코글루 · 리그 17위 · 유로파리그 우승", [["Guglielmo Vicario","GK",85],["Pedro Porro","RB",86],["Cristian Romero","CB",88],["Micky van de Ven","CB",88],["Destiny Udogie","LB",84],["Pape Matar Sarr","CM",83],["Rodrigo Bentancur","CM",85],["Brennan Johnson","RW",84],["Dejan Kulusevski","CAM",86],["Heung-min Son","LW",89],["Dominic Solanke","ST",83,["James Maddison","CAM",84],["Lucas Bergvall","CM",81],["Djed Spence","RB",81]]], seasonPosterMap["2024/25"]),
+  makeSeason("2023/24", "엔지 포스테코글루 · 리그 5위 · FA컵 32강", [["Guglielmo Vicario","GK",85],["Pedro Porro","RB",85],["Cristian Romero","CB",87],["Micky van de Ven","CB",86],["Destiny Udogie","LB",85],["Yves Bissouma","CM",82],["Pape Matar Sarr","CM",82],["Dejan Kulusevski","RW",85],["James Maddison","CAM",87],["Brennan Johnson","LW",83],["Heung-min Son","ST",90],["Richarlison","ST",84]], seasonPosterMap["2023/24"]),
+  makeSeason("2024/25", "엔지 포스테코글루 · 리그 17위 · 유로파리그 우승", [["Guglielmo Vicario","GK",85],["Pedro Porro","RB",86],["Cristian Romero","CB",88],["Micky van de Ven","CB",88],["Destiny Udogie","LB",84],["Pape Matar Sarr","CM",83],["Rodrigo Bentancur","CM",85],["Brennan Johnson","RW",84],["Dejan Kulusevski","CAM",86],["Heung-min Son","LW",89],["Dominic Solanke","ST",83],["James Maddison","CAM",84],["Lucas Bergvall","CM",81],["Djed Spence","RB",81]], seasonPosterMap["2024/25"]),
   makeSeason("2025/26", "토마스 프랭크→이고르 투도르→데 제르비 · 리그 17위 · 슈퍼컵 준우승", [["Guglielmo Vicario","GK",84],["Pedro Porro","RB",86],["Cristian Romero","CB",86],["Micky van de Ven","CB",85],["Djed Spence","LB",82],["João Palhinha","CM",86],["Rodrigo Bentancur","CM",84],["Mohammed Kudus","RW",85],["Xavi Simons","CAM",85],["Mathys Tel","LW",81],["Richarlison","ST",84]], seasonPosterMap["2025/26"]),
   makeSeason("2026/27", "로베르토 데 제르비 · 리그 진행 중 · 시즌 진행 중", [["Antonín Kinský","GK",84],["Pedro Porro","RB",88],["Jan Paul van Hecke","CB",87],["Micky van de Ven","CB",85],["Destiny Udogie","LB",83],["Sandro Tonali","CM",86],["Rodrigo Bentancur","CM",84],["Lucas Bergvall","CM",83],["Matheus Fernandes","CM",84],["Mohammed Kudus","RW",84],["James Maddison","CAM",86],["Mathys Tel","LW",82],["Omar Marmoush","ST",84],["Dominic Solanke","ST",83],["Sávio","RW",84],["Andrew Robertson","LB",85]], null),
   makeSeason("THE LEGENDS", "비공식 스퍼스 레전드 스페셜 · 모든 카드 OVR 90+", [["Pat Jennings","GK",93],["Steve Perryman","RB",90],["Ledley King","CB",90],["Gary Mabbutt","CB",91],["Chris Hughton","LB",90],["Danny Blanchflower","CM",93],["Dave Mackay","CM",92],["Glenn Hoddle","CAM",94],["Paul Gascoigne","CAM",92],["Ossie Ardiles","CM",91],["Cliff Jones","LW",90],["Jimmy Greaves","ST",96]], null)
@@ -4137,7 +4830,7 @@ const playerDisplayNames = {
   "Didier Zokora": "디디에 조코라",
   "Dimitar Berbatov": "디미타르 베르바토프",
   "Djed Spence": "제드 스펜스",
-  "Dominic Solanke": "도미닉 솔란케",
+  "Dominic Solanke": "도미닉 솔랑케",
   "Edgar Davids": "에드가 다비즈",
   "Emerson Royal": "에메르송 로얄",
   "Emmanuel Adebayor": "에마뉘엘 아데바요르",
@@ -4290,28 +4983,30 @@ function getPrimaryPosition(name, fallbackPos=""){
 
 
 const managers = [
-  {name:"빌 니콜슨", ovr:95, tenure:"1958–1974", weight:0.5},
-  {name:"주제 무리뉴", ovr:90, tenure:"2019–2021", weight:1},
-  {name:"안토니오 콘테", ovr:89, tenure:"2021–2023", weight:1},
-  {name:"마우리시오 포체티노", ovr:87, tenure:"2014–2019", weight:1},
-  {name:"로베르토 데 제르비", ovr:86, tenure:"2026–", weight:1},
-  {name:"엔지 포스테코글루", ovr:85, tenure:"2023–2025", weight:1},
-  {name:"해리 레드냅", ovr:84, tenure:"2008–2012", weight:1},
-  {name:"마르틴 욜", ovr:83, tenure:"2004–2007", weight:1},
-  {name:"조지 그레이엄", ovr:82, tenure:"1998–2001", weight:1},
-  {name:"누누 에스피리투 산투", ovr:81, tenure:"2021", weight:1},
-  {name:"안드레 빌라스보아스", ovr:81, tenure:"2012–2013", weight:1},
-  {name:"글렌 호들", ovr:80, tenure:"2001–2003", weight:1},
-  {name:"후안데 라모스", ovr:80, tenure:"2007–2008", weight:1},
-  {name:"게리 프랜시스", ovr:79, tenure:"1994–1997", weight:1},
-  {name:"이고르 투도르", ovr:79, tenure:"2026", weight:1},
-  {name:"토마스 프랭크", ovr:78, tenure:"2025–2026", weight:1},
-  {name:"오시 아르딜레스", ovr:78, tenure:"1993–1994", weight:1},
-  {name:"팀 셔우드", ovr:77, tenure:"2013–2014", weight:1},
-  {name:"자크 상티니", ovr:76, tenure:"2004", weight:1},
-  {name:"라이언 메이슨", ovr:76, tenure:"2021 · 2023", weight:1},
-  {name:"데이비드 플리트", ovr:75, tenure:"2003–2004", weight:1},
-  {name:"크리스천 그로스", ovr:74, tenure:"1997–1998", weight:1}
+  {name:"빌 니콜슨", ovr:95, tenure:"1958–1974", rarity:"UR", mods:{ovr:3}},
+  {name:"주제 무리뉴", ovr:90, tenure:"2019–2021", rarity:"SSR", mods:{def:2}},
+  {name:"안토니오 콘테", ovr:89, tenure:"2021–2023", rarity:"SSR", mods:{def:1,mid:1}},
+  {name:"마우리시오 포체티노", ovr:87, tenure:"2014–2019", rarity:"SSR", mods:{att:1,def:1}},
+  {name:"로베르토 데 제르비", ovr:86, tenure:"2026–", rarity:"SR", mods:{mid:1}},
+  {name:"엔지 포스테코글루", ovr:85, tenure:"2023–2025", rarity:"SR", mods:{att:2,def:-1}},
+  {name:"해리 레드냅", ovr:85, tenure:"2008–2012", rarity:"SR", mods:{att:1}},
+
+  {name:"마르틴 욜", ovr:83, tenure:"2004–2007", rarity:"R", mods:{att:1,def:-1}},
+  {name:"조지 그레이엄", ovr:82, tenure:"1998–2001", rarity:"R", mods:{def:1,att:-1}},
+  {name:"누누 에스피리투 산투", ovr:81, tenure:"2021", rarity:"R", mods:{def:1,att:-1}},
+  {name:"안드레 빌라스보아스", ovr:81, tenure:"2012–2013", rarity:"R", mods:{mid:1,def:-1}},
+  {name:"글렌 호들", ovr:80, tenure:"2001–2003", rarity:"R", mods:{att:1,def:-1}},
+  {name:"후안데 라모스", ovr:80, tenure:"2007–2008", rarity:"R", mods:{def:1,mid:-1}},
+
+  {name:"게리 프랜시스", ovr:79, tenure:"1994–1997", rarity:"F", mods:{mid:-1}},
+  {name:"이고르 투도르", ovr:79, tenure:"2026", rarity:"F", mods:{att:-1}},
+  {name:"토마스 프랭크", ovr:78, tenure:"2025–2026", rarity:"F", mods:{ovr:-1}},
+  {name:"오시 아르딜레스", ovr:78, tenure:"1993–1994", rarity:"F", mods:{def:-1}},
+  {name:"팀 셔우드", ovr:77, tenure:"2013–2014", rarity:"F", mods:{mid:-1}},
+  {name:"자크 상티니", ovr:76, tenure:"2004", rarity:"F", mods:{att:-1}},
+  {name:"라이언 메이슨", ovr:76, tenure:"2021 · 2023", rarity:"F", mods:{def:-1}},
+  {name:"데이비드 플리트", ovr:75, tenure:"2003–2004", rarity:"F", mods:{ovr:-1}},
+  {name:"크리스천 그로스", ovr:74, tenure:"1997–1998", rarity:"F", mods:{ovr:-1}}
 ];
 
 let selectedManager = null;
@@ -4321,21 +5016,51 @@ let managerIndex = 0;
 let managerTimer = null;
 const MANAGER_REPEAT = 40;
 
-function getManagerBoost(manager = selectedManager){
-  if(!manager || !managerPlaced) return 0;
-  if(manager.name === "빌 니콜슨") return 3;
-  if(manager.ovr >= 90) return 2;
-  if(manager.ovr >= 85) return 1;
-  if(manager.ovr >= 80) return 0;
-  return -1;
+const managerRarityConfig = [
+  {id:"UR", label:"UR · ULTRA RARE", chance:2},
+  {id:"SSR", label:"SSR", chance:14},
+  {id:"SR", label:"SR", chance:24},
+  {id:"R", label:"R", chance:34},
+  {id:"F", label:"F", chance:26}
+];
+
+let pendingManagerRarity = null;
+let pendingManagerCandidates = [];
+
+function getManagerModifiers(manager = selectedManager){
+  if(!manager || !managerPlaced) return {ovr:0,att:0,mid:0,def:0};
+  return {
+    ovr:Number(manager.mods?.ovr || 0),
+    att:Number(manager.mods?.att || 0),
+    mid:Number(manager.mods?.mid || 0),
+    def:Number(manager.mods?.def || 0)
+  };
 }
 
-function formatManagerBoost(boost = getManagerBoost()){
-  return `${boost >= 0 ? "+" : ""}${boost}`;
+function formatSigned(v){ return `${v>=0?"+":""}${v}`; }
+
+function formatManagerModifiers(manager = selectedManager, requirePlaced=true){
+  if(!manager) return "보정 없음";
+  const mods = requirePlaced ? getManagerModifiers(manager) : {
+    ovr:Number(manager.mods?.ovr || 0),
+    att:Number(manager.mods?.att || 0),
+    mid:Number(manager.mods?.mid || 0),
+    def:Number(manager.mods?.def || 0)
+  };
+  const parts = [];
+  if(mods.ovr) parts.push(`OVR ${formatSigned(mods.ovr)}`);
+  if(mods.att) parts.push(`ATT ${formatSigned(mods.att)}`);
+  if(mods.mid) parts.push(`MID ${formatSigned(mods.mid)}`);
+  if(mods.def) parts.push(`DEF ${formatSigned(mods.def)}`);
+  return parts.length ? parts.join(" · ") : "보정 없음";
 }
 
-function applyManagerBoost(value){
-  return clamp(value + getManagerBoost(), 0, 99);
+function managerRarityClass(manager){
+  return manager?.rarity ? `manager-rarity-${manager.rarity.toLowerCase()}` : "";
+}
+
+function managerTierClass(manager){
+  return managerRarityClass(manager);
 }
 
 // 팀 라인 평균 기준:
@@ -4396,6 +5121,9 @@ let statGroups = {
 };
 let drafted = [];
 let activeChemistryIds = new Set();
+let chemistryAnimationQueue = [];
+let chemistryAnimationPlaying = false;
+let chemistryAnimationTimer = null;
 let currentSeason = null;
 let isRolling = false;
 let rouletteIndex = 0;
@@ -4453,14 +5181,14 @@ function setRouletteMode(mode){
   if(mode === "manager"){
     list.innerHTML = "";
     const loop = [];
-    for(let r=0;r<MANAGER_REPEAT;r++) loop.push(...managers);
-    loop.forEach(m=>{
+    for(let r=0;r<MANAGER_REPEAT;r++) loop.push(...managerRarityConfig);
+    loop.forEach(tier=>{
       const item = document.createElement("div");
       item.className = "roulette-item";
-      item.innerHTML = `<strong>${m.name}</strong><span>${m.tenure} · OVR ${m.ovr}</span>`;
+      item.innerHTML = `<strong>${tier.label}</strong><span>MANAGER RARITY · ${tier.chance}%</span>`;
       list.appendChild(item);
     });
-    managerIndex = managers.length * Math.floor(MANAGER_REPEAT/3);
+    managerIndex = managerRarityConfig.length * Math.floor(MANAGER_REPEAT/3);
     list.style.transition = "none";
     list.style.transform = `translateY(-${managerIndex * 80}px)`;
   }else{
@@ -4475,11 +5203,14 @@ function renderXIManagerCard(){
   const tenure = $("#xiManagerTenure");
   if(!slot || !name || !meta || !tenure) return;
 
+  slot.classList.remove("tier-platinum","tier-gold","tier-silver","tier-base","tier-legend","manager-rarity-ur","manager-rarity-ssr","manager-rarity-sr","manager-rarity-r","manager-rarity-f");
+
   if(selectedManager && managerPlaced){
     slot.classList.add("show");
-    const boost = formatManagerBoost();
-    name.textContent = selectedManager.name;
-    meta.textContent = `OVR ${selectedManager.ovr} · 팀 보정 ${boost}`;
+    const tierClass = managerTierClass(selectedManager);
+    if(tierClass) slot.classList.add(tierClass);
+    name.textContent = `${selectedManager.rarity} · ${selectedManager.name}`;
+    meta.textContent = `OVR ${selectedManager.ovr} · ${formatManagerModifiers()}`;
     tenure.textContent = `Tottenham ${selectedManager.tenure}`;
   }else{
     slot.classList.remove("show");
@@ -4532,11 +5263,11 @@ function updateFinalDraftUI(){
 function updateManagerRerollUI(){
   const btn = $("#managerRerollBtn");
   if(!btn) return;
-  btn.textContent = `감독 리롤 ${managerRerollRemaining}회`;
+  btn.textContent = `감독 등급 리롤 ${managerRerollRemaining}회`;
   btn.disabled = !(
     draftedCount() === 11 &&
     managerRerollRemaining > 0 &&
-    !!selectedManager &&
+    (!!selectedManager || !!pendingManagerRarity) &&
     !managerPlaced &&
     !managerRolling
   );
@@ -4555,7 +5286,7 @@ function updateManagerUI(){
   }
 
   if(managerBtn){
-    managerBtn.disabled = managerRolling || !!selectedManager;
+    managerBtn.disabled = managerRolling || !!selectedManager || !!pendingManagerRarity;
   }
 
   updateManagerRerollUI();
@@ -4566,26 +5297,139 @@ function rerollManager(){
   if(
     draftedCount() !== 11 ||
     managerRerollRemaining <= 0 ||
-    !selectedManager ||
+    (!selectedManager && !pendingManagerRarity) ||
     managerPlaced ||
     managerRolling
   ) return;
 
-  const previousManagerName = selectedManager.name;
   managerRerollRemaining--;
   selectedManager = null;
+  pendingManagerRarity = null;
+  pendingManagerCandidates = [];
   managerPlaced = false;
   renderXIManagerCard();
   updateManagerRerollUI();
-  startManagerRoulette(previousManagerName);
+  startManagerRoulette();
 }
 
-function startManagerRoulette(excludeManagerName=null){
+function pulseRouletteStep(finalStep=false){
+  const box = document.querySelector(".roulette-box");
+  if(!box) return;
+  const className = finalStep ? "roulette-lock-step" : "roulette-click-step";
+  box.classList.remove("roulette-click-step","roulette-lock-step");
+  void box.offsetWidth;
+  box.classList.add(className);
+  setTimeout(()=>{
+    if(box) box.classList.remove(className);
+  }, finalStep ? 360 : 175);
+}
+
+function chooseManagerRarity(){
+  const total = managerRarityConfig.reduce((sum,t)=>sum+t.chance,0);
+  let roll = Math.random()*total;
+  for(const tier of managerRarityConfig){
+    roll -= tier.chance;
+    if(roll <= 0) return tier;
+  }
+  return managerRarityConfig[managerRarityConfig.length-1];
+}
+
+function renderManagerTierChoices(tier){
+  pendingManagerRarity = tier.id;
+  pendingManagerCandidates = managers.filter(m=>m.rarity===tier.id);
+
+  $("#seasonName").textContent = `${tier.label} 등급`;
+  $("#seasonInfo").textContent = `등급 확정 · 아래 감독 중 한 명을 선택하세요.`;
+  $("#revealStage").className = "reveal-stage";
+  $("#revealStage").innerHTML = "";
+
+  $("#players").innerHTML = `
+    <div style="width:100%">
+      <div style="font-size:11px;font-weight:1000;color:#9fb2d5;letter-spacing:1.3px;margin-bottom:8px">
+        ${tier.label} MANAGERS
+      </div>
+      <div class="manager-choice-grid">
+        ${pendingManagerCandidates.map((m,i)=>`
+          <button type="button" class="manager-choice-card ${managerRarityClass(m)}" onclick="chooseManagerFromTier(${i})">
+            <div class="manager-rarity-chip">${m.rarity}</div>
+            <strong>${m.name}</strong>
+            <span>Tottenham ${m.tenure} · OVR ${m.ovr}</span>
+            <em>${formatManagerModifiers(m,false)}</em>
+          </button>
+        `).join("")}
+      </div>
+    </div>
+  `;
+  updateManagerRerollUI();
+  updateManagerUI();
+}
+
+function chooseManagerFromTier(index){
+  const manager = pendingManagerCandidates[index];
+  if(!manager || managerRolling || managerPlaced) return;
+
+  selectedManager = manager;
+  pendingManagerRarity = null;
+  pendingManagerCandidates = [];
+
+  $("#players").innerHTML = "";
+  $("#seasonName").textContent = `${selectedManager.rarity} · ${selectedManager.name}`;
+  $("#seasonInfo").textContent = `MANAGER · Tottenham ${selectedManager.tenure} · OVR ${selectedManager.ovr} · ${formatManagerModifiers(selectedManager,false)}`;
+
+  if(selectedManager.name === "빌 니콜슨"){
+    triggerLegendRevealAnimation("UR · BILL NICHOLSON");
+  }
+
+  const reveal = $("#revealStage");
+  if(reveal){
+    reveal.className = "reveal-stage show";
+    reveal.innerHTML = `
+      <div id="pendingManagerCard" class="manager-reveal-card ${managerRarityClass(selectedManager)} drag-ready" draggable="true">
+        <div class="reveal-head">
+          <div>
+            <div class="manager-rarity-chip">${selectedManager.rarity}</div>
+            <div class="reveal-nation">TOTTENHAM MANAGER</div>
+            <div class="reveal-name">${selectedManager.name}</div>
+            <div class="reveal-tenure">Tottenham ${selectedManager.tenure}</div>
+          </div>
+          <div class="reveal-ovr">
+            <strong>${selectedManager.ovr}</strong>
+            <span>OVR</span>
+          </div>
+        </div>
+        <div class="manager-card-label">${formatManagerModifiers(selectedManager,false)} · 카드를 누르거나 감독 빈 자리로 드래그하세요</div>
+      </div>`;
+
+    const managerCard = $("#pendingManagerCard");
+    if(managerCard){
+      managerCard.addEventListener("dragstart", e=>{
+        e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData("text/plain","manager");
+        $("#xiManagerSlot")?.classList.add("drop-ready");
+      });
+      managerCard.addEventListener("dragend", ()=>{
+        $("#xiManagerSlot")?.classList.remove("drop-ready");
+      });
+      managerCard.addEventListener("click", ()=>{
+        if(selectedManager && !managerPlaced) placeManager();
+      });
+    }
+  }
+
+  renderXIManagerCard();
+  updateManagerUI();
+  updateFinalDraftUI();
+}
+
+function startManagerRoulette(){
   if(managerRolling || draftedCount() !== 11 || selectedManager) return;
 
   managerRolling = true;
   managerPlaced = false;
+  pendingManagerRarity = null;
+  pendingManagerCandidates = [];
   renderXIManagerCard();
+
   $("#drawBtn").disabled = true;
   $("#managerDrawBtn").disabled = true;
   $("#rerollBtn").disabled = true;
@@ -4594,34 +5438,21 @@ function startManagerRoulette(excludeManagerName=null){
 
   setRouletteMode("manager");
 
-  $("#seasonName").innerHTML = `<span class="live"><span class="dot"></span>감독 룰렛 회전 중...</span>`;
-  $("#seasonInfo").textContent = "감독을 결정하는 중입니다.";
+  $("#seasonName").innerHTML = `<span class="live"><span class="dot"></span>감독 등급 룰렛 회전 중...</span>`;
+  $("#seasonInfo").textContent = "UR · SSR · SR · R · F 중 감독 등급을 결정합니다.";
   $("#players").innerHTML = "";
   $("#revealStage").className = "reveal-stage";
   $("#revealStage").innerHTML = "";
-  const preview = $("#seasonPreview");
 
   if(managerTimer) clearTimeout(managerTimer);
 
   const list = $("#rouletteList");
-  const eligibleManagerWeights = managers.map(m=>
-    m.name === excludeManagerName ? 0 : (m.weight ?? 1)
-  );
-  const totalManagerWeight = eligibleManagerWeights.reduce((sum,w)=>sum+w,0);
-  let managerRoll = Math.random()*totalManagerWeight;
-  let targetIndex = 0;
-  for(let i=0;i<managers.length;i++){
-    managerRoll -= eligibleManagerWeights[i];
-    if(managerRoll <= 0 && eligibleManagerWeights[i] > 0){
-      targetIndex = i;
-      break;
-    }
-  }
-  const target = managers[targetIndex];
+  const targetTier = chooseManagerRarity();
+  const targetIndex = managerRarityConfig.findIndex(t=>t.id===targetTier.id);
 
-  const currentModulo = ((managerIndex % managers.length)+managers.length)%managers.length;
-  let steps = managers.length*2 + ((targetIndex-currentModulo+managers.length)%managers.length);
-  if(steps < 14) steps += managers.length;
+  const currentModulo = ((managerIndex % managerRarityConfig.length)+managerRarityConfig.length)%managerRarityConfig.length;
+  let steps = managerRarityConfig.length*5 + ((targetIndex-currentModulo+managerRarityConfig.length)%managerRarityConfig.length);
+  if(steps < 20) steps += managerRarityConfig.length;
 
   let step = 0;
   function tick(){
@@ -4631,72 +5462,24 @@ function startManagerRoulette(excludeManagerName=null){
     const progress = step/steps;
     let delay;
     if(progress < .80){
-      delay = 11;
+      delay = 18;
     }else{
       const eased = (progress-.80)/.20;
-      delay = 11 + Math.pow(eased,2.5)*180;
+      delay = 18 + Math.pow(eased,2.5)*180;
     }
 
     list.style.transition = `transform ${Math.min(delay,185)}ms cubic-bezier(.15,.82,.22,1)`;
     list.style.transform = `translateY(-${managerIndex*80}px)`;
 
+    if(progress >= .80) pulseRouletteStep(step >= steps);
+
     if(step < steps){
       managerTimer = setTimeout(tick,delay);
     }else{
-      selectedManager = target;
       managerTimer = setTimeout(()=>{
         managerRolling = false;
-        const managerBoostPreview = (selectedManager.name === "빌 니콜슨")
-          ? 3
-          : (selectedManager.ovr >= 90 ? 2 : (selectedManager.ovr >= 85 ? 1 : (selectedManager.ovr >= 80 ? 0 : -1)));
-        const managerBoostText = `${managerBoostPreview >= 0 ? "+" : ""}${managerBoostPreview}`;
-        $("#seasonName").textContent = selectedManager.name;
-        $("#seasonInfo").textContent = `MANAGER · Tottenham ${selectedManager.tenure} · OVR ${selectedManager.ovr} · 팀 보정 ${managerBoostText}`;
-
-        const reveal = $("#revealStage");
-        if(reveal){
-          reveal.className = "reveal-stage show";
-          reveal.innerHTML = `
-            <div id="pendingManagerCard" class="manager-reveal-card drag-ready" draggable="true">
-              <div class="reveal-head">
-                <div>
-                  <div class="reveal-nation">TOTTENHAM MANAGER</div>
-                  <div class="reveal-name">${selectedManager.name}</div>
-                  <div class="reveal-tenure">Tottenham ${selectedManager.tenure}</div>
-                </div>
-                <div class="reveal-ovr">
-                  <strong>${selectedManager.ovr}</strong>
-                  <span>OVR</span>
-                </div>
-              </div>
-              <div class="manager-card-label">팀 보정 ${managerBoostText} · 카드를 누르거나 감독 빈 자리로 드래그하세요</div>
-            </div>`;
-
-          const managerCard = $("#pendingManagerCard");
-          if(managerCard){
-            managerCard.addEventListener("dragstart", e=>{
-              e.dataTransfer.effectAllowed = "move";
-              e.dataTransfer.setData("text/plain","manager");
-              const managerSlot = $("#xiManagerSlot");
-              if(managerSlot) managerSlot.classList.add("drop-ready");
-            });
-            managerCard.addEventListener("dragend", ()=>{
-              const managerSlot = $("#xiManagerSlot");
-              if(managerSlot) managerSlot.classList.remove("drop-ready");
-            });
-
-            // 모바일에서는 HTML5 drag가 안정적으로 동작하지 않으므로
-            // 감독 카드를 탭/클릭하는 것만으로 바로 감독 슬롯에 배치합니다.
-            managerCard.addEventListener("click", ()=>{
-              if(selectedManager && !managerPlaced) placeManager();
-            });
-          }
-        }
-
-        renderXIManagerCard();
-        updateManagerUI();
-        updateFinalDraftUI();
-      },90);
+        renderManagerTierChoices(targetTier);
+      },120);
     }
   }
   tick();
@@ -4911,6 +5694,10 @@ function startRoulette(excludeSeasonName=null){
 
     list.style.transition = `transform ${Math.min(delay,170)}ms cubic-bezier(.15,.82,.22,1)`;
     list.style.transform = `translateY(-${rouletteIndex * 80}px)`;
+
+    if(progress >= .78){
+      pulseRouletteStep(step >= stepsToTarget);
+    }
 
     if(step < stepsToTarget){
       rouletteTimer = setTimeout(tick, delay);
@@ -5419,6 +6206,12 @@ function handleDropOnSlot(targetIndex){
     clearDropHints();
     renderSquad();
     renderPitch();
+
+    // 포메이션 내 선수 위치를 바꿨다면 현재 시즌 후보의
+    // "포지션 마감" 여부도 새 배치 기준으로 즉시 다시 계산한다.
+    if(currentSeason && !pendingPlayer && !isRolling){
+      renderPlayers();
+    }
   }
 }
 
@@ -5754,7 +6547,12 @@ function getChemistryBoosts(){
   }), {att:0,mid:0,def:0,overall:0});
 }
 
-function triggerChemistryActivation(chem){
+function playNextChemistryActivation(){
+  if(chemistryAnimationPlaying || !chemistryAnimationQueue.length) return;
+
+  chemistryAnimationPlaying = true;
+  const chem = chemistryAnimationQueue.shift();
+
   const pop = document.createElement("div");
   pop.className = "chem-activation";
   pop.innerHTML = `
@@ -5763,7 +6561,30 @@ function triggerChemistryActivation(chem){
     <div class="chem-activation-effect">${chem.effect}</div>
   `;
   document.body.appendChild(pop);
-  setTimeout(()=>pop.remove(), 1700);
+
+  chemistryAnimationTimer = setTimeout(()=>{
+    pop.remove();
+    chemistryAnimationPlaying = false;
+    chemistryAnimationTimer = null;
+
+    // 동시에 여러 팀캐미가 켜졌다면 하나가 완전히 끝난 뒤 다음 것을 표시.
+    playNextChemistryActivation();
+  }, 1700);
+}
+
+function triggerChemistryActivation(chem){
+  chemistryAnimationQueue.push(chem);
+  playNextChemistryActivation();
+}
+
+function clearChemistryActivationQueue(){
+  chemistryAnimationQueue = [];
+  chemistryAnimationPlaying = false;
+  if(chemistryAnimationTimer){
+    clearTimeout(chemistryAnimationTimer);
+    chemistryAnimationTimer = null;
+  }
+  document.querySelectorAll(".chem-activation").forEach(el=>el.remove());
 }
 
 function renderTeamChemistryPanel(activeChems=getActiveTeamChemistries()){
@@ -5822,13 +6643,13 @@ function updateStats(){
   const chemistryBoost = getChemistryBoosts();
 
   $("#atk").textContent = attValue
-    ? Math.round(clamp(applyManagerBoost(attValue) + chemistryBoost.att, 0, 99))
+    ? Math.round(clamp(attValue + getManagerModifiers().att + chemistryBoost.att, 0, 99))
     : 0;
   $("#mid").textContent = midValue
-    ? Math.round(clamp(applyManagerBoost(midValue) + chemistryBoost.mid, 0, 99))
+    ? Math.round(clamp(midValue + getManagerModifiers().mid + chemistryBoost.mid, 0, 99))
     : 0;
   $("#def").textContent = defValue
-    ? Math.round(clamp(applyManagerBoost(defValue) + chemistryBoost.def, 0, 99))
+    ? Math.round(clamp(defValue + getManagerModifiers().def + chemistryBoost.def, 0, 99))
     : 0;
 
   const all = drafted.filter(Boolean);
@@ -5836,7 +6657,7 @@ function updateStats(){
     ? Math.round(all.reduce((sum,p)=>sum+p.ovr,0)/all.length)
     : 0;
   $("#ovr").textContent = overall
-    ? Math.round(clamp(applyManagerBoost(overall) + chemistryBoost.overall, 0, 99))
+    ? Math.round(clamp(overall + getManagerModifiers().ovr + chemistryBoost.overall + winterTeamOvrBoost, 0, 99))
     : 0;
 
   syncTeamChemistry({animate:true});
@@ -5953,10 +6774,10 @@ function getMyTeamRatings(){
   const overall = all.reduce((sum,p)=>sum+p.ovr,0) / Math.max(1,all.length);
   const chemistryBoost = getChemistryBoosts();
   return {
-    overall: clamp(applyManagerBoost(overall) + chemistryBoost.overall, 0, 99),
-    att: clamp(applyManagerBoost(averageGroupOvr(statGroups.att)) + chemistryBoost.att, 0, 99),
-    mid: clamp(applyManagerBoost(averageGroupOvr(statGroups.mid)) + chemistryBoost.mid, 0, 99),
-    def: clamp(applyManagerBoost(averageGroupOvr(statGroups.def)) + chemistryBoost.def, 0, 99)
+    overall: clamp(overall + getManagerModifiers().ovr + chemistryBoost.overall + winterTeamOvrBoost, 0, 99),
+    att: clamp(averageGroupOvr(statGroups.att) + getManagerModifiers().att + chemistryBoost.att, 0, 99),
+    mid: clamp(averageGroupOvr(statGroups.mid) + getManagerModifiers().mid + chemistryBoost.mid, 0, 99),
+    def: clamp(averageGroupOvr(statGroups.def) + getManagerModifiers().def + chemistryBoost.def, 0, 99)
   };
 }
 
@@ -5984,6 +6805,15 @@ function poissonRandom(lambda){
   return Math.min(k - 1, 7);
 }
 
+// 약팀 상대에서 우세가 지나치게 4~6골 난타전으로 번지는 것을 방지.
+// 1.80 xG까지는 그대로 두고, 그 이상 구간만 35%의 기울기로 완만하게 압축한다.
+// 강팀의 승리 확률은 유지하면서 과도한 대승 빈도만 줄이는 소프트 캡.
+function dampenHighXg(xg){
+  const threshold = 1.80;
+  if(xg <= threshold) return xg;
+  return Math.min(2.45, threshold + (xg - threshold) * 0.35);
+}
+
 function buildMatchModel(myRatings, opponentRatings, venue){
   const homeBonus = venue === "H" ? 1.8 : -1.8;
 
@@ -5993,7 +6823,7 @@ function buildMatchModel(myRatings, opponentRatings, venue){
   const flowDiff = myFlow - oppFlow;
 
   // A smooth share rather than a hard win/loss threshold.
-  const myFlowShare = 1 / (1 + Math.exp(-flowDiff / 7.5));
+  const myFlowShare = 1 / (1 + Math.exp(-flowDiff / 7.0));
   const oppFlowShare = 1 - myFlowShare;
 
   // ATT vs opposing DEF determines how efficiently each side converts its share into goals.
@@ -6003,10 +6833,10 @@ function buildMatchModel(myRatings, opponentRatings, venue){
   const myChanceMultiplier = 0.72 + myFlowShare * 0.68;
   const oppChanceMultiplier = 0.72 + oppFlowShare * 0.68;
 
-  // 득점량을 조금 낮춘 버전:
-  // 기본 기대득점을 낮추고, ATT-DEF 차이가 득점에 미치는 폭도 완만하게 조정.
-  let myXg = 1.04 * myChanceMultiplier * Math.exp(myAttackEdge / 25);
-  let oppXg = 1.04 * oppChanceMultiplier * Math.exp(oppAttackEdge / 25);
+  // 리그 테이블이 현실적인 승점 분포를 만들도록 강팀/약팀 격차를 조금 더 분명하게 반영.
+  // 기본 기대득점과 ATT-DEF 영향도를 조정해 무승부 과다를 줄이고 상위권 승점대를 높인다.
+  let myXg = 1.15 * myChanceMultiplier * Math.exp(myAttackEdge / 22);
+  let oppXg = 1.15 * oppChanceMultiplier * Math.exp(oppAttackEdge / 22);
 
   // 팀별 홈 가중치 / 토트넘 상대 상성 가중치.
   // 값이 높을수록 상대팀이 토트넘에게 더 까다롭게 작동한다.
@@ -6023,9 +6853,10 @@ function buildMatchModel(myRatings, opponentRatings, venue){
   // 상성 가중치는 홈/원정과 무관하게 상대 득점 기대값에 적용.
   oppXg *= opponentRatings.matchupWeight;
 
-  // xG는 소수점을 유지해 팀별 능력치·홈/원정·상성 차이가 확률에 그대로 반영되도록 한다.
-  myXg = clampFloat(myXg, 0.15, 3.10);
-  oppXg = clampFloat(oppXg, 0.15, 3.10);
+  // xG는 소수점을 유지하되 높은 구간은 소프트 캡으로 압축한다.
+  // 약팀 상대에서도 우세는 유지하지만 4~6골 경기가 과도하게 반복되지 않게 한다.
+  myXg = dampenHighXg(clampFloat(myXg, 0.15, 3.10));
+  oppXg = dampenHighXg(clampFloat(oppXg, 0.15, 3.10));
 
   return {myXg, oppXg, myFlowShare, myAttackEdge, oppAttackEdge};
 }
@@ -6479,25 +7310,234 @@ function renderCompletedRound(fixture, result, spursGoals, opponentGoals, events
   history.prepend(row);
 }
 
-function simulateOtherTeamPoints(teamName, ratings){
-  const overall = (ratings.att + ratings.mid + ratings.def) / 3;
-  const baseline = 50 + (overall - 82) * 2.5;
-  const noise = (Math.random() + Math.random() - 1) * 9;
-  return Math.round(clamp(baseline + noise, 23, 95));
+function buildFullLeagueSchedule(){
+  const firstHalfSpurs = premierLeague2627Fixtures.slice(0,19);
+  const opponentByResidue = firstHalfSpurs.map(f=>f.opponent);
+  const firstHalfRounds = [];
+
+  // 19-team residue + Tottenham as the fixed pivot.
+  // Round r: Tottenham vs residue r, and the other 18 teams pair as r±k.
+  for(let r=0;r<19;r++){
+    const spursFixture = firstHalfSpurs[r];
+    const pairs = [];
+
+    pairs.push(
+      spursFixture.venue === "H"
+        ? {home:"Tottenham", away:spursFixture.opponent}
+        : {home:spursFixture.opponent, away:"Tottenham"}
+    );
+
+    for(let k=1;k<=9;k++){
+      const a = opponentByResidue[(r+k)%19];
+      const b = opponentByResidue[(r-k+19)%19];
+      // Alternate orientation to avoid long artificial home/away streaks.
+      if((r+k)%2 === 0) pairs.push({home:a,away:b});
+      else pairs.push({home:b,away:a});
+    }
+    firstHalfRounds.push(pairs);
+  }
+
+  // The supplied Tottenham schedule uses a different round order in the second half.
+  // Reuse the exact reverse fixture set, reordered by Tottenham's listed opponent.
+  const full = [...firstHalfRounds];
+  for(let i=19;i<38;i++){
+    const spursFixture = premierLeague2627Fixtures[i];
+    const firstIndex = opponentByResidue.indexOf(spursFixture.opponent);
+    const reverseRound = firstHalfRounds[firstIndex].map(match=>({
+      home:match.away,
+      away:match.home
+    }));
+    full.push(reverseRound);
+  }
+  return full;
 }
 
-function calculateFinalRank(spursPoints){
-  const otherTeams = Object.entries(premierLeague2627TeamRatings).map(([name,ratings])=>({
-    name,
-    pts: simulateOtherTeamPoints(name,ratings),
-    tie: Math.random()
-  }));
-  const table = [
-    ...otherTeams,
-    {name:"Tottenham", pts:spursPoints, tie:Math.random()}
-  ].sort((a,b)=>b.pts-a.pts || b.tie-a.tie);
+const premierLeague2627FullSchedule = buildFullLeagueSchedule();
 
-  return table.findIndex(t=>t.name==="Tottenham")+1;
+function createLeagueTableState(){
+  const names = ["Tottenham", ...Object.keys(premierLeague2627TeamRatings)];
+  return Object.fromEntries(names.map(name=>[
+    name,
+    {name,p:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0}
+  ]));
+}
+
+function applyLeagueResult(table, homeName, awayName, homeGoals, awayGoals){
+  const home = table[homeName];
+  const away = table[awayName];
+  if(!home || !away) return;
+
+  home.p++;
+  away.p++;
+  home.gf += homeGoals;
+  home.ga += awayGoals;
+  away.gf += awayGoals;
+  away.ga += homeGoals;
+
+  if(homeGoals > awayGoals){
+    home.w++;
+    away.l++;
+    home.pts += 3;
+  }else if(homeGoals < awayGoals){
+    away.w++;
+    home.l++;
+    away.pts += 3;
+  }else{
+    home.d++;
+    away.d++;
+    home.pts++;
+    away.pts++;
+  }
+
+  home.gd = home.gf - home.ga;
+  away.gd = away.gf - away.ga;
+}
+
+function getLeagueRatings(teamName){
+  if(teamName === "Tottenham") return getMyTeamRatings();
+  return getOpponentRatings(teamName);
+}
+
+function buildOtherLeagueMatchModel(homeName, awayName){
+  const home = getLeagueRatings(homeName);
+  const away = getLeagueRatings(awayName);
+
+  const homeFlow = (home.overall + home.mid) / 2 + 1.8;
+  const awayFlow = (away.overall + away.mid) / 2 - 1.8;
+  const flowDiff = homeFlow - awayFlow;
+
+  const homeShare = 1 / (1 + Math.exp(-flowDiff / 7.0));
+  const awayShare = 1 - homeShare;
+
+  const homeChanceMultiplier = 0.72 + homeShare * 0.68;
+  const awayChanceMultiplier = 0.72 + awayShare * 0.68;
+
+  let homeXg = 1.15 * homeChanceMultiplier * Math.exp((home.att - away.def) / 22);
+  let awayXg = 1.15 * awayChanceMultiplier * Math.exp((away.att - home.def) / 22);
+
+  // Each club gets its configured home-strength modifier; away side gets the same away penalty.
+  homeXg *= Number.isFinite(home.homeWeight) ? home.homeWeight : 1.06;
+  awayXg *= 0.95;
+
+  homeXg = dampenHighXg(clampFloat(homeXg,0.15,3.10));
+  awayXg = dampenHighXg(clampFloat(awayXg,0.15,3.10));
+
+  return {homeXg,awayXg};
+}
+
+function simulateOtherLeagueMatch(homeName, awayName){
+  const model = buildOtherLeagueMatchModel(homeName, awayName);
+  return {
+    homeGoals:poissonRandom(model.homeXg),
+    awayGoals:poissonRandom(model.awayXg)
+  };
+}
+
+function simulateOtherMatchesForRound(roundNumber, table){
+  const fixtures = premierLeague2627FullSchedule[roundNumber-1] || [];
+  fixtures
+    .filter(match=>match.home !== "Tottenham" && match.away !== "Tottenham")
+    .forEach(match=>{
+      const score = simulateOtherLeagueMatch(match.home,match.away);
+      applyLeagueResult(table,match.home,match.away,score.homeGoals,score.awayGoals);
+    });
+}
+
+function applySpursMatchToLeagueTable(table, fixture, spursGoals, opponentGoals){
+  if(fixture.venue === "H"){
+    applyLeagueResult(table,"Tottenham",fixture.opponent,spursGoals,opponentGoals);
+  }else{
+    applyLeagueResult(table,fixture.opponent,"Tottenham",opponentGoals,spursGoals);
+  }
+}
+
+function sortedLeagueTable(table){
+  return Object.values(table).slice().sort((a,b)=>
+    b.pts-a.pts ||
+    b.gd-a.gd ||
+    b.gf-a.gf ||
+    b.w-a.w ||
+    a.name.localeCompare(b.name)
+  );
+}
+
+function calculateFinalRank(table){
+  return sortedLeagueTable(table).findIndex(t=>t.name==="Tottenham")+1;
+}
+
+function renderLeagueTable(table, roundNumber=0, final=false){
+  const panel = $("#leagueTablePanel");
+  if(!panel) return;
+  const rows = sortedLeagueTable(table);
+
+  panel.classList.add("show");
+  panel.classList.toggle("live", !final);
+  panel.innerHTML = `
+    <div class="league-table-head">
+      <div class="league-table-title">2026/27 LEAGUE TABLE</div>
+      <div class="league-table-sub">${final ? "380 MATCHES COMPLETE" : `LIVE · ROUND ${roundNumber} / 38`}</div>
+    </div>
+    <table class="league-table">
+      <colgroup>
+        <col style="width:24px">
+        <col>
+        <col style="width:25px">
+        <col style="width:25px">
+        <col style="width:25px">
+        <col style="width:25px">
+        <col style="width:30px">
+        <col style="width:32px">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th class="team-col">TEAM</th>
+          <th>P</th>
+          <th>W</th>
+          <th>D</th>
+          <th>L</th>
+          <th>GD</th>
+          <th>PTS</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map((row,index)=>{
+          const position = index + 1;
+          const zoneClass =
+            position === 1 ? "zone-champion" :
+            position <= 4 ? "zone-champions" :
+            position <= 6 ? "zone-europa" :
+            position === 7 ? "zone-conference" :
+            position >= 18 ? "zone-relegation" : "";
+          const spursClass = row.name==="Tottenham" ? "spurs-row" : "";
+          return `
+          <tr class="${zoneClass} ${spursClass}">
+            <td>${position}</td>
+            <td class="team-col" title="${getTeamDisplayName(row.name)}">${getTeamDisplayName(row.name)}</td>
+            <td>${row.p}</td>
+            <td>${row.w}</td>
+            <td>${row.d}</td>
+            <td>${row.l}</td>
+            <td>${row.gd>0?"+":""}${row.gd}</td>
+            <td class="pts-col">${row.pts}</td>
+          </tr>`;
+        }).join("")}
+      </tbody>
+    </table>
+  `;
+
+  if(!final && roundNumber > 0){
+    panel.classList.remove("table-pulse");
+    void panel.offsetWidth;
+    panel.classList.add("table-pulse");
+    setTimeout(()=>panel.classList.remove("table-pulse"),460);
+  }else{
+    panel.classList.remove("table-pulse");
+  }
+}
+
+function renderFinalLeagueTable(table){
+  renderLeagueTable(table,38,true);
 }
 
 function clearSeasonGoalTimers(){
@@ -6721,12 +7761,701 @@ async function submitBillboardRecord(){
   }
 }
 
+function triggerChampionCelebration(){
+  document.querySelectorAll(".champion-celebration").forEach(el=>el.remove());
+
+  const wrap = document.createElement("div");
+  wrap.className = "champion-celebration";
+  wrap.innerHTML = `
+    <div class="champion-celebration-card">
+      <div class="champion-celebration-kicker">2026/27 PREMIER LEAGUE</div>
+      <div class="champion-celebration-title">CHAMPIONS</div>
+      <div class="champion-celebration-sub">토트넘 홋스퍼 · 프리미어리그 우승</div>
+    </div>
+  `;
+
+  for(let i=0;i<72;i++){
+    const piece = document.createElement("span");
+    piece.className = "champion-confetti";
+    piece.style.left = `${Math.random()*100}%`;
+    piece.style.setProperty("--dur",`${2.0 + Math.random()*1.5}s`);
+    piece.style.setProperty("--delay",`${Math.random()*.75}s`);
+    piece.style.setProperty("--drift",`${-90 + Math.random()*180}px`);
+    piece.style.setProperty("--rot",`${Math.random()*360}deg`);
+    piece.style.width = `${5 + Math.random()*6}px`;
+    piece.style.height = `${10 + Math.random()*12}px`;
+    wrap.appendChild(piece);
+  }
+
+  document.body.appendChild(wrap);
+  setTimeout(()=>wrap.remove(),3700);
+}
+
+
+const winterTransferEvents = [
+  {
+    id:"owner_investment",
+    name:"구단주의 과감한 투자",
+    desc:"가장 낮은 OVR 선수를 같은 포지션의 더 강한 선수로 교체합니다."
+  },
+  {
+    id:"concert_revenue",
+    name:"콘서트 수익",
+    desc:"원하는 선수 한 명을 선택해 같은 포지션의 더 강한 선수로 교체합니다."
+  },
+  {
+    id:"star_exit",
+    name:"라이벌팀의 제의",
+    desc:"라이벌팀이 최고 OVR 선수에게 이적 제의를 보냈습니다. 제의를 수락하면 해당 선수는 떠나고, 대신 하위 OVR 선수 2명에 대한 전력 보강 기회가 생깁니다."
+  },
+  {
+    id:"season_out",
+    name:"시즌아웃",
+    desc:"무작위 선수가 부상으로 시즌 아웃됩니다. 같은 포지션의 낮은 OVR 대체자를 선택합니다."
+  },
+  {
+    id:"step_up",
+    name:"스탭업",
+    desc:"무작위 선수 한 명이 자신의 최고 OVR 시즌 카드로 각성합니다."
+  },
+  {
+    id:"manager_change",
+    name:"감독 교체",
+    desc:"현재 감독보다 OVR이 높은 감독 중 한 명이 새롭게 선임됩니다."
+  },
+  {
+    id:"recruitment_effect",
+    name:"0입 효과",
+    desc:"아무도 영입하지 않은 0입 효과. 오히려 기존 선수단의 조직력이 올라 시즌 종료까지 팀 OVR이 +1 상승합니다."
+  },
+  {
+    id:"locker_room_conflict",
+    name:"라커룸 불화",
+    desc:"랜덤 선수 2명 중 한 명을 방출하고, 같은 포지션의 랜덤 후보 3명 중 한 명을 영입합니다."
+  }
+];
+
+let winterTransferResolvedThisSeason = false;
+let winterTeamOvrBoost = 0;
+
+function getAllWinterTransferCards(){
+  const cards = [];
+  seasons.forEach(season=>{
+    if(isLegendSeason(season)) return;
+    season.players.forEach(([name,pos,ovr])=>{
+      const player = buildPlayerObject(name,pos,ovr,season.name);
+      if(isSolCard(player)) return;
+      cards.push(player);
+    });
+  });
+  return cards;
+}
+
+function shuffleArray(arr){
+  const copy = arr.slice();
+  for(let i=copy.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [copy[i],copy[j]] = [copy[j],copy[i]];
+  }
+  return copy;
+}
+
+function winterUniqueByName(cards){
+  const seen = new Set();
+  return cards.filter(card=>{
+    if(seen.has(card.name)) return false;
+    seen.add(card.name);
+    return true;
+  });
+}
+
+function winterReplacementCandidates(slotIndex, currentPlayer, direction="higher", limit=3){
+  const slot = slots[slotIndex];
+  const squadNames = new Set(drafted.filter(Boolean).map(p=>p.name));
+
+  let candidates = getAllWinterTransferCards().filter(card=>{
+    if(card.name === currentPlayer.name) return false;
+    if(squadNames.has(card.name)) return false;
+    if(!isPlayerCompatibleWithSlot(card,slot)) return false;
+    if(direction === "higher" && !(card.ovr > currentPlayer.ovr)) return false;
+    if(direction === "lower" && !(card.ovr < currentPlayer.ovr)) return false;
+    return true;
+  });
+
+  candidates = shuffleArray(candidates);
+  candidates = winterUniqueByName(candidates);
+  return candidates.slice(0,limit);
+}
+
+function winterRandomReplacementCandidates(slotIndex, currentPlayer, limit=3){
+  const slot = slots[slotIndex];
+  const squadNames = new Set(drafted.filter(Boolean).map(p=>p.name));
+
+  let candidates = getAllWinterTransferCards().filter(card=>{
+    if(card.name === currentPlayer.name) return false;
+    if(squadNames.has(card.name)) return false;
+    if(!isPlayerCompatibleWithSlot(card,slot)) return false;
+    return true;
+  });
+
+  candidates = shuffleArray(candidates);
+  candidates = winterUniqueByName(candidates);
+  return candidates.slice(0,limit);
+}
+
+function winterBestSeasonForPlayer(player){
+  const cards = getAllWinterTransferCards()
+    .filter(card=>card.name === player.name)
+    .sort((a,b)=>b.ovr-a.ovr);
+  return cards[0] || player;
+}
+
+function winterEnsureScorerPlayer(scorerState, player){
+  if(!scorerState || !player) return;
+  if(!(player.name in scorerState.goalCounts)) scorerState.goalCounts[player.name] = 0;
+  if(!(player.name in scorerState.assistCounts)) scorerState.assistCounts[player.name] = 0;
+  if(!(player.name in scorerState.ratingTotals)) scorerState.ratingTotals[player.name] = 0;
+  if(!(player.name in scorerState.ratingMatches)) scorerState.ratingMatches[player.name] = 0;
+}
+
+function winterReplacePlayer(slotIndex, replacement, scorerState){
+  if(!replacement || slotIndex < 0 || slotIndex >= drafted.length) return false;
+  drafted[slotIndex] = replacement;
+  winterEnsureScorerPlayer(scorerState,replacement);
+  renderSquad();
+  renderPitch();
+  updateStats();
+  return true;
+}
+
+function winterCardButton(card, index, onClickName="chooseWinterReplacement"){
+  return `
+    <button class="winter-choice" type="button" onclick="${onClickName}(${index})">
+      <div class="winter-choice-name">${getPlayerDisplayName(card.name)}</div>
+      <div class="winter-choice-season">${card.season}</div>
+    </button>
+  `;
+}
+
+function showWinterOverlay(html){
+  const overlay = $("#winterTransferOverlay");
+  const content = $("#winterTransferContent");
+  if(!overlay || !content) return;
+  content.innerHTML = html;
+  overlay.classList.add("show");
+  overlay.setAttribute("aria-hidden","false");
+}
+
+function closeWinterOverlay(){
+  const overlay = $("#winterTransferOverlay");
+  if(!overlay) return;
+  overlay.classList.remove("show");
+  overlay.setAttribute("aria-hidden","true");
+}
+
+let winterPendingContinue = null;
+let winterPendingScorerState = null;
+let winterPendingCandidates = [];
+let winterPendingSlotIndex = -1;
+let winterPendingEvent = null;
+let winterStarExitQueue = [];
+let winterStarExitResults = [];
+let winterLockerRoomChoices = [];
+
+function openWinterTransferPrompt(scorerState, onContinue){
+  winterPendingContinue = onContinue;
+  winterPendingScorerState = scorerState;
+
+  showWinterOverlay(`
+    <div class="winter-kicker">JANUARY 2027</div>
+    <div class="winter-title">겨울 이적시장에 참여하시겠습니까?</div>
+    <div class="winter-sub">참여하면 무작위 이적 이벤트 1개가 발생합니다.<br>이벤트 결과에 따라 선수 또는 감독이 교체될 수 있습니다.</div>
+    <div class="winter-actions">
+      <button type="button" onclick="participateWinterTransfer()">참여</button>
+      <button type="button" class="winter-decline" onclick="declineWinterTransfer()">참여하지 않음</button>
+    </div>
+  `);
+}
+
+function declineWinterTransfer(){
+  closeWinterOverlay();
+  const next = winterPendingContinue;
+  winterPendingContinue = null;
+  if(typeof next === "function") setTimeout(next,180);
+}
+
+function participateWinterTransfer(){
+  startWinterEventRoulette();
+}
+
+function startWinterEventRoulette(){
+  const items = [];
+  const repeat = 8;
+  for(let r=0;r<repeat;r++) items.push(...winterTransferEvents);
+  const targetIndex = Math.floor(Math.random()*winterTransferEvents.length);
+  const targetEvent = winterTransferEvents[targetIndex];
+
+  showWinterOverlay(`
+    <div class="winter-kicker">WINTER TRANSFER WINDOW</div>
+    <div class="winter-title">이적 이벤트 룰렛</div>
+    <div class="winter-sub">이번 겨울에 어떤 일이 벌어질까요?</div>
+    <div class="winter-roulette">
+      <div class="winter-roulette-focus"></div>
+      <div id="winterRouletteList" class="winter-roulette-list">
+        ${items.map(event=>`<div class="winter-roulette-item">${event.name}</div>`).join("")}
+      </div>
+    </div>
+  `);
+
+  const list = $("#winterRouletteList");
+  const eventCount = winterTransferEvents.length;
+  let index = eventCount * 2;
+  const currentModulo = index % eventCount;
+  let steps = eventCount * 4 + ((targetIndex-currentModulo+eventCount)%eventCount);
+  let step = 0;
+
+  list.style.transform = `translateY(-${index*64}px)`;
+
+  const tick = ()=>{
+    step++;
+    index++;
+    const progress = step/steps;
+    const delay = progress < .72
+      ? 18
+      : 18 + Math.pow((progress-.72)/.28,2.3)*155;
+
+    list.style.transition = `transform ${Math.min(delay,165)}ms cubic-bezier(.14,.82,.2,1)`;
+    list.style.transform = `translateY(-${index*64}px)`;
+
+    if(step < steps){
+      setTimeout(tick,delay);
+    }else{
+      winterPendingEvent = targetEvent;
+      setTimeout(()=>resolveWinterTransferEvent(targetEvent),320);
+    }
+  };
+  tick();
+}
+
+function winterContinueAfterEvent(){
+  closeWinterOverlay();
+  winterPendingCandidates = [];
+  winterPendingSlotIndex = -1;
+  winterPendingEvent = null;
+  winterStarExitQueue = [];
+  winterStarExitResults = [];
+  winterLockerRoomChoices = [];
+  const next = winterPendingContinue;
+  winterPendingContinue = null;
+  if(typeof next === "function") setTimeout(next,220);
+}
+
+function showWinterResult(eventName, lines, bad=false){
+  showWinterOverlay(`
+    <div class="winter-kicker">WINTER TRANSFER WINDOW</div>
+    <div class="winter-title">${eventName}</div>
+    <div class="winter-result ${bad ? "bad" : ""}">${lines.join("<br>")}</div>
+    <div class="winter-actions">
+      <button type="button" onclick="winterContinueAfterEvent()">리그 계속하기</button>
+    </div>
+  `);
+}
+
+function resolveWinterTransferEvent(event){
+  if(!event) return;
+  const scorerState = winterPendingScorerState;
+
+  if(event.id === "owner_investment"){
+    const minOvr = Math.min(...drafted.filter(Boolean).map(p=>p.ovr));
+    const targetIndexes = drafted
+      .map((p,i)=>p && p.ovr===minOvr ? i : -1)
+      .filter(i=>i>=0);
+    const slotIndex = targetIndexes[Math.floor(Math.random()*targetIndexes.length)];
+    const current = drafted[slotIndex];
+    const candidates = winterReplacementCandidates(slotIndex,current,"higher",3);
+
+    if(!candidates.length){
+      showWinterResult(event.name,[`${getPlayerDisplayName(current.name)}의 포지션에서 더 높은 OVR의 교체 후보를 찾지 못했습니다.`]);
+      return;
+    }
+
+    winterPendingSlotIndex = slotIndex;
+    winterPendingCandidates = candidates;
+    showWinterOverlay(`
+      <div class="winter-kicker">WINTER TRANSFER EVENT</div>
+      <div class="winter-title">${event.name}</div>
+      <div class="winter-event-desc">${event.desc}</div>
+      <div class="winter-target">교체 대상 · ${slots[slotIndex]} ${getPlayerDisplayName(current.name)} · ${current.season}</div>
+      <div class="winter-grid">
+        ${candidates.map((card,i)=>winterCardButton(card,i)).join("")}
+      </div>
+      <div class="winter-sub" style="margin-top:12px">후보의 OVR은 공개되지 않습니다.</div>
+    `);
+    return;
+  }
+
+  if(event.id === "concert_revenue"){
+    const eligible = drafted
+      .map((player,index)=>({player,index,candidates:winterReplacementCandidates(index,player,"higher",2)}))
+      .filter(x=>x.player && x.candidates.length);
+
+    if(!eligible.length){
+      showWinterResult(event.name,["현재 스쿼드에서 더 높은 OVR 교체 후보가 있는 선수가 없습니다."]);
+      return;
+    }
+
+    winterPendingCandidates = eligible;
+    showWinterOverlay(`
+      <div class="winter-kicker">WINTER TRANSFER EVENT</div>
+      <div class="winter-title">${event.name}</div>
+      <div class="winter-event-desc">${event.desc}</div>
+      <div class="winter-target">보강할 선수 한 명을 선택하세요.</div>
+      <div class="winter-grid">
+        ${eligible.map((entry,i)=>`
+          <button class="winter-choice current" type="button" onclick="chooseConcertTarget(${i})">
+            <div class="winter-choice-name">${slots[entry.index]} · ${getPlayerDisplayName(entry.player.name)}</div>
+            <div class="winter-choice-season">${entry.player.season}</div>
+          </button>
+        `).join("")}
+      </div>
+    `);
+    return;
+  }
+
+  if(event.id === "star_exit"){
+    const original = drafted.map((player,index)=>({player,index}));
+    const maxOvr = Math.max(...original.filter(x=>x.player).map(x=>x.player.ovr));
+    const starPool = original.filter(x=>x.player && x.player.ovr===maxOvr);
+    const star = starPool[Math.floor(Math.random()*starPool.length)];
+
+    const lowPool = original
+      .filter(x=>x.player && x.index!==star.index)
+      .sort((a,b)=>a.player.ovr-b.player.ovr || Math.random()-.5)
+      .slice(0,2);
+
+    winterStarExitQueue = [
+      {
+        kind:"star",
+        index:star.index,
+        original:star.player,
+        direction:"lower",
+        label:"라이벌팀의 제의"
+      },
+      ...lowPool.map((entry,idx)=>({
+        kind:"upgrade",
+        index:entry.index,
+        original:entry.player,
+        direction:"higher",
+        label:`전력 보강 ${idx+1}`
+      }))
+    ];
+    winterStarExitResults = [];
+
+    showWinterOverlay(`
+      <div class="winter-kicker">WINTER TRANSFER EVENT</div>
+      <div class="winter-title">라이벌팀의 제의</div>
+      <div class="winter-event-desc">
+        라이벌팀이 현재 스쿼드의 최고 OVR 선수에게 이적 제의를 보냈습니다.<br>
+        제의를 수락하면 해당 선수를 같은 포지션의 더 낮은 OVR 선수로 교체해야 합니다.<br>
+        대신 최저 OVR 선수 2명은 같은 포지션의 더 높은 OVR 선수로 보강할 수 있습니다.
+      </div>
+      <div class="winter-target">
+        제의 대상 · ${slots[star.index]} ${getPlayerDisplayName(star.player.name)} · ${star.player.season}
+      </div>
+      <div class="winter-actions">
+        <button type="button" onclick="acceptRivalOffer()">수락</button>
+        <button type="button" class="winter-decline" onclick="rejectRivalOffer()">거절</button>
+      </div>
+    `);
+    return;
+  }
+
+  if(event.id === "season_out"){
+    const candidatesByPlayer = drafted
+      .map((player,index)=>({player,index,replacements:winterReplacementCandidates(index,player,"lower",2)}))
+      .filter(x=>x.player && x.replacements.length);
+
+    if(!candidatesByPlayer.length){
+      showWinterResult(event.name,["부상 대체가 가능한 하위 OVR 후보를 찾지 못했습니다."]);
+      return;
+    }
+
+    const target = candidatesByPlayer[Math.floor(Math.random()*candidatesByPlayer.length)];
+    winterPendingSlotIndex = target.index;
+    winterPendingCandidates = target.replacements;
+
+    showWinterOverlay(`
+      <div class="winter-kicker">WINTER TRANSFER EVENT</div>
+      <div class="winter-title">${event.name}</div>
+      <div class="winter-event-desc">${event.desc}</div>
+      <div class="winter-target">시즌 아웃 · ${slots[target.index]} ${getPlayerDisplayName(target.player.name)} · ${target.player.season}</div>
+      <div class="winter-grid two">
+        ${target.replacements.map((card,i)=>winterCardButton(card,i)).join("")}
+      </div>
+      <div class="winter-sub" style="margin-top:12px">대체 후보의 OVR은 공개되지 않습니다.</div>
+    `);
+    return;
+  }
+
+  if(event.id === "step_up"){
+    const eligible = drafted
+      .map((player,index)=>({player,index,best:winterBestSeasonForPlayer(player)}))
+      .filter(x=>x.player && x.best && x.best.ovr > x.player.ovr);
+
+    if(!eligible.length){
+      showWinterResult(event.name,["모든 선수가 이미 자신의 최고 OVR 시즌 카드입니다."]);
+      return;
+    }
+
+    const target = eligible[Math.floor(Math.random()*eligible.length)];
+    const before = target.player;
+    winterReplacePlayer(target.index,target.best,scorerState);
+    showWinterResult(event.name,[
+      `${getPlayerDisplayName(before.name)}이(가) 스탭업했습니다.`,
+      `${before.season} → ${target.best.season}`
+    ]);
+    return;
+  }
+
+  if(event.id === "recruitment_effect"){
+    winterTeamOvrBoost += 1;
+    updateStats();
+    showWinterResult(event.name,[
+      "아무도 영입하지 않은 0입 효과! 기존 선수단의 조직력이 향상되었습니다.",
+      "시즌 종료까지 팀 OVR +1"
+    ]);
+    return;
+  }
+
+  if(event.id === "locker_room_conflict"){
+    const pool = drafted
+      .map((player,index)=>({player,index}))
+      .filter(x=>x.player);
+
+    if(pool.length < 2){
+      showWinterResult(event.name,["선택 가능한 선수가 부족해 이벤트가 취소되었습니다."],true);
+      return;
+    }
+
+    winterLockerRoomChoices = shuffleArray(pool).slice(0,2);
+
+    showWinterOverlay(`
+      <div class="winter-kicker">WINTER TRANSFER EVENT</div>
+      <div class="winter-title">${event.name}</div>
+      <div class="winter-event-desc">${event.desc}</div>
+      <div class="winter-target">방출할 선수 한 명을 선택하세요.</div>
+      <div class="winter-grid two">
+        ${winterLockerRoomChoices.map((entry,i)=>`
+          <button class="winter-choice current" type="button" onclick="chooseLockerRoomDeparture(${i})">
+            <div class="winter-choice-name">${slots[entry.index]} · ${getPlayerDisplayName(entry.player.name)}</div>
+            <div class="winter-choice-season">${entry.player.season}</div>
+          </button>
+        `).join("")}
+      </div>
+    `);
+    return;
+  }
+
+  if(event.id === "manager_change"){
+    const higherManagers = managers.filter(m=>
+      selectedManager &&
+      m.name !== selectedManager.name &&
+      m.ovr > selectedManager.ovr
+    );
+
+    if(!higherManagers.length){
+      showWinterResult(event.name,[`${selectedManager?.name || "현재 감독"}보다 높은 OVR의 감독이 없어 현 감독이 유임됩니다.`]);
+      return;
+    }
+
+    const oldManager = selectedManager;
+    const replacement = higherManagers[Math.floor(Math.random()*higherManagers.length)];
+    selectedManager = replacement;
+    managerPlaced = true;
+    renderXIManagerCard();
+    updateStats();
+
+    if(replacement.name === "빌 니콜슨"){
+      triggerLegendRevealAnimation("THE LEGENDS");
+    }
+
+    showWinterResult(event.name,[
+      `${oldManager.name} 감독과 결별했습니다.`,
+      `신임 감독 · ${replacement.name} · ${replacement.tenure}`
+    ]);
+  }
+}
+
+function acceptRivalOffer(){
+  if(!winterStarExitQueue.length){
+    showWinterResult("라이벌팀의 제의",["이적 제의를 처리할 수 없습니다."],true);
+    return;
+  }
+  showNextStarExitChoice();
+}
+
+function rejectRivalOffer(){
+  winterStarExitResults = ["라이벌팀의 제의를 거절했습니다. 기존 스쿼드를 유지합니다."];
+  showWinterResult("라이벌팀의 제의",winterStarExitResults);
+}
+
+function showNextStarExitChoice(){
+  const event = winterPendingEvent;
+  if(!winterStarExitQueue.length){
+    showWinterResult(
+      event?.name || "라이벌팀의 제의",
+      winterStarExitResults.length ? winterStarExitResults : ["교체 가능한 후보가 없어 이벤트가 종료되었습니다."],
+      true
+    );
+    return;
+  }
+
+  const task = winterStarExitQueue[0];
+  const current = drafted[task.index] || task.original;
+  const candidateCount = task.kind === "star" ? 3 : 2;
+  const candidates = winterReplacementCandidates(
+    task.index,
+    current,
+    task.direction,
+    candidateCount
+  );
+
+  if(!candidates.length){
+    winterStarExitResults.push(
+      `${task.label} · ${getPlayerDisplayName(current.name)}: 조건에 맞는 교체 후보 없음`
+    );
+    winterStarExitQueue.shift();
+    showNextStarExitChoice();
+    return;
+  }
+
+  winterPendingSlotIndex = task.index;
+  winterPendingCandidates = candidates;
+
+  const desc = task.kind === "star"
+    ? "제의를 수락했습니다. 최고 OVR 선수 대신 같은 포지션의 더 낮은 OVR 후보 3명 중 한 명을 선택하세요."
+    : "전력 보강 기회입니다. 최저 OVR 선수 대신 같은 포지션의 더 높은 OVR 후보 2명 중 한 명을 선택하세요.";
+
+  showWinterOverlay(`
+    <div class="winter-kicker">WINTER TRANSFER EVENT</div>
+    <div class="winter-title">라이벌팀의 제의</div>
+    <div class="winter-event-desc">${desc}</div>
+    <div class="winter-target">${task.label} · ${slots[task.index]} ${getPlayerDisplayName(current.name)} · ${current.season}</div>
+    <div class="winter-grid ${candidateCount===2 ? "two" : ""}">
+      ${candidates.map((card,i)=>`
+        <button class="winter-choice" type="button" onclick="chooseStarExitReplacement(${i})">
+          <div class="winter-choice-name">${getPlayerDisplayName(card.name)}</div>
+          <div class="winter-choice-season">${card.season}</div>
+        </button>
+      `).join("")}
+    </div>
+    <div class="winter-sub" style="margin-top:12px">후보의 OVR은 공개되지 않습니다. 선택 후 다음 대상의 교체가 이어집니다.</div>
+  `);
+}
+
+function chooseStarExitReplacement(index){
+  const task = winterStarExitQueue[0];
+  const replacement = winterPendingCandidates[index];
+  if(!task || !replacement) return;
+
+  const current = drafted[task.index] || task.original;
+  winterReplacePlayer(task.index,replacement,winterPendingScorerState);
+
+  winterStarExitResults.push(
+    `${task.label} · ${getPlayerDisplayName(current.name)} (${current.season}) → ${getPlayerDisplayName(replacement.name)} (${replacement.season})`
+  );
+
+  winterStarExitQueue.shift();
+  winterPendingCandidates = [];
+  winterPendingSlotIndex = -1;
+  showNextStarExitChoice();
+}
+
+function chooseLockerRoomDeparture(index){
+  const entry = winterLockerRoomChoices[index];
+  if(!entry || !entry.player) return;
+
+  const candidates = winterRandomReplacementCandidates(entry.index,entry.player,3);
+  if(!candidates.length){
+    showWinterResult("라커룸 불화",[
+      `${getPlayerDisplayName(entry.player.name)}의 포지션에서 교체 후보를 찾지 못했습니다.`
+    ],true);
+    return;
+  }
+
+  winterPendingSlotIndex = entry.index;
+  winterPendingCandidates = candidates;
+
+  showWinterOverlay(`
+    <div class="winter-kicker">WINTER TRANSFER EVENT</div>
+    <div class="winter-title">라커룸 불화</div>
+    <div class="winter-event-desc">${getPlayerDisplayName(entry.player.name)}을(를) 방출합니다. 같은 포지션의 랜덤 후보 3명 중 한 명을 선택하세요.</div>
+    <div class="winter-target">방출 · ${slots[entry.index]} ${getPlayerDisplayName(entry.player.name)} · ${entry.player.season}</div>
+    <div class="winter-grid">
+      ${candidates.map((card,i)=>`
+        <button class="winter-choice" type="button" onclick="chooseLockerRoomReplacement(${i})">
+          <div class="winter-choice-name">${getPlayerDisplayName(card.name)}</div>
+          <div class="winter-choice-season">${card.season}</div>
+        </button>
+      `).join("")}
+    </div>
+    <div class="winter-sub" style="margin-top:12px">후보의 OVR은 공개되지 않습니다.</div>
+  `);
+}
+
+function chooseLockerRoomReplacement(index){
+  const replacement = winterPendingCandidates[index];
+  const slotIndex = winterPendingSlotIndex;
+  const current = drafted[slotIndex];
+  if(!replacement || !current) return;
+
+  winterReplacePlayer(slotIndex,replacement,winterPendingScorerState);
+
+  showWinterResult("라커룸 불화",[
+    `방출 · ${getPlayerDisplayName(current.name)} (${current.season})`,
+    `영입 · ${getPlayerDisplayName(replacement.name)} (${replacement.season})`
+  ],true);
+}
+
+function chooseWinterReplacement(index){
+  const replacement = winterPendingCandidates[index];
+  const slotIndex = winterPendingSlotIndex;
+  const current = drafted[slotIndex];
+  if(!replacement || !current) return;
+
+  winterReplacePlayer(slotIndex,replacement,winterPendingScorerState);
+  showWinterResult(winterPendingEvent?.name || "겨울 이적시장",[
+    `${getPlayerDisplayName(current.name)} (${current.season})`,
+    `→ ${getPlayerDisplayName(replacement.name)} (${replacement.season})`
+  ], winterPendingEvent?.id === "season_out");
+}
+
+function chooseConcertTarget(index){
+  const entry = winterPendingCandidates[index];
+  if(!entry) return;
+  winterPendingSlotIndex = entry.index;
+  winterPendingCandidates = entry.candidates;
+
+  showWinterOverlay(`
+    <div class="winter-kicker">WINTER TRANSFER EVENT</div>
+    <div class="winter-title">콘서트 수익</div>
+    <div class="winter-event-desc">같은 포지션의 더 높은 OVR 선수 중 한 명을 선택하세요.</div>
+    <div class="winter-target">보강 대상 · ${slots[entry.index]} ${getPlayerDisplayName(entry.player.name)} · ${entry.player.season}</div>
+    <div class="winter-grid two">
+      ${entry.candidates.map((card,i)=>winterCardButton(card,i)).join("")}
+    </div>
+    <div class="winter-sub" style="margin-top:12px">후보의 OVR은 공개되지 않습니다.</div>
+  `);
+}
+
+
 function finishSeasonSimulation(state, teamRatings, scorerState){
   seasonSimulationRunning = false;
   seasonSimulationTimer = null;
   clearSeasonGoalTimers();
 
-  const place = calculateFinalRank(state.points);
+  const place = calculateFinalRank(state.leagueTable);
+  renderFinalLeagueTable(state.leagueTable);
   latestSeasonBillboardRecord = buildBillboardRecord(place, state, teamRatings, scorerState);
   billboardSubmitting = false;
   const summary = $("#simSummary");
@@ -6734,23 +8463,31 @@ function finishSeasonSimulation(state, teamRatings, scorerState){
     summary.innerHTML = `
       <div class="season-summary">
         <div class="season-summary-kicker">2026/27 PREMIER LEAGUE · 38 MATCHES COMPLETE</div>
-        <div class="season-summary-rank">${place}위</div>
+        <div class="season-summary-rank${place===1 ? " champion" : ""}">${place===1 ? "우승" : `${place}위`}</div>
         <div class="season-summary-points">${state.points} pts</div>
         <div class="season-summary-record">${state.w}승 ${state.d}무 ${state.l}패 · ${state.gf}득점 ${state.ga}실점 · 팀 OVR ${teamRatings.overall.toFixed(1)}</div>
       </div>
       ${renderBillboardRegistration(latestSeasonBillboardRecord)}
       ${renderSeasonPlayerReview(scorerState)}
+      <div class="season-end-actions">
+        <button id="seasonRestartSmall" class="season-restart-small" type="button">처음부터</button>
+      </div>
     `;
     $("#billboardSubmit")?.addEventListener("click", submitBillboardRecord);
     $("#billboardNickname")?.addEventListener("keydown", e=>{
       if(e.key === "Enter") submitBillboardRecord();
     });
+    $("#seasonRestartSmall")?.addEventListener("click", reset);
+  }
+
+  if(place === 1){
+    setTimeout(triggerChampionCelebration,220);
   }
 
   const btn = $("#finalSimBtn");
   if(btn){
-    btn.disabled = false;
-    btn.textContent = "시즌 다시 시뮬레이션하기";
+    btn.disabled = true;
+    btn.style.display = "none";
   }
 }
 
@@ -6764,9 +8501,9 @@ function simulate(){
   }
   clearSeasonGoalTimers();
 
-  const teamRatings = getMyTeamRatings();
+  let teamRatings = getMyTeamRatings();
   const scorerState = initializeScorerState();
-  const state = {index:0, points:0, w:0, d:0, l:0, gf:0, ga:0};
+  const state = {index:0, points:0, w:0, d:0, l:0, gf:0, ga:0, leagueTable:createLeagueTableState(), winterTransferHandled:false};
 
   seasonSimulationRunning = true;
   const btn = $("#finalSimBtn");
@@ -6775,6 +8512,13 @@ function simulate(){
     btn.textContent = "시즌 시뮬레이션 진행 중...";
   }
 
+  const leaguePanel = $("#leagueTablePanel");
+  if(leaguePanel){
+    leaguePanel.classList.remove("show","live","table-pulse");
+    leaguePanel.innerHTML = "";
+  }
+  renderLeagueTable(state.leagueTable,0,false);
+
   const r = $("#result");
   r.style.display = "block";
   r.innerHTML = `
@@ -6782,7 +8526,7 @@ function simulate(){
       <div class="season-sim-head">
         <div>
           <div class="season-sim-title">2026/27 PREMIER LEAGUE</div>
-          <div class="season-sim-sub">ATT / MID / DEF 기반 경기 시뮬레이션 · 경기당 약 5초</div>
+          <div class="season-sim-sub">ATT / MID / DEF 기반 경기 시뮬레이션 · 경기당 약 4초</div>
         </div>
       </div>
       <div id="simSummary"></div>
@@ -6804,6 +8548,7 @@ function simulate(){
     clearSeasonGoalTimers();
     renderCurrentSimulationRound(fixture);
 
+    teamRatings = getMyTeamRatings();
     const opponentRatings = getOpponentRatings(fixture.opponent);
     const match = createScoreline(
       teamRatings,
@@ -6817,9 +8562,9 @@ function simulate(){
     let liveSpurs = 0;
     let liveOpponent = 0;
 
-    // 90분을 약 4.25초에 압축. 득점은 실제 경기 시간 순서대로 스코어에 반영.
+    // 90분을 약 3.4초에 압축. 득점은 실제 경기 시간 순서대로 스코어에 반영.
     match.events.forEach(event=>{
-      const delay = 350 + (event.minute / 90) * 3900;
+      const delay = 300 + (event.minute / 90) * 3100;
       const id = setTimeout(()=>{
         if(!seasonSimulationRunning) return;
         if(event.side === "spurs") liveSpurs++;
@@ -6833,7 +8578,7 @@ function simulate(){
 
     // Match clock progresses even when there are no goals.
     [15,30,45,60,75,90].forEach(minute=>{
-      const delay = 250 + (minute / 90) * 4050;
+      const delay = 200 + (minute / 90) * 3200;
       const id = setTimeout(()=>{
         if(!seasonSimulationRunning) return;
         const clock = $("#simClock");
@@ -6865,6 +8610,19 @@ function simulate(){
         state.ga += match.oppGoals;
         updateSeasonPlayerRatings(scorerState, match, result);
 
+        // This round has 10 league matches in total:
+        // the visible Tottenham match + 9 background matches.
+        applySpursMatchToLeagueTable(
+          state.leagueTable,
+          fixture,
+          match.myGoals,
+          match.oppGoals
+        );
+        simulateOtherMatchesForRound(fixture.round,state.leagueTable);
+
+        // 해당 라운드의 10경기가 모두 반영된 직후 실시간 리그 테이블 갱신.
+        renderLeagueTable(state.leagueTable,fixture.round,false);
+
         if(result === "W"){
           state.w++;
           state.points += 3;
@@ -6887,13 +8645,24 @@ function simulate(){
         if(state.index >= premierLeague2627Fixtures.length){
           const current = $("#simCurrent");
           if(current) current.style.display = "none";
+          teamRatings = getMyTeamRatings();
           finishSeasonSimulation(state, teamRatings, scorerState);
           return;
         }
 
+        // 12월 30일 18R 종료 후, 1월 첫 경기를 시작하기 전에 겨울 이적시장 이벤트.
+        if(state.index === 18 && !state.winterTransferHandled){
+          state.winterTransferHandled = true;
+          openWinterTransferPrompt(scorerState, ()=>{
+            teamRatings = getMyTeamRatings();
+            playRound();
+          });
+          return;
+        }
+
         playRound();
-      }, 600);
-    }, 4400);
+      }, 500);
+    }, 3500);
   };
 
   playRound();
@@ -6908,9 +8677,21 @@ function reset(){
   seasonSimulationRunning = false;
 
   $("#gameOverOverlay")?.classList.remove("show");
+  closeWinterOverlay();
+  winterTransferResolvedThisSeason = false;
+  winterTeamOvrBoost = 0;
+  winterPendingContinue = null;
+  winterPendingScorerState = null;
+  winterPendingCandidates = [];
+  winterPendingSlotIndex = -1;
+  winterPendingEvent = null;
+  winterStarExitQueue = [];
+  winterStarExitResults = [];
+  winterLockerRoomChoices = [];
   const finalBtn = $("#finalSimBtn");
   if(finalBtn){
     finalBtn.disabled = false;
+    finalBtn.style.display = "none";
     finalBtn.textContent = "시즌 시뮬레이션 시작하기";
   }
   const resultBox = $("#result");
@@ -6923,6 +8704,8 @@ function reset(){
   if(managerTimer) clearTimeout(managerTimer);
   managerRolling = false;
   selectedManager = null;
+  pendingManagerRarity = null;
+  pendingManagerCandidates = [];
   managerPlaced = false;
   renderXIManagerCard();
   formationChosen = false;
@@ -6930,6 +8713,7 @@ function reset(){
   managerRerollRemaining = 1;
   drafted = [];
   activeChemistryIds = new Set();
+  clearChemistryActivationQueue();
   renderTeamChemistryPanel([]);
   currentSeason = null;
   pendingPlayer = null;
@@ -6951,6 +8735,11 @@ function reset(){
   if(rouletteBox) rouletteBox.style.display = "";
   const preview = $("#seasonPreview");
   if(preview) preview.style.display = "";
+  const leaguePanel = $("#leagueTablePanel");
+  if(leaguePanel){
+    leaguePanel.classList.remove("show","live","table-pulse");
+    leaguePanel.innerHTML = "";
+  }
 
   $("#players").innerHTML = "";
   $("#revealStage").className = "reveal-stage";
