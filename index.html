@@ -3167,7 +3167,7 @@
   }
   .billboard-overlay.show{display:flex}
   .billboard-modal{
-    width:min(920px,96vw);
+    width:min(1080px,96vw);
     max-height:88vh;
     overflow:auto;
     border:1px solid #334d7b;
@@ -3212,7 +3212,7 @@
     padding:5px 7px;
     text-align:center;
   }
-  .billboard-table th:nth-child(2){text-align:left}
+  .billboard-table th:first-child{text-align:left}
   .billboard-table td{
     padding:10px 7px;
     background:#0d1a31;
@@ -3226,15 +3226,23 @@
   .billboard-table td:first-child{
     border-left:1px solid #1d3154;
     border-radius:10px 0 0 10px;
-    font-size:14px;font-weight:1000;color:#f5d475
+    text-align:left;
+    color:#fff;
+    font-weight:1000;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
   }
   .billboard-table td:last-child{
     border-right:1px solid #1d3154;
     border-radius:0 10px 10px 0;
   }
-  .billboard-table td:nth-child(2){
-    text-align:left;color:#fff;font-weight:1000;
-    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  .billboard-gd.positive{color:#75e7aa}
+  .billboard-gd.negative{color:#ff9292}
+  .billboard-manager{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
   }
   .billboard-empty{
     padding:34px 14px;text-align:center;color:#738ab5;font-size:12px
@@ -8720,12 +8728,26 @@ function getSeasonTopScorers(scorerState){
   };
 }
 
+function formatBillboardLeagueRank(rank){
+  const n = Number(rank);
+  if(n === 1) return "우승";
+  return Number.isFinite(n) ? `${n}위` : "-";
+}
+
+function formatBillboardGoalDifference(value){
+  const n = Number(value);
+  if(!Number.isFinite(n)) return "-";
+  return n > 0 ? `+${n}` : String(n);
+}
+
 function buildBillboardRecord(place, state, teamRatings, scorerState){
   const top = getSeasonTopScorers(scorerState);
   return {
     league_rank: place,
     points: state.points,
+    goal_difference: Number(state.gf || 0) - Number(state.ga || 0),
     team_ovr: Number(teamRatings.overall.toFixed(2)),
+    manager: selectedManager?.name || "-",
     top_scorer: top.names,
     top_scorer_goals: top.goals
   };
@@ -8755,7 +8777,7 @@ async function loadBillboard(){
   if(content) content.innerHTML = '<div class="billboard-empty">기록을 불러오는 중...</div>';
   try{
     const data = await billboardRequest(
-      "leaderboard?select=id,nickname,league_rank,points,team_ovr,top_scorer,top_scorer_goals,created_at&order=points.desc,league_rank.asc,team_ovr.asc,created_at.asc&limit=20"
+      "leaderboard?select=id,nickname,league_rank,points,goal_difference,team_ovr,manager,top_scorer,top_scorer_goals,created_at&order=points.desc,league_rank.asc,goal_difference.desc,team_ovr.desc,created_at.asc&limit=20"
     );
     renderBillboard(data || []);
   }catch(error){
@@ -8774,34 +8796,41 @@ function renderBillboard(rows){
   content.innerHTML = `
     <table class="billboard-table">
       <colgroup>
-        <col style="width:48px">
-        <col style="width:22%">
-        <col style="width:70px">
-        <col style="width:62px">
+        <col style="width:18%">
+        <col style="width:74px">
         <col style="width:72px">
+        <col style="width:72px">
+        <col style="width:72px">
+        <col style="width:16%">
         <col>
       </colgroup>
       <thead>
         <tr>
-          <th>순위</th>
           <th>닉네임</th>
-          <th>리그</th>
+          <th>리그순위</th>
           <th>승점</th>
-          <th>OVR</th>
-          <th>최다 득점자</th>
+          <th>골득실</th>
+          <th>오버롤</th>
+          <th>감독</th>
+          <th>최다득점자</th>
         </tr>
       </thead>
       <tbody>
-        ${rows.map((row,index)=>`
-          <tr>
-            <td>${index+1}</td>
-            <td title="${escapeBillboardHtml(row.nickname)}">${escapeBillboardHtml(row.nickname)}</td>
-            <td>${Number(row.league_rank)}위</td>
-            <td>${Number(row.points)}</td>
-            <td>${Number(row.team_ovr).toFixed(1)}</td>
-            <td>${escapeBillboardHtml(row.top_scorer)} · ${Number(row.top_scorer_goals)}골</td>
-          </tr>
-        `).join("")}
+        ${rows.map(row=>{
+          const gd = Number(row.goal_difference);
+          const gdClass = Number.isFinite(gd) ? (gd > 0 ? "positive" : (gd < 0 ? "negative" : "")) : "";
+          return `
+            <tr>
+              <td title="${escapeBillboardHtml(row.nickname)}">${escapeBillboardHtml(row.nickname)}</td>
+              <td>${formatBillboardLeagueRank(row.league_rank)}</td>
+              <td>${Number(row.points)}pts</td>
+              <td class="billboard-gd ${gdClass}">${formatBillboardGoalDifference(row.goal_difference)}</td>
+              <td>${Number(row.team_ovr).toFixed(1)}</td>
+              <td class="billboard-manager" title="${escapeBillboardHtml(row.manager || "-")}">${escapeBillboardHtml(row.manager || "-")}</td>
+              <td>${escapeBillboardHtml(row.top_scorer)} · ${Number(row.top_scorer_goals)}골</td>
+            </tr>
+          `;
+        }).join("")}
       </tbody>
     </table>
   `;
@@ -8829,8 +8858,8 @@ function renderBillboardRegistration(record){
     <div class="billboard-register">
       <div class="billboard-register-title">BILLBOARD에 시즌 기록 등록</div>
       <div class="billboard-register-preview">
-        프리미어리그 ${record.league_rank}위 · ${record.points} pts · 팀 OVR ${record.team_ovr.toFixed(1)}<br>
-        최다 득점자 ${escapeBillboardHtml(record.top_scorer)} · ${record.top_scorer_goals}골
+        프리미어리그 ${formatBillboardLeagueRank(record.league_rank)} · ${record.points}pts · 골득실 ${formatBillboardGoalDifference(record.goal_difference)} · 팀 OVR ${record.team_ovr.toFixed(1)}<br>
+        감독 ${escapeBillboardHtml(record.manager)} · 최다 득점자 ${escapeBillboardHtml(record.top_scorer)} · ${record.top_scorer_goals}골
       </div>
       <div class="billboard-register-row">
         <input id="billboardNickname" class="billboard-nickname" type="text" maxlength="20" autocomplete="off" placeholder="닉네임을 입력하세요">
@@ -8879,7 +8908,7 @@ async function submitBillboardRecord(){
     const insertedId = inserted?.[0]?.id;
 
     const top20 = await billboardRequest(
-      "leaderboard?select=id,nickname,league_rank,points,team_ovr,top_scorer,top_scorer_goals,created_at&order=points.desc,league_rank.asc,team_ovr.asc,created_at.asc&limit=20"
+      "leaderboard?select=id,nickname,league_rank,points,goal_difference,team_ovr,manager,top_scorer,top_scorer_goals,created_at&order=points.desc,league_rank.asc,goal_difference.desc,team_ovr.desc,created_at.asc&limit=20"
     );
     const rankIndex = (top20 || []).findIndex(row=>String(row.id) === String(insertedId));
 
