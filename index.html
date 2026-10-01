@@ -395,6 +395,38 @@
     transition:.16s transform,.16s border-color,.16s background;
   }
   .prepick-row:hover{transform:translateY(-1px);border-color:#7897dc;background:linear-gradient(180deg,#182b52,#12203e)}
+  .dead-season-notice{
+    margin-top:12px;
+    padding:14px;
+    border:1px solid rgba(255,188,92,.35);
+    border-radius:16px;
+    background:linear-gradient(145deg,rgba(102,69,17,.22),rgba(37,28,14,.35));
+    text-align:center;
+  }
+  .dead-season-notice strong{
+    display:block;
+    color:#ffd58a;
+    font-size:13px;
+    font-weight:1000;
+    margin-bottom:5px;
+  }
+  .dead-season-notice span{
+    display:block;
+    color:#b9a98b;
+    font-size:10px;
+    line-height:1.55;
+  }
+  .dead-season-notice button{
+    margin-top:10px;
+    border:1px solid #6d5631;
+    border-radius:11px;
+    background:#f1d29a;
+    color:#241a0d;
+    padding:9px 13px;
+    font-size:10px;
+    font-weight:1000;
+    cursor:pointer;
+  }
   .prepick-row.disabled{
     cursor:not-allowed;
     background:linear-gradient(180deg,#0f1628,#0b1221);
@@ -2235,8 +2267,47 @@
   .stat.stat-ovr strong{color:#13264f}
   .stat.stat-ovr span{color:#13264f}
 
-  .roulette-actions{align-items:center}
-  .reset-align-right{margin-left:auto}
+  .roulette-actions{
+    align-items:center;
+    display:grid;
+    grid-template-columns:auto minmax(92px,.8fr) minmax(138px,1.4fr);
+    column-gap:8px;
+  }
+  .roulette-actions button{
+    width:100%;
+    min-width:0;
+    white-space:nowrap;
+  }
+  #resetBtn{
+    grid-column:1;
+    width:auto;
+    min-width:72px;
+    padding-left:10px;
+    padding-right:10px;
+    margin-right:14px;
+    font-size:10px;
+    opacity:.86;
+  }
+  #rerollBtn,#managerRerollBtn{grid-column:2}
+  #drawBtn,#managerDrawBtn{grid-column:3}
+  @media(max-width:540px){
+    .roulette-actions{
+      grid-template-columns:auto minmax(78px,.78fr) minmax(124px,1.35fr);
+      column-gap:6px;
+    }
+    .roulette-actions button{
+      padding-left:8px;
+      padding-right:8px;
+      font-size:11px;
+    }
+    #resetBtn{
+      min-width:62px;
+      padding-left:8px;
+      padding-right:8px;
+      margin-right:12px;
+      font-size:9px;
+    }
+  }
   .final-sim-btn{
     display:none;
     width:100%;
@@ -2981,11 +3052,11 @@
   <div class="grid">
     <section class="card">
       <div class="row roulette-actions">
-        <button id="drawBtn">시즌 룰렛 돌리기</button>
+        <button class="secondary" id="resetBtn">처음부터</button>
         <button id="rerollBtn" class="secondary" disabled>리롤 3회</button>
-        <button id="managerDrawBtn" class="secondary" style="display:none" disabled>감독 룰렛 돌리기</button>
+        <button id="drawBtn">시즌 룰렛 돌리기</button>
         <button id="managerRerollBtn" class="secondary" style="display:none" disabled>감독 리롤 1회</button>
-        <button class="secondary reset-align-right" id="resetBtn">처음부터</button>
+        <button id="managerDrawBtn" class="secondary" style="display:none" disabled>감독 룰렛 돌리기</button>
       </div>
       <button id="finalSimBtn" class="final-sim-btn">시즌 시뮬레이션 시작하기</button>
       <div id="result" class="result" style="display:none"></div>
@@ -5125,6 +5196,7 @@ let chemistryAnimationQueue = [];
 let chemistryAnimationPlaying = false;
 let chemistryAnimationTimer = null;
 let currentSeason = null;
+let deadSeasonNoSelectable = false;
 let isRolling = false;
 let rouletteIndex = 0;
 let rouletteTimer = null;
@@ -5655,6 +5727,7 @@ function startRoulette(excludeSeasonName=null){
   if(currentSeason && excludeSeasonName === null) return;
   setRouletteMode("season");
   isRolling = true;
+  deadSeasonNoSelectable = false;
   currentSeason = null;
   $("#drawBtn").disabled = true;
   $("#rerollBtn").disabled = true;
@@ -5721,6 +5794,7 @@ function startRoulette(excludeSeasonName=null){
 function rerollSeason(){
   if(rerollRemaining <= 0 || draftedCount() >= 11 || !currentSeason || isRolling || pendingPlayer) return;
   const previousSeason = currentSeason.name;
+  deadSeasonNoSelectable = false;
   rerollRemaining--;
   updateRerollUI();
   startRoulette(previousSeason);
@@ -5729,10 +5803,13 @@ function rerollSeason(){
 function renderPlayers(){
   const wrap = $("#players");
   const reveal = $("#revealStage");
+  const drawBtn = $("#drawBtn");
   wrap.innerHTML = "";
   reveal.className = "reveal-stage";
   reveal.innerHTML = "";
   renderSeasonPreview();
+
+  let selectableCount = 0;
 
   currentSeason.players.forEach(p=>{
     const [name,pos,ovr] = p;
@@ -5740,6 +5817,8 @@ function renderPlayers(){
     const alreadyPicked = drafted.some(x=>x && x.name===name);
     const noOpenPosition = !alreadyPicked && !hasOpenCompatibleSlot(player);
     const disabled = alreadyPicked || noOpenPosition;
+    if(!disabled) selectableCount++;
+
     const el = document.createElement("div");
     let candidateClass = "";
     if(isLegendCard(player)) candidateClass = " prepick-legend";
@@ -5767,6 +5846,41 @@ function renderPlayers(){
     }
     wrap.appendChild(el);
   });
+
+  deadSeasonNoSelectable = selectableCount === 0;
+
+  if(deadSeasonNoSelectable){
+    const notice = document.createElement("div");
+    notice.className = "dead-season-notice";
+    notice.innerHTML = `
+      <strong>선택 가능한 선수가 없습니다.</strong>
+      <span>동일 선수 중복 또는 남은 포지션 마감으로 이 시즌에서는 선수를 선택할 수 없습니다.</span>
+      <button type="button" onclick="rerollDeadSeasonFree()">시즌 룰렛 다시 돌리기</button>
+    `;
+    wrap.appendChild(notice);
+
+    if(drawBtn){
+      drawBtn.disabled = false;
+      drawBtn.textContent = "시즌 룰렛 다시 돌리기";
+    }
+    const rerollBtn = $("#rerollBtn");
+    if(rerollBtn) rerollBtn.disabled = true;
+  }else if(drawBtn){
+    drawBtn.textContent = "시즌 뽑기";
+  }
+}
+
+function rerollDeadSeasonFree(){
+  if(!deadSeasonNoSelectable || !currentSeason || isRolling || pendingPlayer || draftedCount() >= 11) return;
+  const previousSeason = currentSeason.name;
+  deadSeasonNoSelectable = false;
+  currentSeason = null;
+  const drawBtn = $("#drawBtn");
+  if(drawBtn){
+    drawBtn.disabled = true;
+    drawBtn.textContent = "시즌 뽑기";
+  }
+  startRoulette(previousSeason);
 }
 
 function getTierClass(ovr, prime=false, wonder=false, legend=false, toty=false, goldenBoot=false, hero=false, winner=false, sol=false){
@@ -8716,9 +8830,11 @@ function reset(){
   clearChemistryActivationQueue();
   renderTeamChemistryPanel([]);
   currentSeason = null;
+  deadSeasonNoSelectable = false;
   pendingPlayer = null;
   dragSource = null;
   $("#drawBtn").disabled = false;
+  $("#drawBtn").textContent = "시즌 뽑기";
   $("#drawBtn").style.display = "";
   $("#managerDrawBtn").disabled = true;
   $("#managerDrawBtn").style.display = "none";
@@ -8763,7 +8879,7 @@ function reset(){
   buildRoulette();
 }
 
-$("#drawBtn").onclick = ()=>startRoulette();
+$("#drawBtn").onclick = ()=> deadSeasonNoSelectable ? rerollDeadSeasonFree() : startRoulette();
 $("#rerollBtn").onclick = rerollSeason;
 $("#resetBtn").onclick = reset;
 $("#gameOverRestart").onclick = ()=>{
