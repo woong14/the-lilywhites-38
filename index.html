@@ -2691,16 +2691,32 @@
     border:2px solid #f1c84b;
     box-shadow:0 14px 30px rgba(0,0,0,.24),0 0 22px rgba(241,200,75,.14);
   }
-  .sim-match-type{display:flex;justify-content:center;margin-top:8px;position:relative;z-index:1}
+  .sim-match-type{
+    display:flex;
+    justify-content:center;
+    margin-top:8px;
+    position:relative;
+    z-index:1;
+  }
   .sim-match-type span{
-    display:inline-flex;align-items:center;justify-content:center;padding:4px 9px;border-radius:999px;
-    font-size:9px;font-weight:1000;letter-spacing:1px
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:4px 9px;
+    border-radius:999px;
+    font-size:9px;
+    font-weight:1000;
+    letter-spacing:1px;
   }
   .sim-match-type.derby span{
-    color:#f2f5fb;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16)
+    color:#f2f5fb;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.16);
   }
   .sim-match-type.big span{
-    color:#f5d76d;background:rgba(241,200,75,.08);border:1px solid rgba(241,200,75,.25)
+    color:#f5d76d;
+    background:rgba(241,200,75,.08);
+    border:1px solid rgba(241,200,75,.25);
   }
   .sim-round-line{display:flex;align-items:center;justify-content:space-between;gap:10px;position:relative;z-index:1}
   .sim-round-badge{
@@ -2746,8 +2762,15 @@
     white-space:nowrap;
   }
   @media(max-width:540px){
-    .live-perf-badge{max-width:100%;flex-wrap:wrap;row-gap:3px}
-    .live-perf-inline-reasons{white-space:normal;line-height:1.3}
+    .live-perf-badge{
+      max-width:100%;
+      flex-wrap:wrap;
+      row-gap:3px;
+    }
+    .live-perf-inline-reasons{
+      white-space:normal;
+      line-height:1.3;
+    }
   }
   .sim-date{font-size:10px;color:#8ba0ca}
   .sim-matchup{position:relative;z-index:1;margin-top:13px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}
@@ -2991,6 +3014,125 @@
     border-color:#d8c2ff;
   }
   .card-count-wonder .card-count-name,.card-count-wonder .card-count-value{color:#f8f4ff}
+
+  .profile-fab{
+    border:1px solid rgba(255,255,255,.28);
+    background:linear-gradient(145deg,#f7f9ff,#dfe8fa);
+    color:#102652;
+    border-radius:999px;
+    padding:10px 16px;
+    min-width:154px;
+    font-size:11px;
+    font-weight:1000;
+    letter-spacing:1px;
+    box-shadow:0 10px 30px rgba(0,0,0,.28);
+    cursor:pointer;
+    text-align:center;
+  }
+  .profile-fab.logged-in{
+    background:linear-gradient(145deg,#e9fff2,#c5f0d7);
+    border-color:#8ed9ad;
+  }
+  .profile-content{padding:18px}
+  .profile-login{
+    width:min(440px,100%);
+    margin:14px auto;
+    padding:18px;
+    border:1px solid #29436f;
+    border-radius:18px;
+    background:#0c1830;
+  }
+  .profile-login-title{font-size:16px;font-weight:1000;color:#fff}
+  .profile-login-sub{margin-top:6px;color:#8096c0;font-size:10px;line-height:1.55}
+  .profile-login-row{display:grid;grid-template-columns:1fr 110px;gap:8px;margin-top:14px}
+  .profile-login input{
+    width:100%;
+    box-sizing:border-box;
+    padding:11px 12px;
+    border-radius:11px;
+    border:1px solid #324d7d;
+    background:#081326;
+    color:#fff;
+    outline:none;
+    font-size:12px;
+    font-weight:800;
+  }
+  .profile-login button,
+  .profile-logout{
+    border:0;
+    border-radius:11px;
+    padding:11px 13px;
+    background:#fff;
+    color:#102652;
+    font-size:11px;
+    font-weight:1000;
+    cursor:pointer;
+  }
+  .profile-login-status{min-height:18px;margin-top:9px;font-size:10px;color:#8ba0c7}
+  .profile-login-status.error{color:#ff8f99}
+  .profile-login-status.ok{color:#78e6aa}
+
+  .profile-head-card{
+    padding:18px;
+    border-radius:18px;
+    border:1px solid #355487;
+    background:
+      radial-gradient(circle at 90% 0,rgba(110,151,226,.18),transparent 32%),
+      linear-gradient(145deg,#142544,#0b162c);
+  }
+  .profile-head-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .profile-nickname{font-size:22px;font-weight:1000;color:#fff}
+  .profile-updated{margin-top:4px;color:#7187af;font-size:9px}
+  .profile-stats{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:8px;
+    margin-top:14px;
+  }
+  .profile-stat{
+    padding:11px 9px;
+    border:1px solid rgba(111,143,196,.19);
+    border-radius:13px;
+    background:rgba(5,12,25,.42);
+    text-align:center;
+  }
+  .profile-stat strong{display:block;color:#fff;font-size:17px;font-weight:1000}
+  .profile-stat span{display:block;margin-top:4px;color:#7189b2;font-size:8px;font-weight:900;letter-spacing:.5px}
+  .profile-section{margin-top:15px}
+  .profile-section-title{font-size:11px;font-weight:1000;color:#9db3dc;letter-spacing:1px;margin-bottom:8px}
+  .profile-chip-list{display:flex;flex-wrap:wrap;gap:6px}
+  .profile-chip{
+    padding:6px 8px;
+    border-radius:999px;
+    border:1px solid #2b436d;
+    background:#0d1a31;
+    color:#cddaf0;
+    font-size:9px;
+    font-weight:900;
+  }
+  .achievement-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+  .achievement-item{
+    padding:10px 11px;
+    border-radius:12px;
+    border:1px solid #22385d;
+    background:#0a162b;
+    color:#60769d;
+    font-size:10px;
+    font-weight:900;
+  }
+  .achievement-item.done{
+    border-color:rgba(99,219,149,.30);
+    background:rgba(44,135,85,.11);
+    color:#b8f5d0;
+  }
+  .achievement-item small{display:block;margin-top:3px;font-size:8px;font-weight:700;opacity:.68}
+  .profile-empty{padding:20px;text-align:center;color:#7187ad;font-size:10px}
+  @media(max-width:650px){
+    .profile-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .achievement-grid{grid-template-columns:1fr}
+    .profile-login-row{grid-template-columns:1fr}
+  }
+
   .billboard-overlay{
     position:fixed;
     inset:0;
@@ -3290,10 +3432,24 @@
 </head>
 <body>
 <div class="quick-menu">
+  <button id="profileFab" class="profile-fab" type="button">MY PROFILE · LOGIN</button>
   <button id="billboardFab" class="billboard-fab" type="button">BILLBOARD · TOP 20</button>
   <button id="chemistryInfoFab" class="quick-info-btn" type="button">TEAM CHEMISTRY</button>
   <button id="cardInfoFab" class="quick-info-btn" type="button">CARD INFO</button>
 </div>
+<div id="profileOverlay" class="billboard-overlay" aria-hidden="true">
+  <div class="billboard-modal">
+    <div class="billboard-modal-head">
+      <div>
+        <div class="billboard-title">THE LILYWHITES 38 · MY PROFILE</div>
+        <div class="billboard-sub">누적 기록 · 선수 선택 · 팀캐미 · 특수카드 · 도전과제</div>
+      </div>
+      <button id="profileClose" class="billboard-close" type="button">×</button>
+    </div>
+    <div id="profileContent" class="profile-content"></div>
+  </div>
+</div>
+
 <div id="billboardOverlay" class="billboard-overlay" aria-hidden="true">
   <div class="billboard-modal">
     <div class="billboard-modal-head">
@@ -6555,6 +6711,8 @@ function finishPendingPlacement(index){
   }
 
   drafted[index] = pendingPlayer;
+  sessionDraftPicks.push(pendingPlayer.name);
+  rememberSpecialCardForProfile(pendingPlayer);
   pendingPlayer = null;
   dragSource = null;
   clearDropHints();
@@ -7075,6 +7233,7 @@ function syncTeamChemistry({animate=true}={}){
   }
 
   activeChemistryIds = activeIds;
+  rememberChemistriesForProfile(activeChems);
   renderTeamChemistryPanel(activeChems);
   return activeChems;
 }
@@ -7687,6 +7846,7 @@ function formatFixtureDate(iso){
   return `${y}.${m}.${d}`;
 }
 
+
 function getLivePerformanceBoost(state){
   const effects = Array.isArray(state?.livePerformanceEffects) ? state.livePerformanceEffects : [];
   const active = effects.filter(effect=>effect && effect.gamesRemaining > 0 && effect.delta);
@@ -7711,6 +7871,8 @@ function addLivePerformanceEffect(state, delta, gamesRemaining, reason){
 
 function updateLivePerformanceAfterMatch(state, fixture, result, myGoals, oppGoals){
   if(!state) return;
+
+  // 이번 경기에 적용된 기존 효과를 먼저 1경기 소진.
   consumeLivePerformanceEffects(state);
 
   if(result === "W"){
@@ -7725,36 +7887,56 @@ function updateLivePerformanceAfterMatch(state, fixture, result, myGoals, oppGoa
   }
 
   const margin = myGoals - oppGoals;
-  if(margin >= 3) addLivePerformanceEffect(state, 1, 1, "3점차 이상 대승");
-  else if(margin <= -3) addLivePerformanceEffect(state, -1, 1, "3점차 이상 대패");
 
-  if(result === "W" && state.winStreak >= 3) addLivePerformanceEffect(state, 1, 1, `${state.winStreak}연승`);
-  else if(result === "L" && state.lossStreak >= 3) addLivePerformanceEffect(state, -1, 1, `${state.lossStreak}연패`);
+  if(margin >= 3){
+    addLivePerformanceEffect(state, 1, 1, "3점차 이상 대승");
+  }else if(margin <= -3){
+    addLivePerformanceEffect(state, -1, 1, "3점차 이상 대패");
+  }
+
+  if(result === "W" && state.winStreak >= 3){
+    addLivePerformanceEffect(state, 1, 1, `${state.winStreak}연승`);
+  }else if(result === "L" && state.lossStreak >= 3){
+    addLivePerformanceEffect(state, -1, 1, `${state.lossStreak}연패`);
+  }
 
   if(fixture.opponent === "Arsenal"){
-    if(result === "W") addLivePerformanceEffect(state, 2, 2, "북런던더비 승리");
-    else if(result === "L") addLivePerformanceEffect(state, -2, 2, "북런던더비 패배");
+    if(result === "W"){
+      addLivePerformanceEffect(state, 2, 2, "북런던더비 승리");
+    }else if(result === "L"){
+      addLivePerformanceEffect(state, -2, 2, "북런던더비 패배");
+    }
   }
 
   if(fixture.opponent === "Chelsea"){
-    if(result === "W") addLivePerformanceEffect(state, 1, 1, "런던더비 승리");
-    else if(result === "L") addLivePerformanceEffect(state, -1, 1, "런던더비 패배");
+    if(result === "W"){
+      addLivePerformanceEffect(state, 1, 1, "런던더비 승리");
+    }else if(result === "L"){
+      addLivePerformanceEffect(state, -1, 1, "런던더비 패배");
+    }
   }
 }
+
 
 function getMatchPresentation(state, fixture){
   const home = fixture.venue === "H";
   const spursColor = "#ffffff";
   const arsenalColor = "#e33b43";
   const chelseaColor = "#2f67d8";
-  let type = null, label = "", leftColor = null, rightColor = null;
+
+  let type = null;
+  let label = "";
+  let leftColor = null;
+  let rightColor = null;
 
   if(fixture.opponent === "Arsenal"){
-    type = "derby"; label = "북런던더비";
+    type = "derby";
+    label = "북런던더비";
     leftColor = home ? spursColor : arsenalColor;
     rightColor = home ? arsenalColor : spursColor;
   }else if(fixture.opponent === "Chelsea"){
-    type = "derby"; label = "런던더비";
+    type = "derby";
+    label = "런던더비";
     leftColor = home ? spursColor : chelseaColor;
     rightColor = home ? chelseaColor : spursColor;
   }else if(fixture.round > 1){
@@ -7762,12 +7944,20 @@ function getMatchPresentation(state, fixture){
     const spursRank = rows.findIndex(row=>row.name==="Tottenham") + 1;
     const opponentRank = rows.findIndex(row=>row.name===fixture.opponent) + 1;
     if(spursRank > 0 && opponentRank > 0 && spursRank <= 4 && opponentRank <= 4){
-      type = "big"; label = "빅매치";
+      type = "big";
+      label = "빅매치";
     }
   }
 
   const sixSecondMatch = !!type || fixture.round >= 37;
-  return {type,label,leftColor,rightColor,sixSecondMatch};
+
+  return {
+    type,
+    label,
+    leftColor,
+    rightColor,
+    sixSecondMatch
+  };
 }
 
 function renderCurrentSimulationRound(fixture, livePerformance={total:0,reasons:[]}, matchPresentation={}){
@@ -7793,7 +7983,16 @@ function renderCurrentSimulationRound(fixture, livePerformance={total:0,reasons:
 
   current.innerHTML = `
     <div class="sim-round-line">
-      <div class="sim-round-badge">ROUND ${fixture.round}</div>
+      <div>
+        <div class="sim-round-badge">ROUND ${fixture.round}</div>
+        ${livePerformance.total !== 0 ? `
+          <div class="live-perf-badge ${livePerformance.total > 0 ? "up" : "down"}">
+            <span class="live-perf-triangle"></span>
+            <span>${livePerformance.total > 0 ? "+" : ""}${livePerformance.total}</span>
+            ${livePerformance.reasons?.length ? `<span class="live-perf-inline-reasons">${livePerformance.reasons.join(" · ")}</span>` : ""}
+          </div>
+        ` : ""}
+      </div>
       <div class="sim-date">${formatFixtureDate(fixture.date)} · ${home ? "HOME" : "AWAY"}</div>
     </div>
     ${matchPresentation.label ? `
@@ -8106,6 +8305,309 @@ function clearSeasonGoalTimers(){
   seasonSimulationGoalTimers = [];
 }
 
+
+
+let lilyProfileSession = null;
+let lilyProfileData = null;
+let lilyProfileSyncTimer = null;
+let sessionChemistryHistory = new Set();
+let sessionSpecialHistory = new Set();
+let sessionDraftPicks = [];
+
+const LILY_ACHIEVEMENTS = [
+  ["first_season","첫 시즌","시즌 1회 완료"],
+  ["season_10","단골 감독","시즌 10회 완료"],
+  ["champion","챔피언","프리미어리그 우승"],
+  ["points_90","90점 클럽","한 시즌 승점 90점 이상"],
+  ["first_chemistry","첫 번째 연결","팀캐미 1종 발동"],
+  ["chemistry_5","케미스트리스트","서로 다른 팀캐미 5종 발동"],
+  ["all_chemistries","완벽한 조합","팀캐미 15종 모두 발동"],
+  ["first_special","특별한 한 장","특수카드 1종 획득"],
+  ["prime_time","PRIME TIME","PRIME TIME 카드 획득"],
+  ["the_legends","THE LEGENDS","THE LEGENDS 카드 획득"],
+  ["toty","TOTY","TOTY 카드 획득"],
+  ["golden_boot","GOLDEN BOOT","GOLDEN BOOT 카드 획득"],
+  ["hero","HERO","HERO 카드 획득"],
+  ["world_cup_winner","WORLD CUP WINNER","WORLD CUP WINNER 카드 획득"],
+  ["wonder_boy","WONDER BOY","WONDER BOY 카드 획득"]
+];
+
+function escapeProfileHtml(value){
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function getSpecialCardCollectionType(player){
+  if(!player) return null;
+  if(isLegendCard(player)) return "THE LEGENDS";
+  if(isGoldenBootCard(player)) return "GOLDEN BOOT";
+  if(isWorldCupWinnerCard(player)) return "WORLD CUP WINNER";
+  if(isHeroCard(player)) return "HERO";
+  if(isTotyCard(player)) return "TOTY";
+  if(isWonderBoy(player) && !isTotyCard(player) && !isGoldenBootCard(player)) return "WONDER BOY";
+  if(isPrimeTime(player)) return "PRIME TIME";
+  return null;
+}
+
+async function profileRequest(action, payload={}){
+  if(!lilyProfileSession) throw new Error("로그인이 필요합니다.");
+  const response = await fetch(`${LILY_SUPABASE_URL}/functions/v1/lily-profile`, {
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "apikey":LILY_SUPABASE_KEY
+    },
+    body:JSON.stringify({
+      action,
+      nickname:lilyProfileSession.nickname,
+      pin:lilyProfileSession.pin,
+      ...payload
+    })
+  });
+  const data = await response.json().catch(()=>({}));
+  if(!response.ok) throw new Error(data.error || `PROFILE ${response.status}`);
+  if(data.profile) lilyProfileData = data.profile;
+  updateProfileFab();
+  return data;
+}
+
+function updateProfileFab(){
+  const btn = $("#profileFab");
+  if(!btn) return;
+  if(lilyProfileSession && lilyProfileData){
+    btn.classList.add("logged-in");
+    btn.textContent = `MY PROFILE · ${lilyProfileData.nickname}`;
+  }else{
+    btn.classList.remove("logged-in");
+    btn.textContent = "MY PROFILE · LOGIN";
+  }
+}
+
+function renderProfileLogin(message="", kind=""){
+  const content = $("#profileContent");
+  if(!content) return;
+  content.innerHTML = `
+    <div class="profile-login">
+      <div class="profile-login-title">MY SPURS PROFILE</div>
+      <div class="profile-login-sub">
+        닉네임과 숫자 3자리 PIN으로 로그인합니다.<br>
+        처음 사용하는 닉네임이면 입력한 PIN으로 계정이 자동 생성됩니다.
+      </div>
+      <div class="profile-login-row">
+        <input id="profileNickname" type="text" maxlength="20" autocomplete="username" placeholder="닉네임">
+        <input id="profilePin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="current-password" placeholder="PIN 3자리">
+      </div>
+      <button id="profileLoginBtn" type="button" style="width:100%;margin-top:8px">로그인 / 처음이면 계정 만들기</button>
+      <div id="profileLoginStatus" class="profile-login-status ${kind}">${escapeProfileHtml(message)}</div>
+    </div>
+  `;
+  $("#profileLoginBtn")?.addEventListener("click", loginProfile);
+  ["#profileNickname","#profilePin"].forEach(sel=>{
+    $(sel)?.addEventListener("keydown",e=>{
+      if(e.key==="Enter") loginProfile();
+    });
+  });
+  $("#profilePin")?.addEventListener("input",e=>{
+    e.target.value = e.target.value.replace(/\D/g,"").slice(0,3);
+  });
+}
+
+async function loginProfile(){
+  const nickname = String($("#profileNickname")?.value || "").trim();
+  const pin = String($("#profilePin")?.value || "").replace(/\D/g,"").slice(0,3);
+  const status = $("#profileLoginStatus");
+  if(!nickname || pin.length !== 3){
+    if(status){
+      status.className = "profile-login-status error";
+      status.textContent = "닉네임과 숫자 3자리 PIN을 입력해주세요.";
+    }
+    return;
+  }
+
+  if(status){
+    status.className = "profile-login-status";
+    status.textContent = "로그인 중...";
+  }
+
+  lilyProfileSession = {nickname:nickname.slice(0,20),pin};
+  try{
+    const data = await profileRequest("login");
+    lilyProfileData = data.profile;
+    renderProfile();
+  }catch(error){
+    lilyProfileSession = null;
+    lilyProfileData = null;
+    updateProfileFab();
+    renderProfileLogin(error.message || "로그인하지 못했습니다.","error");
+  }
+}
+
+function logoutProfile(){
+  lilyProfileSession = null;
+  lilyProfileData = null;
+  updateProfileFab();
+  renderProfileLogin("로그아웃했습니다.","ok");
+}
+
+function renderProfile(){
+  const content = $("#profileContent");
+  if(!content) return;
+  const p = lilyProfileData;
+  if(!p){
+    renderProfileLogin();
+    return;
+  }
+
+  const achievements = new Set(p.achievements || []);
+  const chemistryNames = {
+    duo:"환상의 듀오", belgian_wall:"벨기에의 벽", leadership:"리더십", desk:"DESK 라인",
+    heroes:"히어로즈", golden_generation:"황금세대", legend_class:"레전드의 품격",
+    best_back_four:"리그베스트 포백", world_class:"월드클래스", poch_kids:"포체티노의 아이들",
+    welsh_mafia:"웨일스 마피아", belgian_connection:"벨기에 커넥션", brazilian:"브라질 향우회",
+    league_best_xi:"리그베스트 XI", bond:"유대감"
+  };
+  const chemistries = (p.chemistries || []).map(id=>chemistryNames[id] || id);
+
+  content.innerHTML = `
+    <div class="profile-head-card">
+      <div class="profile-head-top">
+        <div>
+          <div class="profile-nickname">${escapeProfileHtml(p.nickname)}</div>
+          <div class="profile-updated">누적 기록은 로그인 계정에 저장됩니다.</div>
+        </div>
+        <button class="profile-logout" id="profileLogout" type="button">로그아웃</button>
+      </div>
+
+      <div class="profile-stats">
+        <div class="profile-stat">
+          <strong>${Number(p.seasons_played || 0)}</strong><span>PLAYED SEASONS</span>
+        </div>
+        <div class="profile-stat">
+          <strong>${p.best_rank ? `${p.best_rank}위 · ${p.best_points}점` : "-"}</strong><span>BEST RECORD</span>
+        </div>
+        <div class="profile-stat">
+          <strong>${escapeProfileHtml(getPlayerDisplayName(p.top_player || "-"))}</strong>
+          <span>MOST PICKED · ${Number(p.top_player_count || 0)}회</span>
+        </div>
+        <div class="profile-stat">
+          <strong>${Number(p.best_team_ovr || 0).toFixed(1)}</strong><span>BEST TEAM OVR</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <div class="profile-section-title">TEAM CHEMISTRY COLLECTION · ${chemistries.length}/15</div>
+      <div class="profile-chip-list">
+        ${chemistries.length ? chemistries.map(name=>`<span class="profile-chip">${escapeProfileHtml(name)}</span>`).join("") : '<span class="profile-empty">아직 기록된 팀캐미가 없습니다.</span>'}
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <div class="profile-section-title">SPECIAL CARD COLLECTION · ${(p.special_cards || []).length}/7</div>
+      <div class="profile-chip-list">
+        ${(p.special_cards || []).length ? p.special_cards.map(name=>`<span class="profile-chip">${escapeProfileHtml(name)}</span>`).join("") : '<span class="profile-empty">아직 기록된 특수카드가 없습니다.</span>'}
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <div class="profile-section-title">ACHIEVEMENTS · ${LILY_ACHIEVEMENTS.filter(([id])=>achievements.has(id)).length}/${LILY_ACHIEVEMENTS.length}</div>
+      <div class="achievement-grid">
+        ${LILY_ACHIEVEMENTS.map(([id,name,desc])=>`
+          <div class="achievement-item ${achievements.has(id) ? "done" : ""}">
+            ${achievements.has(id) ? "✓ " : "□ "}${escapeProfileHtml(name)}
+            <small>${escapeProfileHtml(desc)}</small>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+  $("#profileLogout")?.addEventListener("click", logoutProfile);
+}
+
+async function openProfile(){
+  const overlay = $("#profileOverlay");
+  if(overlay){
+    overlay.classList.add("show");
+    overlay.setAttribute("aria-hidden","false");
+  }
+
+  if(!lilyProfileSession){
+    renderProfileLogin();
+    return;
+  }
+
+  const content = $("#profileContent");
+  if(content) content.innerHTML = '<div class="profile-empty">프로필을 불러오는 중...</div>';
+  try{
+    await profileRequest("get_profile");
+    renderProfile();
+  }catch(error){
+    renderProfileLogin(error.message || "프로필을 불러오지 못했습니다.","error");
+  }
+}
+
+function closeProfile(){
+  const overlay = $("#profileOverlay");
+  if(overlay){
+    overlay.classList.remove("show");
+    overlay.setAttribute("aria-hidden","true");
+  }
+}
+
+function queueProfileProgressSync(){
+  if(!lilyProfileSession) return;
+  if(lilyProfileSyncTimer) clearTimeout(lilyProfileSyncTimer);
+  lilyProfileSyncTimer = setTimeout(async()=>{
+    try{
+      await profileRequest("sync_progress",{
+        chemistries:[...sessionChemistryHistory],
+        special_cards:[...sessionSpecialHistory]
+      });
+    }catch(error){
+      console.warn("PROFILE sync failed",error);
+    }
+  },450);
+}
+
+function rememberSpecialCardForProfile(player){
+  const type = getSpecialCardCollectionType(player);
+  if(!type || sessionSpecialHistory.has(type)) return;
+  sessionSpecialHistory.add(type);
+  queueProfileProgressSync();
+}
+
+function rememberChemistriesForProfile(activeChems){
+  let changed = false;
+  (activeChems || []).forEach(chem=>{
+    if(!chem?.id || sessionChemistryHistory.has(chem.id)) return;
+    sessionChemistryHistory.add(chem.id);
+    changed = true;
+  });
+  if(changed) queueProfileProgressSync();
+}
+
+async function recordCompletedSeasonToProfile(place,state,teamRatings){
+  if(!lilyProfileSession) return;
+  try{
+    const data = await profileRequest("record_season",{
+      season:{
+        rank:place,
+        points:state.points,
+        team_ovr:Number(teamRatings.overall.toFixed(2)),
+        players:[...sessionDraftPicks],
+        chemistries:[...sessionChemistryHistory],
+        special_cards:[...sessionSpecialHistory]
+      }
+    });
+    lilyProfileData = data.profile;
+  }catch(error){
+    console.warn("PROFILE season save failed",error);
+  }
+}
 
 const LILY_SUPABASE_URL = "https://bjgjdioqgbmbievqogfs.supabase.co";
 const LILY_SUPABASE_KEY = "sb_publishable_OZFxmAOevXOpMh4yNVotQQ_zNZujbo4";
@@ -8482,6 +8984,7 @@ function winterEnsureScorerPlayer(scorerState, player){
 function winterReplacePlayer(slotIndex, replacement, scorerState){
   if(!replacement || slotIndex < 0 || slotIndex >= drafted.length) return false;
   drafted[slotIndex] = replacement;
+  rememberSpecialCardForProfile(replacement);
   winterEnsureScorerPlayer(scorerState,replacement);
   renderSquad();
   renderPitch();
@@ -8537,7 +9040,6 @@ function showWinterPlayerChange(before, after, label, onDone){
   },2050);
 }
 
-
 function winterManagerCardHtml(manager, tag, type){
   if(!manager) return "";
   return `
@@ -8581,6 +9083,8 @@ function showWinterManagerChange(before, after, label, onDone){
     if(typeof onDone === "function") onDone();
   },2050);
 }
+
+
 
 function winterCardButton(card, index, onClickName="chooseWinterReplacement"){
   return `
@@ -9173,6 +9677,7 @@ function finishSeasonSimulation(state, teamRatings, scorerState){
   renderFinalLeagueTable(state.leagueTable);
   latestSeasonBillboardRecord = buildBillboardRecord(place, state, teamRatings, scorerState);
   billboardSubmitting = false;
+  recordCompletedSeasonToProfile(place,state,teamRatings);
   const summary = $("#simSummary");
   if(summary){
     summary.innerHTML = `
@@ -9188,6 +9693,8 @@ function finishSeasonSimulation(state, teamRatings, scorerState){
         <button id="seasonRestartSmall" class="season-restart-small" type="button">처음부터</button>
       </div>
     `;
+    const billboardNick = $("#billboardNickname");
+    if(billboardNick && lilyProfileData?.nickname) billboardNick.value = lilyProfileData.nickname;
     $("#billboardSubmit")?.addEventListener("click", submitBillboardRecord);
     $("#billboardNickname")?.addEventListener("keydown", e=>{
       if(e.key === "Enter") submitBillboardRecord();
@@ -9293,6 +9800,7 @@ function simulate(){
     let liveSpurs = 0;
     let liveOpponent = 0;
 
+    // 더비/빅매치/37~38R은 약 6초, 일반 경기는 약 4초 흐름으로 진행.
     const finalWhistleMs = matchPresentation.sixSecondMatch ? 5500 : 3500;
     const eventWindowMs = matchPresentation.sixSecondMatch ? 4700 : 3100;
     const clockWindowMs = matchPresentation.sixSecondMatch ? 5000 : 3200;
@@ -9454,6 +9962,9 @@ function reset(){
   rerollRemaining = 3;
   managerRerollRemaining = 1;
   drafted = [];
+  sessionDraftPicks = [];
+  sessionChemistryHistory = new Set();
+  sessionSpecialHistory = new Set();
   activeChemistryIds = new Set();
   clearChemistryActivationQueue();
   renderTeamChemistryPanel([]);
@@ -9507,6 +10018,8 @@ function reset(){
   buildRoulette();
 }
 
+updateProfileFab();
+
 $("#drawBtn").onclick = ()=> deadSeasonNoSelectable ? rerollDeadSeasonFree() : startRoulette();
 $("#rerollBtn").onclick = rerollSeason;
 $("#resetBtn").onclick = reset;
@@ -9528,6 +10041,11 @@ function closeInfoOverlay(id){
   overlay.setAttribute("aria-hidden","true");
 }
 
+$("#profileFab")?.addEventListener("click", openProfile);
+$("#profileClose")?.addEventListener("click", closeProfile);
+$("#profileOverlay")?.addEventListener("click", e=>{
+  if(e.target === $("#profileOverlay")) closeProfile();
+});
 $("#chemistryInfoFab")?.addEventListener("click", ()=>openInfoOverlay("chemistryInfoOverlay"));
 $("#chemistryInfoClose")?.addEventListener("click", ()=>closeInfoOverlay("chemistryInfoOverlay"));
 $("#chemistryInfoOverlay")?.addEventListener("click", e=>{
