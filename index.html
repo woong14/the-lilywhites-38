@@ -5628,15 +5628,13 @@ function playerOvrContributionFactor(ovr){
   return clamp(1 + (Number(ovr || 85) - 85) * 0.03, 0.70, 1.30);
 }
 
-function goalShareForSlot(slot){
-  if(slot === "ST") return 40.0;
-  if(["LW","RW"].includes(slot)) return 30.0;
-  if(["CAM","RM","LM"].includes(slot)) return 15.0;
-  if(["CM","DM"].includes(slot)) return 6.0;
-  if(["RB","LB"].includes(slot)) return 4.0;
-  if(slot === "CB") return 4.5;
-  if(slot === "GK") return 0.5;
-  return 0;
+function goalShareForIndex(index){
+  const shares = {
+    "4231":[0.2,2.0,3.9,3.9,2.0,4.0,4.0,18.0,10.0,22.0,30.0],
+    "433":[0.2,2.0,3.9,3.9,2.0,6.0,6.0,6.0,18.0,22.0,30.0],
+    "442":[0.2,2.0,3.9,3.9,2.0,15.0,6.0,6.0,11.0,25.0,25.0]
+  };
+  return shares[currentFormationKey]?.[index] ?? 0;
 }
 
 function assistShareForSlot(slot){
@@ -5682,12 +5680,14 @@ function buildContributionWeights(type, excludeName=null){
 
   return candidates.map(item=>{
     const baseShare = type === "goal"
-      ? goalShareForSlot(item.slot)
+      ? goalShareForIndex(item.index)
       : assistShareForSlot(item.slot);
     const groupKey = contributionGroupKey(item.slot, type);
     const groupCount = Math.max(1, groupCounts[groupKey] || 1);
 
-    const perPlayerShare = baseShare / groupCount;
+    const perPlayerShare = type === "goal"
+      ? baseShare
+      : baseShare / groupCount;
     const ovrFactor = playerOvrContributionFactor(item.player.ovr);
     const weight = perPlayerShare * ovrFactor;
 
