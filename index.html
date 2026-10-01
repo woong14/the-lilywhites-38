@@ -2804,6 +2804,13 @@ function getPlayerDisplayName(name){
   return playerDisplayNames[name] || name;
 }
 
+function getAssistDisplayName(name){
+  const display = getPlayerDisplayName(name);
+  if(display === "손흥민" || display === "이영표") return display;
+  const parts = display.trim().split(/\s+/);
+  return parts[parts.length - 1] || display;
+}
+
 
 function getPlayerMeta(name){
   return playerMeta[name] || ["국적 미상","재적 기간 미상"];
@@ -4091,6 +4098,33 @@ const premierLeague2627Fixtures = [
   {round:38, date:"2027-05-30", opponent:"Aston Villa", venue:"A"}
 ];
 
+const premierLeagueTeamDisplayNames = {
+  "Tottenham": "토트넘 홋스퍼",
+  "Arsenal": "아스날 FC",
+  "Manchester City": "맨체스터 시티",
+  "Liverpool": "리버풀 FC",
+  "Chelsea": "첼시 FC",
+  "Manchester United": "맨체스터 유나이티드",
+  "Newcastle United": "뉴캐슬 유나이티드",
+  "Aston Villa": "아스톤 빌라",
+  "Brighton & Hove Albion": "브라이튼",
+  "Crystal Palace": "크리스탈 팰리스",
+  "AFC Bournemouth": "본머스",
+  "Nottingham Forest": "노팅엄 포레스트",
+  "Brentford": "브렌트포드",
+  "Fulham": "풀럼 FC",
+  "Everton": "에버턴 FC",
+  "Leeds United": "리즈 유나이티드",
+  "Sunderland": "선덜랜드",
+  "Ipswich Town": "입스위치 타운",
+  "Hull City": "헐시티",
+  "Coventry City": "코번트리 시티"
+};
+
+function getTeamDisplayName(name){
+  return premierLeagueTeamDisplayNames[name] || name;
+}
+
 const premierLeague2627TeamRatings = {
   "Arsenal":                {att:93, mid:93, def:92},
   "Manchester City":       {att:93, mid:94, def:91},
@@ -4495,8 +4529,8 @@ function renderCurrentSimulationRound(fixture){
   const current = $("#simCurrent");
   if(!current) return;
 
-  const leftName = home ? "Tottenham" : fixture.opponent;
-  const rightName = home ? fixture.opponent : "Tottenham";
+  const leftName = home ? getTeamDisplayName("Tottenham") : getTeamDisplayName(fixture.opponent);
+  const rightName = home ? getTeamDisplayName(fixture.opponent) : getTeamDisplayName("Tottenham");
 
   current.style.display = "";
   current.innerHTML = `
@@ -4530,10 +4564,10 @@ function updateLiveScore(fixture, spursGoals, opponentGoals, event=null){
     const eventEl = $("#simEvent");
     if(eventEl){
       if(event.side === "spurs"){
-        const assistText = event.assist ? ` · 도움 ${getPlayerDisplayName(event.assist)}` : "";
+        const assistText = event.assist ? ` (AS ${getAssistDisplayName(event.assist)})` : "";
         eventEl.textContent = `${event.minute}' GOAL · ${getPlayerDisplayName(event.scorer)}${assistText}${event.setPiece ? " · SET PIECE" : ""}`;
       }else{
-        eventEl.textContent = `${event.minute}' GOAL · ${fixture.opponent}`;
+        eventEl.textContent = `${event.minute}' GOAL · ${getTeamDisplayName(fixture.opponent)}`;
       }
       setTimeout(()=>{
         if(eventEl.textContent.includes(`${event.minute}'`)) eventEl.textContent = "";
@@ -4552,12 +4586,12 @@ function renderCompletedRound(fixture, result, spursGoals, opponentGoals, events
   const spursScorers = events
     .filter(e=>e.side==="spurs" && e.scorer)
     .map(e=>{
-      const assistText = e.assist ? ` (도움 ${getPlayerDisplayName(e.assist)})` : "";
+      const assistText = e.assist ? ` (AS ${getAssistDisplayName(e.assist)})` : "";
       return `${getPlayerDisplayName(e.scorer)}${assistText}${e.setPiece ? " (SP)" : ""}`;
     });
 
   const scorerLine = spursScorers.length
-    ? `<small>Tottenham 득점 · ${spursScorers.join(", ")}</small>`
+    ? `<small>${getTeamDisplayName("Tottenham")} 득점 · ${spursScorers.join(", ")}</small>`
     : "";
 
   const row = document.createElement("div");
@@ -4565,7 +4599,7 @@ function renderCompletedRound(fixture, result, spursGoals, opponentGoals, events
   row.innerHTML = `
     <div class="sim-history-round">${fixture.round}R</div>
     <div class="sim-history-match">
-      ${home ? "Tottenham" : fixture.opponent} ${leftGoals} - ${rightGoals} ${home ? fixture.opponent : "Tottenham"}
+      ${home ? getTeamDisplayName("Tottenham") : getTeamDisplayName(fixture.opponent)} ${leftGoals} - ${rightGoals} ${home ? getTeamDisplayName(fixture.opponent) : getTeamDisplayName("Tottenham")}
       <small>${formatFixtureDate(fixture.date)} · ${home ? "HOME" : "AWAY"}</small>
       ${scorerLine}
     </div>
