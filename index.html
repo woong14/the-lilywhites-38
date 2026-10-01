@@ -1833,7 +1833,7 @@
   }
   .info-row{
     display:grid;
-    grid-template-columns:minmax(150px,1fr) minmax(230px,2fr) auto;
+    grid-template-columns:minmax(150px,1fr) minmax(230px,2fr) 190px;
     gap:12px;
     align-items:center;
     padding:12px 14px;
@@ -1843,7 +1843,13 @@
   }
   .info-name{color:#fff;font-size:12px;font-weight:1000}
   .info-desc{color:#899fc9;font-size:10px;line-height:1.55}
-  .info-effect{color:#bcd0ff;font-size:11px;font-weight:1000;white-space:nowrap}
+  .info-effect{
+    color:#bcd0ff;
+    font-size:11px;
+    font-weight:1000;
+    white-space:nowrap;
+    text-align:right;
+  }
   .card-count-list{
     padding:14px;
     display:grid;
@@ -1862,8 +1868,59 @@
   }
   .card-count-name{color:#dfe9fb;font-size:11px;font-weight:950}
   .card-count-value{color:#fff;font-size:18px;font-weight:1000}
-  .card-count-total{grid-column:1/-1;background:#ffffff;border-color:#ffffff}
-  .card-count-total .card-count-name,.card-count-total .card-count-value{color:#102652}
+  .card-count-total{
+    grid-column:1/-1;
+    background:#ffffff;
+    border-color:#ffffff;
+  }
+  .card-count-total .card-count-name,
+  .card-count-total .card-count-value{color:#102652}
+
+  .card-count-prime{
+    background:linear-gradient(120deg,#ffffff 0%,#ecf6ff 25%,#fff4fa 48%,#f4fffa 68%,#f5f2ff 86%,#ffffff 100%);
+    border-color:#ffffff;
+  }
+  .card-count-prime .card-count-name,.card-count-prime .card-count-value{color:#10182a}
+
+  .card-count-legend{
+    background:linear-gradient(140deg,#fffbea 0%,#f7e4ab 28%,#e1bf6f 58%,#b78b3f 100%);
+    border-color:#f6ebc2;
+  }
+  .card-count-legend .card-count-name,.card-count-legend .card-count-value{color:#2a2010}
+
+  .card-count-toty{
+    background:linear-gradient(140deg,#090b10 0%,#12141b 38%,#050609 100%);
+    border-color:#d8b14f;
+  }
+  .card-count-toty .card-count-name,.card-count-toty .card-count-value{color:#f6d884}
+
+  .card-count-golden{
+    background:linear-gradient(140deg,#08251f 0%,#105143 30%,#1b8068 50%,#0d493b 72%,#061c18 100%);
+    border-color:#8df1d5;
+  }
+  .card-count-golden .card-count-name,.card-count-golden .card-count-value{color:#dcfff5}
+
+  .card-count-hero{
+    background:
+      radial-gradient(circle at 18% 20%,rgba(255,255,255,.9),rgba(255,255,255,0) 30%),
+      linear-gradient(150deg,#eefbff 0%,#83CBEB 45%,#22789d 100%);
+    border-color:rgba(109,193,226,.65);
+  }
+  .card-count-hero .card-count-name,.card-count-hero .card-count-value{color:#0f2d3f}
+
+  .card-count-winner{
+    background:
+      radial-gradient(circle at 18% 20%,rgba(255,255,255,.9),rgba(255,255,255,0) 28%),
+      linear-gradient(150deg,#fff7d8 0%,#FFC000 48%,#ff9c00 100%);
+    border-color:#ffc227;
+  }
+  .card-count-winner .card-count-name,.card-count-winner .card-count-value{color:#5a3900}
+
+  .card-count-wonder{
+    background:linear-gradient(135deg,#462383 0%,#5f31ad 28%,#4d2d94 55%,#321b65 100%);
+    border-color:#d8c2ff;
+  }
+  .card-count-wonder .card-count-name,.card-count-wonder .card-count-value{color:#f8f4ff}
   .billboard-overlay{
     position:fixed;
     inset:0;
@@ -2168,21 +2225,21 @@
       <button id="chemistryInfoClose" class="billboard-close" type="button">×</button>
     </div>
     <div class="info-list">
-      <div class="info-row"><div class="info-name">환상의 듀오</div><div class="info-desc">해리 케인 + 손흥민</div><div class="info-effect">ATT +1</div></div>
-      <div class="info-row"><div class="info-name">벨기에의 벽</div><div class="info-desc">얀 베르통언 + 토비 알데르베이럴트</div><div class="info-effect">DEF +1</div></div>
-      <div class="info-row"><div class="info-name">리더십</div><div class="info-desc">개리 마벗 / 마이클 도슨 / 손흥민 / 위고 요리스 / 레들리 킹 / 크리스티안 로메로 중 3명 이상</div><div class="info-effect">OVR +1</div></div>
-      <div class="info-row"><div class="info-name">DESK 라인</div><div class="info-desc">손흥민 + 해리 케인 + 크리스티안 에릭센 + 델리 알리 전원</div><div class="info-effect">ATT +2</div></div>
-      <div class="info-row"><div class="info-name">히어로즈</div><div class="info-desc">HERO 카드 3장 이상</div><div class="info-effect">OVR +1</div></div>
-      <div class="info-row"><div class="info-name">황금세대</div><div class="info-desc">PRIME TIME 카드 3장 이상</div><div class="info-effect">OVR +1</div></div>
-      <div class="info-row"><div class="info-name">레전드의 품격</div><div class="info-desc">THE LEGENDS 카드 1장 이상</div><div class="info-effect">OVR +1</div></div>
-      <div class="info-row"><div class="info-name">리그베스트 포백</div><div class="info-desc">대니 로즈 + 얀 베르통언 + 토비 알데르베이럴트 + 카일 워커 전원</div><div class="info-effect">DEF +2</div></div>
-      <div class="info-row"><div class="info-name">월드클래스</div><div class="info-desc">OVR 90 이상 선수 4명 이상</div><div class="info-effect">OVR +1</div></div>
-      <div class="info-row"><div class="info-name">포체티노의 아이들</div><div class="info-desc">마우리시오 포체티노 감독 배치 + 포체티노 영입 선수 중 3명 이상</div><div class="info-effect">OVR +2</div></div>
-      <div class="info-row"><div class="info-name">웨일스 마피아</div><div class="info-desc">베일 / 벤 데이비스 / 브레넌 존슨 / 손흥민 중 2명 이상. 3명부터 효과 상승</div><div class="info-effect">2명 ATT +1 · 3명+ ATT +2</div></div>
-      <div class="info-row"><div class="info-name">벨기에 커넥션</div><div class="info-desc">얀 베르통언 + 토비 알데르베이럴트 + 무사 뎀벨레 전원</div><div class="info-effect">MID +2</div></div>
-      <div class="info-row"><div class="info-name">브라질 향우회</div><div class="info-desc">히샬리송 + 루카스 모우라 + 에메르송 로얄 전원</div><div class="info-effect">ATT +2</div></div>
-      <div class="info-row"><div class="info-name">리그베스트 XI</div><div class="info-desc">TOTY 카드 3장 이상</div><div class="info-effect">OVR +1</div></div>
-      <div class="info-row"><div class="info-name">유대감</div><div class="info-desc">같은 시즌 카드 3명 이상. THE LEGENDS는 동일 시즌 판정에서 제외</div><div class="info-effect">OVR +1</div></div>
+      <div class="info-row"><div class="info-name">환상의 듀오</div><div class="info-desc">해리 케인 + 손흥민 보유</div><div class="info-effect">ATT +1</div></div>
+      <div class="info-row"><div class="info-name">벨기에의 벽</div><div class="info-desc">얀 베르통언 + 토비 알더베이럴트 보유</div><div class="info-effect">DEF +1</div></div>
+      <div class="info-row"><div class="info-name">리더십</div><div class="info-desc">개리 마벗 / 레들리 킹 / 마이클 도슨 / 위고 요리스 / 손흥민 / 크리스티안 로메로 중 3명 이상 보유</div><div class="info-effect">OVR +1</div></div>
+      <div class="info-row"><div class="info-name">DESK 라인</div><div class="info-desc">손흥민 + 해리 케인 + 크리스티안 에릭센 + 델리 알리 4명 모두 보유</div><div class="info-effect">ATT +2</div></div>
+      <div class="info-row"><div class="info-name">히어로즈</div><div class="info-desc">HERO 카드 3장 이상 보유</div><div class="info-effect">OVR +1</div></div>
+      <div class="info-row"><div class="info-name">황금세대</div><div class="info-desc">PRIME TIME 카드 3장 이상 보유</div><div class="info-effect">OVR +1</div></div>
+      <div class="info-row"><div class="info-name">레전드의 품격</div><div class="info-desc">THE LEGENDS 카드 1장 이상 보유</div><div class="info-effect">OVR +1</div></div>
+      <div class="info-row"><div class="info-name">리그베스트 포백</div><div class="info-desc">대니 로즈 + 얀 베르통언 + 토비 알더베이럴트 + 카일 워커 4명 모두 보유</div><div class="info-effect">DEF +2</div></div>
+      <div class="info-row"><div class="info-name">월드클래스</div><div class="info-desc">OVR 90 이상 선수 4명 이상 보유</div><div class="info-effect">OVR +1</div></div>
+      <div class="info-row"><div class="info-name">포체티노의 아이들</div><div class="info-desc">마우리시오 포체티노 감독 배치 + 포체티노 영입 선수 중 3명 이상 보유</div><div class="info-effect">OVR +2</div></div>
+      <div class="info-row"><div class="info-name">웨일스 마피아</div><div class="info-desc">베일 / 벤 데이비스 / 브레넌 존슨 / 손흥민 중 2명 이상 보유 · 3명 이상부터 효과 상승</div><div class="info-effect">2명 ATT +1 · 3명+ ATT +2</div></div>
+      <div class="info-row"><div class="info-name">벨기에 커넥션</div><div class="info-desc">얀 베르통언 + 토비 알더베이럴트 + 무사 뎀벨레 3명 모두 보유</div><div class="info-effect">MID +2</div></div>
+      <div class="info-row"><div class="info-name">브라질 향우회</div><div class="info-desc">히샬리송 + 루카스 모우라 + 에메르송 로얄 3명 모두 보유</div><div class="info-effect">ATT +2</div></div>
+      <div class="info-row"><div class="info-name">리그베스트 XI</div><div class="info-desc">TOTY 카드 3장 이상 보유</div><div class="info-effect">OVR +1</div></div>
+      <div class="info-row"><div class="info-name">유대감</div><div class="info-desc">같은 시즌 카드 3명 이상 보유</div><div class="info-effect">OVR +1</div></div>
     </div>
   </div>
 </div>
@@ -2197,16 +2254,15 @@
       <button id="cardInfoClose" class="billboard-close" type="button">×</button>
     </div>
     <div class="card-count-list">
-      <div class="card-count-row"><div class="card-count-name">일반 카드</div><div class="card-count-value">332장</div></div>
-      <div class="card-count-row"><div class="card-count-name">PRIME TIME</div><div class="card-count-value">14장</div></div>
-      <div class="card-count-row"><div class="card-count-name">THE LEGENDS</div><div class="card-count-value">12장</div></div>
-      <div class="card-count-row"><div class="card-count-name">TOTY</div><div class="card-count-value">20장</div></div>
-      <div class="card-count-row"><div class="card-count-name">GOLDEN BOOT</div><div class="card-count-value">5장</div></div>
-      <div class="card-count-row"><div class="card-count-name">HERO</div><div class="card-count-value">5장</div></div>
-      <div class="card-count-row"><div class="card-count-name">WORLD CUP WINNER</div><div class="card-count-value">3장</div></div>
-      <div class="card-count-row"><div class="card-count-name">WONDER BOY</div><div class="card-count-value">3장</div></div>
-      <div class="card-count-row"><div class="card-count-name">SOL CAMPBELL SPECIAL</div><div class="card-count-value">8장</div></div>
-      <div class="card-count-row card-count-total"><div class="card-count-name">TOTAL</div><div class="card-count-value">402장</div></div>
+      <div class="card-count-row"><div class="card-count-name">일반 카드</div><div class="card-count-value">357장</div></div>
+      <div class="card-count-row card-count-prime"><div class="card-count-name">PRIME TIME</div><div class="card-count-value">14장</div></div>
+      <div class="card-count-row card-count-legend"><div class="card-count-name">THE LEGENDS</div><div class="card-count-value">12장</div></div>
+      <div class="card-count-row card-count-toty"><div class="card-count-name">TOTY</div><div class="card-count-value">20장</div></div>
+      <div class="card-count-row card-count-golden"><div class="card-count-name">GOLDEN BOOT</div><div class="card-count-value">5장</div></div>
+      <div class="card-count-row card-count-hero"><div class="card-count-name">HERO</div><div class="card-count-value">6장</div></div>
+      <div class="card-count-row card-count-winner"><div class="card-count-name">WORLD CUP WINNER</div><div class="card-count-value">3장</div></div>
+      <div class="card-count-row card-count-wonder"><div class="card-count-name">WONDER BOY</div><div class="card-count-value">3장</div></div>
+      <div class="card-count-row card-count-total"><div class="card-count-name">TOTAL</div><div class="card-count-value">420장</div></div>
     </div>
   </div>
 </div>
@@ -2368,6 +2424,7 @@ const seasonPosterMap = {
 };
 
 function clamp(v, min, max){ return Math.max(min, Math.min(max, Math.round(v))); }
+function clampFloat(v, min, max){ return Math.max(min, Math.min(max, v)); }
 
 function makePlayer(name,pos,ovr){
   return [name,pos,ovr];
@@ -2398,24 +2455,24 @@ const seasons = [
   makeSeason("2004/05", "자크 상티니→마르틴 욜 · 리그 9위 · FA컵 8강", [["Paul Robinson","GK",82],["Noé Pamarot","RB",77],["Noureddine Naybet","CB",79],["Ledley King","CB",85],["Erik Edman","LB",79],["Andy Reid","LW",78],["Michael Carrick","CM",83],["Pedro Mendes","CM",80],["Sean Davies","RW",77],["Robbie Keane","CAM",84],["Jermain Defoe","ST",84]], seasonPosterMap["2004/05"]),
   makeSeason("2005/06", "마르틴 욜 · 리그 5위 · FA컵 32강", [["Paul Robinson","GK",83],["Paul Stalteri","RB",78],["Michael Dawson","CB",80],["Ledley King","CB",87],["Young-Pyo Lee","LB",79],["Edgar Davids","LW",84],["Michael Carrick","CM",84],["Jermaine Jenas","CM",80],["Aaron Lennon","RW",79],["Mido","CAM",83],["Robbie Keane","ST",84]], seasonPosterMap["2005/06"]),
   makeSeason("2006/07", "마르틴 욜 · 리그 5위 · UEFA컵 8강", [["Paul Robinson","GK",82],["Pascal Chimbonda","RB",80],["Michael Dawson","CB",81],["Ledley King","CB",85],["Young-Pyo Lee","LB",79],["Steed Malbranque","LW",80],["Didier Zokora","CM",80],["Jermaine Jenas","CM",81],["Aaron Lennon","RW",81],["Dimitar Berbatov","CAM",88],["Robbie Keane","ST",83]], seasonPosterMap["2006/07"]),
-  makeSeason("2007/08", "마르틴 욜→후안데 라모스 · 리그 11위 · 리그컵 우승", [["Paul Robinson","GK",81],["Pascal Chimbonda","RB",79],["Michael Dawson","CB",82],["Younès Kaboul","CB",80],["Young-Pyo Lee","LB",81],["Steed Malbranque","LW",80],["Didier Zokora","CM",79],["Jermaine Jenas","CM",81],["Aaron Lennon","RW",82],["Dimitar Berbatov","CAM",87],["Robbie Keane","ST",85]], seasonPosterMap["2007/08"]),
+  makeSeason("2007/08", "마르틴 욜→후안데 라모스 · 리그 11위 · 리그컵 우승", [["Paul Robinson","GK",81],["Pascal Chimbonda","RB",79],["Michael Dawson","CB",82],["Younès Kaboul","CB",80],["Young-Pyo Lee","LB",81],["Steed Malbranque","LW",80],["Didier Zokora","CM",79],["Jermaine Jenas","CM",81],["Aaron Lennon","RW",82],["Dimitar Berbatov","CAM",87],["Robbie Keane","ST",85,["Jonathan Woodgate","CB",85]]], seasonPosterMap["2007/08"]),
   makeSeason("2008/09", "후안데 라모스→해리 레드냅 · 리그 8위 · 리그컵 준우승", [["Heurelho Gomes","GK",80],["Vedran Ćorluka","RB",81],["Jonathan Woodgate","CB",83],["Ledley King","CB",84],["Benoît Assou-Ekotto","LB",80],["Luka Modrić","LW",84],["Didier Zokora","CM",78],["Jermaine Jenas","CM",80],["Aaron Lennon","RW",83],["Roman Pavlyuchenko","CAM",82],["Darren Bent","ST",81]], seasonPosterMap["2008/09"]),
-  makeSeason("2009/10", "해리 레드냅 · 리그 4위 · FA컵 4강", [["Heurelho Gomes","GK",82],["Vedran Ćorluka","RB",81],["Michael Dawson","CB",84],["Sébastien Bassong","CB",80],["Benoît Assou-Ekotto","LB",81],["Gareth Bale","LW",84],["Wilson Palacios","CM",80],["Tom Huddlestone","CM",81],["Aaron Lennon","RW",84],["Peter Crouch","CAM",84],["Jermain Defoe","ST",86]], seasonPosterMap["2009/10"]),
-  makeSeason("2010/11", "해리 레드냅 · 리그 5위 · 챔피언스리그 8강", [["Heurelho Gomes","GK",81],["Alan Hutton","RB",79],["Michael Dawson","CB",84],["William Gallas","CB",83],["Benoît Assou-Ekotto","LB",81],["Gareth Bale","LW",89],["Wilson Palacios","CM",79],["Luka Modrić","CM",86],["Aaron Lennon","RW",84],["Rafael van der Vaart","CAM",86],["Peter Crouch","ST",84]], seasonPosterMap["2010/11"]),
+  makeSeason("2009/10", "해리 레드냅 · 리그 4위 · FA컵 4강", [["Heurelho Gomes","GK",82],["Vedran Ćorluka","RB",81],["Michael Dawson","CB",84],["Sébastien Bassong","CB",80],["Benoît Assou-Ekotto","LB",81],["Gareth Bale","LW",84],["Wilson Palacios","CM",80],["Tom Huddlestone","CM",81],["Aaron Lennon","RW",84],["Peter Crouch","CAM",84],["Jermain Defoe","ST",86,["Luka Modrić","CM",85],["Ledley King","CB",84]]], seasonPosterMap["2009/10"]),
+  makeSeason("2010/11", "해리 레드냅 · 리그 5위 · 챔피언스리그 8강", [["Heurelho Gomes","GK",81],["Alan Hutton","RB",79],["Michael Dawson","CB",84],["William Gallas","CB",83],["Benoît Assou-Ekotto","LB",81],["Gareth Bale","LW",89],["Wilson Palacios","CM",79],["Luka Modrić","CM",86],["Aaron Lennon","RW",84],["Rafael van der Vaart","CAM",86],["Peter Crouch","ST",84,["Sandro","CM",80]]], seasonPosterMap["2010/11"]),
   makeSeason("2011/12", "해리 레드냅 · 리그 4위 · FA컵 4강", [["Brad Friedel","GK",82],["Kyle Walker","RB",85],["Younès Kaboul","CB",81],["Ledley King","CB",83],["Benoît Assou-Ekotto","LB",82],["Gareth Bale","LW",90],["Scott Parker","CM",85],["Luka Modrić","CM",87],["Aaron Lennon","RW",85],["Rafael van der Vaart","CAM",85],["Emmanuel Adebayor","ST",84]], seasonPosterMap["2011/12"]),
   makeSeason("2012/13", "안드레 빌라스보아스 · 리그 5위 · 유로파리그 8강", [["Hugo Lloris","GK",85],["Kyle Walker","RB",84],["Michael Dawson","CB",82],["Jan Vertonghen","CB",87],["Benoît Assou-Ekotto","LB",80],["Sandro","CM",82],["Mousa Dembélé","CM",85],["Aaron Lennon","RW",82],["Clint Dempsey","CAM",82],["Gareth Bale","LW",93],["Jermain Defoe","ST",85]], seasonPosterMap["2012/13"]),
-  makeSeason("2013/14", "빌라스보아스→팀 셔우드 · 리그 6위 · 유로파리그 16강", [["Hugo Lloris","GK",86],["Kyle Walker","RB",84],["Michael Dawson","CB",81],["Jan Vertonghen","CB",85],["Danny Rose","LB",81],["Paulinho","CM",81],["Mousa Dembélé","CM",84],["Aaron Lennon","RW",81],["Christian Eriksen","CAM",86],["Gylfi Sigurdsson","LW",81],["Roberto Soldado","ST",79]], seasonPosterMap["2013/14"]),
+  makeSeason("2013/14", "빌라스보아스→팀 셔우드 · 리그 6위 · 유로파리그 16강", [["Hugo Lloris","GK",86],["Kyle Walker","RB",84],["Michael Dawson","CB",81],["Jan Vertonghen","CB",85],["Danny Rose","LB",81],["Paulinho","CM",81],["Mousa Dembélé","CM",84],["Aaron Lennon","RW",81],["Christian Eriksen","CAM",86],["Gylfi Sigurdsson","LW",81],["Roberto Soldado","ST",79,["Emmanuel Adebayor","ST",82]]], seasonPosterMap["2013/14"]),
   makeSeason("2014/15", "마우리시오 포체티노 · 리그 5위 · 리그컵 준우승", [["Hugo Lloris","GK",87],["Kyle Walker","RB",83],["Eric Dier","CB",80],["Jan Vertonghen","CB",85],["Danny Rose","LB",83],["Ryan Mason","CM",80],["Nabil Bentaleb","CM",79],["Erik Lamela","RW",82],["Christian Eriksen","CAM",87],["Nacer Chadli","LW",80],["Harry Kane","ST",90]], seasonPosterMap["2014/15"]),
-  makeSeason("2015/16", "마우리시오 포체티노 · 리그 3위 · 유로파리그 16강", [["Hugo Lloris","GK",87],["Kyle Walker","RB",85],["Toby Alderweireld","CB",90],["Jan Vertonghen","CB",87],["Danny Rose","LB",86],["Eric Dier","CM",83],["Mousa Dembélé","CM",87],["Erik Lamela","RW",84],["Dele Alli","CAM",89],["Christian Eriksen","LW",88],["Harry Kane","ST",91]], seasonPosterMap["2015/16"]),
+  makeSeason("2015/16", "마우리시오 포체티노 · 리그 3위 · 유로파리그 16강", [["Hugo Lloris","GK",87],["Kyle Walker","RB",85],["Toby Alderweireld","CB",90],["Jan Vertonghen","CB",87],["Danny Rose","LB",86],["Eric Dier","CM",83],["Mousa Dembélé","CM",87],["Erik Lamela","RW",84],["Dele Alli","CAM",89],["Christian Eriksen","LW",88],["Harry Kane","ST",91,["Heung-min Son","LW",84]]], seasonPosterMap["2015/16"]),
   makeSeason("2016/17", "마우리시오 포체티노 · 리그 2위 · FA컵 4강", [["Hugo Lloris","GK",88],["Kyle Walker","RB",87],["Toby Alderweireld","CB",90],["Jan Vertonghen","CB",89],["Ben Davies","LB",83],["Victor Wanyama","CM",84],["Eric Dier","CM",86],["Christian Eriksen","RW",90],["Dele Alli","CAM",90],["Heung-min Son","LW",90],["Harry Kane","ST",93]], seasonPosterMap["2016/17"]),
   makeSeason("2017/18", "마우리시오 포체티노 · 리그 3위 · FA컵 4강", [["Hugo Lloris","GK",87],["Kieran Trippier","RB",84],["Davinson Sánchez","CB",83],["Jan Vertonghen","CB",90],["Ben Davies","LB",85],["Mousa Dembélé","CM",85],["Eric Dier","CM",83],["Christian Eriksen","RW",90],["Dele Alli","CAM",87],["Heung-min Son","LW",89],["Harry Kane","ST",93]], seasonPosterMap["2017/18"]),
-  makeSeason("2018/19", "마우리시오 포체티노 · 리그 4위 · 챔피언스리그 준우승", [["Hugo Lloris","GK",89],["Kieran Trippier","RB",83],["Toby Alderweireld","CB",88],["Jan Vertonghen","CB",87],["Ben Davies","LB",82],["Harry Winks","CM",80],["Moussa Sissoko","CM",84],["Lucas Moura","RW",86],["Christian Eriksen","CAM",88],["Heung-min Son","LW",92],["Harry Kane","ST",89]], seasonPosterMap["2018/19"]),
-  makeSeason("2019/20", "포체티노→주제 무리뉴 · 리그 6위 · 챔피언스리그 16강", [["Hugo Lloris","GK",87],["Serge Aurier","RB",81],["Toby Alderweireld","CB",86],["Davinson Sánchez","CB",82],["Ben Davies","LB",81],["Harry Winks","CM",79],["Moussa Sissoko","CM",81],["Lucas Moura","RW",84],["Dele Alli","CAM",84],["Heung-min Son","LW",90],["Harry Kane","ST",92]], seasonPosterMap["2019/20"]),
-  makeSeason("2020/21", "주제 무리뉴→라이언 메이슨 · 리그 7위 · 리그컵 준우승", [["Hugo Lloris","GK",87],["Matt Doherty","RB",79],["Toby Alderweireld","CB",85],["Eric Dier","CB",81],["Ben Davies","LB",80],["Pierre-Emile Højbjerg","CM",83],["Moussa Sissoko","CM",80],["Lucas Moura","RW",84],["Tanguy Ndombele","CAM",83],["Heung-min Son","LW",91],["Harry Kane","ST",95]], seasonPosterMap["2020/21"]),
-  makeSeason("2021/22", "누누→안토니오 콘테 · 리그 4위 · 리그컵 4강", [["Hugo Lloris","GK",86],["Emerson Royal","RB",80],["Cristian Romero","CB",87],["Eric Dier","CB",82],["Ben Davies","LB",82],["Pierre-Emile Højbjerg","CM",82],["Rodrigo Bentancur","CM",83],["Lucas Moura","RW",83],["Sergio Reguilón","LW",80],["Heung-min Son","CAM",93],["Harry Kane","ST",94]], seasonPosterMap["2021/22"]),
+  makeSeason("2018/19", "마우리시오 포체티노 · 리그 4위 · 챔피언스리그 준우승", [["Hugo Lloris","GK",89],["Kieran Trippier","RB",83],["Toby Alderweireld","CB",88],["Jan Vertonghen","CB",87],["Ben Davies","LB",82],["Harry Winks","CM",80],["Moussa Sissoko","CM",84],["Lucas Moura","RW",86],["Christian Eriksen","CAM",88],["Heung-min Son","LW",92],["Harry Kane","ST",89,["Dele Alli","CAM",85],["Danny Rose","LB",84]]], seasonPosterMap["2018/19"]),
+  makeSeason("2019/20", "포체티노→주제 무리뉴 · 리그 6위 · 챔피언스리그 16강", [["Hugo Lloris","GK",87],["Serge Aurier","RB",81],["Toby Alderweireld","CB",86],["Davinson Sánchez","CB",82],["Ben Davies","LB",81],["Harry Winks","CM",79],["Moussa Sissoko","CM",81],["Lucas Moura","RW",84],["Dele Alli","CAM",84],["Heung-min Son","LW",90],["Harry Kane","ST",92,["Giovani Lo Celso","CAM",82],["Steven Bergwijn","LW",81],["Tanguy Ndombele","CM",81]]], seasonPosterMap["2019/20"]),
+  makeSeason("2020/21", "주제 무리뉴→라이언 메이슨 · 리그 7위 · 리그컵 준우승", [["Hugo Lloris","GK",87],["Matt Doherty","RB",79],["Toby Alderweireld","CB",85],["Eric Dier","CB",81],["Ben Davies","LB",80],["Pierre-Emile Højbjerg","CM",83],["Moussa Sissoko","CM",80],["Lucas Moura","RW",84],["Tanguy Ndombele","CAM",83],["Heung-min Son","LW",91],["Harry Kane","ST",95,["Gareth Bale","RW",87],["Sergio Reguilón","LB",82]]], seasonPosterMap["2020/21"]),
+  makeSeason("2021/22", "누누→안토니오 콘테 · 리그 4위 · 리그컵 4강", [["Hugo Lloris","GK",86],["Emerson Royal","RB",80],["Cristian Romero","CB",87],["Eric Dier","CB",82],["Ben Davies","LB",82],["Pierre-Emile Højbjerg","CM",82],["Rodrigo Bentancur","CM",83],["Lucas Moura","RW",83],["Sergio Reguilón","LW",80],["Heung-min Son","CAM",93],["Harry Kane","ST",94,["Dejan Kulusevski","RW",85]]], seasonPosterMap["2021/22"]),
   makeSeason("2022/23", "콘테→스텔리니→라이언 메이슨 · 리그 8위 · 챔피언스리그 16강", [["Hugo Lloris","GK",82],["Emerson Royal","RB",81],["Cristian Romero","CB",89],["Eric Dier","CB",78],["Ben Davies","LB",80],["Pierre-Emile Højbjerg","CM",82],["Rodrigo Bentancur","CM",84],["Dejan Kulusevski","RW",84],["Ivan Perišić","LW",84],["Heung-min Son","CAM",89],["Harry Kane","ST",95]], seasonPosterMap["2022/23"]),
-  makeSeason("2023/24", "엔지 포스테코글루 · 리그 5위 · FA컵 32강", [["Guglielmo Vicario","GK",85],["Pedro Porro","RB",85],["Cristian Romero","CB",87],["Micky van de Ven","CB",86],["Destiny Udogie","LB",85],["Yves Bissouma","CM",82],["Pape Matar Sarr","CM",82],["Dejan Kulusevski","RW",85],["James Maddison","CAM",87],["Brennan Johnson","LW",83],["Heung-min Son","ST",90]], seasonPosterMap["2023/24"]),
-  makeSeason("2024/25", "엔지 포스테코글루 · 리그 17위 · 유로파리그 우승", [["Guglielmo Vicario","GK",85],["Pedro Porro","RB",86],["Cristian Romero","CB",88],["Micky van de Ven","CB",88],["Destiny Udogie","LB",84],["Pape Matar Sarr","CM",83],["Rodrigo Bentancur","CM",85],["Brennan Johnson","RW",84],["Dejan Kulusevski","CAM",86],["Heung-min Son","LW",89],["Dominic Solanke","ST",83]], seasonPosterMap["2024/25"]),
+  makeSeason("2023/24", "엔지 포스테코글루 · 리그 5위 · FA컵 32강", [["Guglielmo Vicario","GK",85],["Pedro Porro","RB",85],["Cristian Romero","CB",87],["Micky van de Ven","CB",86],["Destiny Udogie","LB",85],["Yves Bissouma","CM",82],["Pape Matar Sarr","CM",82],["Dejan Kulusevski","RW",85],["James Maddison","CAM",87],["Brennan Johnson","LW",83],["Heung-min Son","ST",90,["Richarlison","ST",84]]], seasonPosterMap["2023/24"]),
+  makeSeason("2024/25", "엔지 포스테코글루 · 리그 17위 · 유로파리그 우승", [["Guglielmo Vicario","GK",85],["Pedro Porro","RB",86],["Cristian Romero","CB",88],["Micky van de Ven","CB",88],["Destiny Udogie","LB",84],["Pape Matar Sarr","CM",83],["Rodrigo Bentancur","CM",85],["Brennan Johnson","RW",84],["Dejan Kulusevski","CAM",86],["Heung-min Son","LW",89],["Dominic Solanke","ST",83,["James Maddison","CAM",84],["Lucas Bergvall","CM",81],["Djed Spence","RB",81]]], seasonPosterMap["2024/25"]),
   makeSeason("2025/26", "토마스 프랭크→이고르 투도르→데 제르비 · 리그 17위 · 슈퍼컵 준우승", [["Guglielmo Vicario","GK",84],["Pedro Porro","RB",86],["Cristian Romero","CB",86],["Micky van de Ven","CB",85],["Djed Spence","LB",82],["João Palhinha","CM",86],["Rodrigo Bentancur","CM",84],["Mohammed Kudus","RW",85],["Xavi Simons","CAM",85],["Mathys Tel","LW",81],["Richarlison","ST",84]], seasonPosterMap["2025/26"]),
   makeSeason("2026/27", "로베르토 데 제르비 · 리그 진행 중 · 시즌 진행 중", [["Antonín Kinský","GK",84],["Pedro Porro","RB",88],["Jan Paul van Hecke","CB",87],["Micky van de Ven","CB",85],["Destiny Udogie","LB",83],["Sandro Tonali","CM",86],["Rodrigo Bentancur","CM",84],["Lucas Bergvall","CM",83],["Matheus Fernandes","CM",84],["Mohammed Kudus","RW",84],["James Maddison","CAM",86],["Mathys Tel","LW",82],["Omar Marmoush","ST",84],["Dominic Solanke","ST",83],["Sávio","RW",84],["Andrew Robertson","LB",85]], null),
   makeSeason("THE LEGENDS", "비공식 스퍼스 레전드 스페셜 · 모든 카드 OVR 90+", [["Pat Jennings","GK",93],["Steve Perryman","RB",90],["Ledley King","CB",90],["Gary Mabbutt","CB",91],["Chris Hughton","LB",90],["Danny Blanchflower","CM",93],["Dave Mackay","CM",92],["Glenn Hoddle","CAM",94],["Paul Gascoigne","CAM",92],["Ossie Ardiles","CM",91],["Cliff Jones","LW",90],["Jimmy Greaves","ST",96]], null)
@@ -2424,6 +2481,8 @@ const seasons = [
 
 // DATA SOURCE: the_lilywhites_38_player_data(2).xlsx · first sheet "선수별 편집"
 const excelPlayerNationOverrides = {
+  "Giovani Lo Celso": "아르헨티나",
+  "Steven Bergwijn": "네덜란드",
   "Aaron Lennon": "잉글랜드",
   "Alan Hutton": "스코틀랜드",
   "Allan Nielsen": "덴마크",
@@ -2584,6 +2643,14 @@ const excelPlayerNationOverrides = {
   "Øyvind Leonhardsen": "노르웨이"
 };
 const excelPlayerPositionOverrides = {
+  "Giovani Lo Celso": [
+    "CAM",
+    "CM"
+  ],
+  "Steven Bergwijn": [
+    "LW",
+    "RW"
+  ],
   "Aaron Lennon": [
     "RW",
     "RM"
@@ -3145,6 +3212,24 @@ const excelPlayerPositionOverrides = {
   ]
 };
 const excelSeasonOvrOverrides = {
+  "Jonathan Woodgate|2007/08": 85,
+  "Luka Modrić|2009/10": 85,
+  "Ledley King|2009/10": 84,
+  "Sandro|2010/11": 80,
+  "Emmanuel Adebayor|2013/14": 82,
+  "Heung-min Son|2015/16": 84,
+  "Dele Alli|2018/19": 85,
+  "Danny Rose|2018/19": 84,
+  "Giovani Lo Celso|2019/20": 82,
+  "Steven Bergwijn|2019/20": 81,
+  "Tanguy Ndombele|2019/20": 81,
+  "Gareth Bale|2020/21": 87,
+  "Sergio Reguilón|2020/21": 82,
+  "Dejan Kulusevski|2021/22": 85,
+  "Richarlison|2023/24": 84,
+  "James Maddison|2024/25": 84,
+  "Lucas Bergvall|2024/25": 81,
+  "Djed Spence|2024/25": 81,
   "Aaron Lennon|2005/06": 79,
   "Aaron Lennon|2006/07": 81,
   "Aaron Lennon|2007/08": 82,
@@ -3624,6 +3709,7 @@ const goldenBootSeasonCards = new Set([
   "Teddy Sheringham|1992/93"
 ]);
 const heroSeasonCards = new Set([
+  "Jonathan Woodgate|2007/08",
   "Brennan Johnson|2024/25",
   "Heung-min Son|2018/19",
   "João Palhinha|2025/26",
@@ -3687,6 +3773,8 @@ function isSolCard(player){
 }
 
 const playerMeta = {
+  "Giovani Lo Celso": ["아르헨티나", "2019–2024"],
+  "Steven Bergwijn": ["네덜란드", "2020–2022"],
   "Aaron Lennon": ["잉글랜드", "2005–2015"],
   "Alan Hutton": ["스코틀랜드", "2008–2011"],
   "Allan Nielsen": ["덴마크", "1996–2000"],
@@ -4009,6 +4097,8 @@ const playerPositions = {
 };
 
 const playerDisplayNames = {
+  "Giovani Lo Celso":"지오바니 로셀소",
+  "Steven Bergwijn":"스티븐 베르바인",
   "Aaron Lennon": "아론 레넌",
   "Alan Hutton": "앨런 허튼",
   "Allan Nielsen": "알란 닐센",
@@ -4048,7 +4138,7 @@ const playerDisplayNames = {
   "Dimitar Berbatov": "디미타르 베르바토프",
   "Djed Spence": "제드 스펜스",
   "Dominic Solanke": "도미닉 솔란케",
-  "Edgar Davids": "에드가르 다비즈",
+  "Edgar Davids": "에드가 다비즈",
   "Emerson Royal": "에메르송 로얄",
   "Emmanuel Adebayor": "에마뉘엘 아데바요르",
   "Eric Dier": "에릭 다이어",
@@ -4058,7 +4148,7 @@ const playerDisplayNames = {
   "Frederic Kanouté": "프레데릭 카누테",
   "Gareth Bale": "가레스 베일",
   "Gary Doherty": "게리 도허티",
-  "Gary Mabbutt": "게리 매버트",
+  "Gary Mabbutt": "개리 마벗",
   "Gary Samways": "게리 샘웨이스",
   "Glenn Hoddle": "글렌 호들",
   "Goran Bunjevcevic": "고란 부니예브체비치",
@@ -4097,7 +4187,7 @@ const playerDisplayNames = {
   "Mauricio Taricco": "마우리시오 타리코",
   "Michael Carrick": "마이클 캐릭",
   "Michael Dawson": "마이클 도슨",
-  "Micky van de Ven": "미키 판더펜",
+  "Micky van de Ven": "미키 반더벤",
   "Mido": "미도",
   "Mohammed Kudus": "모하메드 쿠두스",
   "Mousa Dembélé": "무사 뎀벨레",
@@ -4123,7 +4213,7 @@ const playerDisplayNames = {
   "Pedro Porro": "페드로 포로",
   "Peter Crouch": "피터 크라우치",
   "Pierre-Emile Højbjerg": "피에르에밀 호이비에르",
-  "Rafael van der Vaart": "라파엘 판데르파르트",
+  "Rafael van der Vaart": "라파엘 반더바르트",
   "Ramon Vega": "라몬 베가",
   "Richarlison": "히샬리송",
   "Robbie Keane": "로비 킨",
@@ -4156,7 +4246,7 @@ const playerDisplayNames = {
   "Tanguy Ndombele": "탕기 은돔벨레",
   "Teddy Sheringham": "테디 셰링엄",
   "Tim Sherwood": "팀 셔우드",
-  "Toby Alderweireld": "토비 알데르베이럴트",
+  "Toby Alderweireld": "토비 알더베이럴트",
   "Tom Huddlestone": "톰 허들스톤",
   "Vedran Ćorluka": "베드란 촐루카",
   "Victor Wanyama": "빅터 완야마",
@@ -5216,6 +5306,14 @@ function showDropHints(player, sourceIndex=null){
 }
 
 function finishPendingPlacement(index){
+  if(!pendingPlayer) return;
+
+  if(isSolCard(pendingPlayer)){
+    const targetNode = document.querySelector(`.player-node[data-slot-index="${index}"]`);
+    triggerSolCampbellGameOver(targetNode);
+    return;
+  }
+
   drafted[index] = pendingPlayer;
   pendingPlayer = null;
   dragSource = null;
@@ -5297,12 +5395,6 @@ function handleDropOnSlot(targetIndex){
   if(dragSource.type === "pending"){
     const p = pendingPlayer;
     if(!p || drafted[targetIndex] || !isPlayerCompatibleWithSlot(p, slots[targetIndex])) return;
-
-    if(isSolCard(p)){
-      const targetNode = document.querySelector(`.player-node[data-slot-index="${targetIndex}"]`);
-      triggerSolCampbellGameOver(targetNode);
-      return;
-    }
 
     finishPendingPlacement(targetIndex);
     return;
@@ -5826,7 +5918,7 @@ const premierLeague2627TeamRatings = {
   "Liverpool":{att:91,mid:90,def:89,homeWeight:1.07,matchupWeight:1.00},
   "Chelsea":{att:90,mid:88,def:87,homeWeight:1.07,matchupWeight:1.02},
   "Manchester United":{att:88,mid:89,def:86,homeWeight:1.06,matchupWeight:1.00},
-  "Newcastle United":{att:86,mid:85,def:86,homeWeight:1.06,matchupWeight:1.03},
+  "Newcastle United":{att:86,mid:85,def:86,homeWeight:1.06,matchupWeight:1.05},
   "Aston Villa":{att:86,mid:86,def:85,homeWeight:1.06,matchupWeight:0.99},
   "Brighton & Hove Albion":{att:84,mid:86,def:82,homeWeight:1.06,matchupWeight:1.00},
   "Crystal Palace":{att:84,mid:84,def:83,homeWeight:1.06,matchupWeight:0.95},
@@ -5931,8 +6023,9 @@ function buildMatchModel(myRatings, opponentRatings, venue){
   // 상성 가중치는 홈/원정과 무관하게 상대 득점 기대값에 적용.
   oppXg *= opponentRatings.matchupWeight;
 
-  myXg = clamp(myXg, 0.15, 3.10);
-  oppXg = clamp(oppXg, 0.15, 3.10);
+  // xG는 소수점을 유지해 팀별 능력치·홈/원정·상성 차이가 확률에 그대로 반영되도록 한다.
+  myXg = clampFloat(myXg, 0.15, 3.10);
+  oppXg = clampFloat(oppXg, 0.15, 3.10);
 
   return {myXg, oppXg, myFlowShare, myAttackEdge, oppAttackEdge};
 }
@@ -6894,22 +6987,26 @@ function openInfoOverlay(id){
   overlay.classList.add("show");
   overlay.setAttribute("aria-hidden","false");
 }
+
 function closeInfoOverlay(id){
   const overlay = document.getElementById(id);
   if(!overlay) return;
   overlay.classList.remove("show");
   overlay.setAttribute("aria-hidden","true");
 }
+
 $("#chemistryInfoFab")?.addEventListener("click", ()=>openInfoOverlay("chemistryInfoOverlay"));
 $("#chemistryInfoClose")?.addEventListener("click", ()=>closeInfoOverlay("chemistryInfoOverlay"));
 $("#chemistryInfoOverlay")?.addEventListener("click", e=>{
   if(e.target === $("#chemistryInfoOverlay")) closeInfoOverlay("chemistryInfoOverlay");
 });
+
 $("#cardInfoFab")?.addEventListener("click", ()=>openInfoOverlay("cardInfoOverlay"));
 $("#cardInfoClose")?.addEventListener("click", ()=>closeInfoOverlay("cardInfoOverlay"));
 $("#cardInfoOverlay")?.addEventListener("click", e=>{
   if(e.target === $("#cardInfoOverlay")) closeInfoOverlay("cardInfoOverlay");
 });
+
 $("#billboardFab")?.addEventListener("click", openBillboard);
 $("#billboardClose")?.addEventListener("click", closeBillboard);
 $("#billboardOverlay")?.addEventListener("click", e=>{
