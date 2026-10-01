@@ -1794,23 +1794,76 @@
   .season-review-ga{color:#d9e5fb;font-size:12px}
 
 
-  .billboard-fab{
+  .quick-menu{
     position:fixed;
     right:18px;
     top:18px;
     z-index:9000;
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    gap:8px;
+  }
+  .billboard-fab,
+  .quick-info-btn{
     border:1px solid rgba(255,255,255,.28);
     background:#ffffff;
     color:#102652;
     border-radius:999px;
     padding:10px 16px;
+    min-width:154px;
     font-size:11px;
     font-weight:1000;
-    letter-spacing:1.2px;
+    letter-spacing:1.0px;
     box-shadow:0 10px 30px rgba(0,0,0,.28);
     cursor:pointer;
+    text-align:center;
   }
-  .billboard-fab:hover{transform:translateY(-1px)}
+  .quick-info-btn{
+    background:#102652;
+    color:#ffffff;
+    border-color:#38578d;
+  }
+  .billboard-fab:hover,.quick-info-btn:hover{transform:translateY(-1px)}
+  .info-list{
+    padding:14px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .info-row{
+    display:grid;
+    grid-template-columns:minmax(150px,1fr) minmax(230px,2fr) auto;
+    gap:12px;
+    align-items:center;
+    padding:12px 14px;
+    border:1px solid #1e3458;
+    border-radius:14px;
+    background:#0c1930;
+  }
+  .info-name{color:#fff;font-size:12px;font-weight:1000}
+  .info-desc{color:#899fc9;font-size:10px;line-height:1.55}
+  .info-effect{color:#bcd0ff;font-size:11px;font-weight:1000;white-space:nowrap}
+  .card-count-list{
+    padding:14px;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:9px;
+  }
+  .card-count-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    padding:13px 14px;
+    border:1px solid #1e3458;
+    border-radius:14px;
+    background:#0c1930;
+  }
+  .card-count-name{color:#dfe9fb;font-size:11px;font-weight:950}
+  .card-count-value{color:#fff;font-size:18px;font-weight:1000}
+  .card-count-total{grid-column:1/-1;background:#ffffff;border-color:#ffffff}
+  .card-count-total .card-count-name,.card-count-total .card-count-value{color:#102652}
   .billboard-overlay{
     position:fixed;
     inset:0;
@@ -1939,7 +1992,11 @@
   .billboard-status.ok{color:#9ce3c7}
   .billboard-status.error{color:#ff9c9c}
   @media(max-width:650px){
-    .billboard-fab{right:10px;top:10px;padding:9px 12px;font-size:9px}
+    .quick-menu{right:10px;top:10px;gap:6px}
+    .billboard-fab,.quick-info-btn{min-width:124px;padding:9px 11px;font-size:9px}
+    .info-row{grid-template-columns:1fr auto;gap:5px 10px}
+    .info-desc{grid-column:1/-1}
+    .card-count-list{grid-template-columns:1fr}
     .billboard-table th:nth-child(3),.billboard-table td:nth-child(3){display:none}
     .billboard-table th,.billboard-table td{padding-left:4px;padding-right:4px;font-size:9px}
     .billboard-register-row{flex-direction:column}
@@ -2081,7 +2138,11 @@
 </style>
 </head>
 <body>
-<button id="billboardFab" class="billboard-fab" type="button">BILLBOARD · TOP 20</button>
+<div class="quick-menu">
+  <button id="billboardFab" class="billboard-fab" type="button">BILLBOARD · TOP 20</button>
+  <button id="chemistryInfoFab" class="quick-info-btn" type="button">TEAM CHEMISTRY</button>
+  <button id="cardInfoFab" class="quick-info-btn" type="button">CARD INFO</button>
+</div>
 <div id="billboardOverlay" class="billboard-overlay" aria-hidden="true">
   <div class="billboard-modal">
     <div class="billboard-modal-head">
@@ -2096,6 +2157,60 @@
     </div>
   </div>
 </div>
+
+<div id="chemistryInfoOverlay" class="billboard-overlay" aria-hidden="true">
+  <div class="billboard-modal">
+    <div class="billboard-modal-head">
+      <div>
+        <div class="billboard-title">THE LILYWHITES 38 · TEAM CHEMISTRY</div>
+        <div class="billboard-sub">조건을 충족하면 여러 팀캐미가 동시에 적용됩니다.</div>
+      </div>
+      <button id="chemistryInfoClose" class="billboard-close" type="button">×</button>
+    </div>
+    <div class="info-list">
+      <div class="info-row"><div class="info-name">환상의 듀오</div><div class="info-desc">해리 케인 + 손흥민</div><div class="info-effect">ATT +1</div></div>
+      <div class="info-row"><div class="info-name">벨기에의 벽</div><div class="info-desc">얀 베르통언 + 토비 알데르베이럴트</div><div class="info-effect">DEF +1</div></div>
+      <div class="info-row"><div class="info-name">리더십</div><div class="info-desc">개리 마벗 / 마이클 도슨 / 손흥민 / 위고 요리스 / 레들리 킹 / 크리스티안 로메로 중 3명 이상</div><div class="info-effect">OVR +1</div></div>
+      <div class="info-row"><div class="info-name">DESK 라인</div><div class="info-desc">손흥민 + 해리 케인 + 크리스티안 에릭센 + 델리 알리 전원</div><div class="info-effect">ATT +2</div></div>
+      <div class="info-row"><div class="info-name">히어로즈</div><div class="info-desc">HERO 카드 3장 이상</div><div class="info-effect">OVR +1</div></div>
+      <div class="info-row"><div class="info-name">황금세대</div><div class="info-desc">PRIME TIME 카드 3장 이상</div><div class="info-effect">OVR +1</div></div>
+      <div class="info-row"><div class="info-name">레전드의 품격</div><div class="info-desc">THE LEGENDS 카드 1장 이상</div><div class="info-effect">OVR +1</div></div>
+      <div class="info-row"><div class="info-name">리그베스트 포백</div><div class="info-desc">대니 로즈 + 얀 베르통언 + 토비 알데르베이럴트 + 카일 워커 전원</div><div class="info-effect">DEF +2</div></div>
+      <div class="info-row"><div class="info-name">월드클래스</div><div class="info-desc">OVR 90 이상 선수 4명 이상</div><div class="info-effect">OVR +1</div></div>
+      <div class="info-row"><div class="info-name">포체티노의 아이들</div><div class="info-desc">마우리시오 포체티노 감독 배치 + 포체티노 영입 선수 중 3명 이상</div><div class="info-effect">OVR +2</div></div>
+      <div class="info-row"><div class="info-name">웨일스 마피아</div><div class="info-desc">베일 / 벤 데이비스 / 브레넌 존슨 / 손흥민 중 2명 이상. 3명부터 효과 상승</div><div class="info-effect">2명 ATT +1 · 3명+ ATT +2</div></div>
+      <div class="info-row"><div class="info-name">벨기에 커넥션</div><div class="info-desc">얀 베르통언 + 토비 알데르베이럴트 + 무사 뎀벨레 전원</div><div class="info-effect">MID +2</div></div>
+      <div class="info-row"><div class="info-name">브라질 향우회</div><div class="info-desc">히샬리송 + 루카스 모우라 + 에메르송 로얄 전원</div><div class="info-effect">ATT +2</div></div>
+      <div class="info-row"><div class="info-name">리그베스트 XI</div><div class="info-desc">TOTY 카드 3장 이상</div><div class="info-effect">OVR +1</div></div>
+      <div class="info-row"><div class="info-name">유대감</div><div class="info-desc">같은 시즌 카드 3명 이상. THE LEGENDS는 동일 시즌 판정에서 제외</div><div class="info-effect">OVR +1</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="cardInfoOverlay" class="billboard-overlay" aria-hidden="true">
+  <div class="billboard-modal">
+    <div class="billboard-modal-head">
+      <div>
+        <div class="billboard-title">THE LILYWHITES 38 · CARD INFO</div>
+        <div class="billboard-sub">현재 게임에 등록된 선수 시즌 카드 수</div>
+      </div>
+      <button id="cardInfoClose" class="billboard-close" type="button">×</button>
+    </div>
+    <div class="card-count-list">
+      <div class="card-count-row"><div class="card-count-name">일반 카드</div><div class="card-count-value">332장</div></div>
+      <div class="card-count-row"><div class="card-count-name">PRIME TIME</div><div class="card-count-value">14장</div></div>
+      <div class="card-count-row"><div class="card-count-name">THE LEGENDS</div><div class="card-count-value">12장</div></div>
+      <div class="card-count-row"><div class="card-count-name">TOTY</div><div class="card-count-value">20장</div></div>
+      <div class="card-count-row"><div class="card-count-name">GOLDEN BOOT</div><div class="card-count-value">5장</div></div>
+      <div class="card-count-row"><div class="card-count-name">HERO</div><div class="card-count-value">5장</div></div>
+      <div class="card-count-row"><div class="card-count-name">WORLD CUP WINNER</div><div class="card-count-value">3장</div></div>
+      <div class="card-count-row"><div class="card-count-name">WONDER BOY</div><div class="card-count-value">3장</div></div>
+      <div class="card-count-row"><div class="card-count-name">SOL CAMPBELL SPECIAL</div><div class="card-count-value">8장</div></div>
+      <div class="card-count-row card-count-total"><div class="card-count-name">TOTAL</div><div class="card-count-value">402장</div></div>
+    </div>
+  </div>
+</div>
+
 <div class="wrap">
   <div class="hero">
     <div class="brand">
@@ -4309,6 +4424,7 @@ function updateFinalDraftUI(){
   finalSimBtn.style.display = "none";
 
   if(playerComplete){
+    // 감독 단계에서는 시즌 관련 버튼을 완전히 숨기고 감독 버튼 두 개만 표시.
     drawBtn.style.display = "none";
     rerollBtn.style.display = "none";
     if(resetBtn) resetBtn.style.display = "none";
@@ -4348,7 +4464,10 @@ function updateManagerUI(){
     return;
   }
 
-  if(managerBtn) managerBtn.disabled = managerRolling || !!selectedManager;
+  if(managerBtn){
+    managerBtn.disabled = managerRolling || !!selectedManager;
+  }
+
   updateManagerRerollUI();
   $("#simBtn").disabled = !(complete && selectedManager && managerPlaced);
 }
@@ -5333,6 +5452,21 @@ function renderPitch(){
   }
 }
 
+const pochSignedPlayers = [
+  "Ben Davies",
+  "Eric Dier",
+  "Dele Alli",
+  "Heung-min Son",
+  "Toby Alderweireld",
+  "Kieran Trippier",
+  "Victor Wanyama",
+  "Moussa Sissoko",
+  "Davinson Sánchez",
+  "Serge Aurier",
+  "Lucas Moura",
+  "Tanguy Ndombele"
+];
+
 const teamChemistries = [
   {
     id:"dream_duo",
@@ -5376,12 +5510,147 @@ const teamChemistries = [
       "Christian Eriksen",
       "Dele Alli"
     ].every(name=>names.has(name))
+  },
+
+  // 추가 팀캐미
+  {
+    id:"heroes",
+    name:"히어로즈",
+    effect:"OVR +1",
+    att:0, mid:0, def:0, overall:1,
+    isActive:(names,players)=>players.filter(player=>isHeroCard(player)).length >= 3
+  },
+  {
+    id:"golden_generation",
+    name:"황금세대",
+    effect:"OVR +1",
+    att:0, mid:0, def:0, overall:1,
+    isActive:(names,players)=>players.filter(player=>isPrimeTime(player)).length >= 3
+  },
+  {
+    id:"legend_class",
+    name:"레전드의 품격",
+    effect:"OVR +1",
+    att:0, mid:0, def:0, overall:1,
+    isActive:(names,players)=>players.some(player=>isLegendCard(player))
+  },
+  {
+    id:"league_best_back_four",
+    name:"리그베스트 포백",
+    effect:"DEF +2",
+    att:0, mid:0, def:2, overall:0,
+    isActive:names=>[
+      "Danny Rose",
+      "Jan Vertonghen",
+      "Toby Alderweireld",
+      "Kyle Walker"
+    ].every(name=>names.has(name))
+  },
+  {
+    id:"world_class",
+    name:"월드클래스",
+    effect:"OVR +1",
+    att:0, mid:0, def:0, overall:1,
+    isActive:(names,players)=>players.filter(player=>Number(player.ovr) >= 90).length >= 4
+  },
+  {
+    id:"poch_children",
+    name:"포체티노의 아이들",
+    effect:"OVR +2",
+    att:0, mid:0, def:0, overall:2,
+    isActive:names=>{
+      const pochManagerActive =
+        !!selectedManager &&
+        managerPlaced &&
+        selectedManager.name === "마우리시오 포체티노";
+      if(!pochManagerActive) return false;
+      return pochSignedPlayers.filter(name=>names.has(name)).length >= 3;
+    }
+  },
+  {
+    id:"welsh_mafia",
+    name:"웨일스 마피아",
+    isActive:names=>[
+      "Gareth Bale",
+      "Ben Davies",
+      "Brennan Johnson",
+      "Heung-min Son"
+    ].filter(name=>names.has(name)).length >= 2,
+    getBoost:names=>{
+      const count = [
+        "Gareth Bale",
+        "Ben Davies",
+        "Brennan Johnson",
+        "Heung-min Son"
+      ].filter(name=>names.has(name)).length;
+      const att = count >= 3 ? 2 : 1;
+      return {
+        effect:`ATT +${att}`,
+        att,
+        mid:0,
+        def:0,
+        overall:0
+      };
+    }
+  },
+  {
+    id:"belgian_connection",
+    name:"벨기에 커넥션",
+    effect:"MID +2",
+    att:0, mid:2, def:0, overall:0,
+    isActive:names=>[
+      "Jan Vertonghen",
+      "Toby Alderweireld",
+      "Mousa Dembélé"
+    ].every(name=>names.has(name))
+  },
+  {
+    id:"brazil_group",
+    name:"브라질 향우회",
+    effect:"ATT +2",
+    att:2, mid:0, def:0, overall:0,
+    isActive:names=>[
+      "Richarlison",
+      "Lucas Moura",
+      "Emerson Royal"
+    ].every(name=>names.has(name))
+  },
+  {
+    id:"league_best_xi",
+    name:"리그베스트 XI",
+    effect:"OVR +1",
+    att:0, mid:0, def:0, overall:1,
+    isActive:(names,players)=>players.filter(player=>isTotyCard(player)).length >= 3
+  },
+  {
+    id:"bond",
+    name:"유대감",
+    effect:"OVR +1",
+    att:0, mid:0, def:0, overall:1,
+    isActive:(names,players)=>{
+      const seasonCounts = {};
+      players.forEach(player=>{
+        const season = player?.season;
+        if(!season || season === "THE LEGENDS") return;
+        seasonCounts[season] = (seasonCounts[season] || 0) + 1;
+      });
+      return Object.values(seasonCounts).some(count=>count >= 3);
+    }
   }
 ];
 
 function getActiveTeamChemistries(){
-  const names = new Set(drafted.filter(Boolean).map(player=>player.name));
-  return teamChemistries.filter(chem=>chem.isActive(names));
+  const players = drafted.filter(Boolean);
+  const names = new Set(players.map(player=>player.name));
+
+  return teamChemistries
+    .filter(chem=>chem.isActive(names, players))
+    .map(chem=>{
+      const dynamic = typeof chem.getBoost === "function"
+        ? chem.getBoost(names, players)
+        : null;
+      return dynamic ? {...chem, ...dynamic} : chem;
+    });
 }
 
 function getChemistryBoosts(){
@@ -5426,11 +5695,14 @@ function renderTeamChemistryPanel(activeChems=getActiveTeamChemistries()){
 
 function syncTeamChemistry({animate=true}={}){
   const activeChems = getActiveTeamChemistries();
-  const activeIds = new Set(activeChems.map(chem=>chem.id));
+
+  // 효과가 +1에서 +2로 업그레이드되는 캐미도 새 활성화처럼 애니메이션 표시.
+  const activeIds = new Set(activeChems.map(chem=>`${chem.id}|${chem.effect}`));
 
   if(animate){
     activeChems.forEach(chem=>{
-      if(!activeChemistryIds.has(chem.id)){
+      const stateKey = `${chem.id}|${chem.effect}`;
+      if(!activeChemistryIds.has(stateKey)){
         triggerChemistryActivation(chem);
       }
     });
@@ -5676,22 +5948,105 @@ function playerOvrContributionFactor(ovr){
 }
 
 function goalShareForIndex(index){
+  // 포메이션별 '자리 자체'의 득점 기본 점유율. 각 포메이션 합계는 정확히 100%.
+  // 이후 선수 OVR 보정을 곱하고 전체 후보를 다시 정규화해 최종 득점자를 뽑는다.
   const shares = {
-    "4231":[0.2,2.0,3.9,3.9,2.0,4.0,4.0,18.0,10.0,22.0,30.0],
-    "433":[0.2,2.0,3.9,3.9,2.0,6.0,6.0,6.0,18.0,22.0,30.0],
-    "442":[0.2,2.0,3.9,3.9,2.0,15.0,6.0,6.0,11.0,25.0,25.0]
+    "4231":[
+      0.2,  // GK
+      2.0,  // RB
+      3.9,  // CB1
+      3.9,  // CB2
+      2.0,  // LB
+      4.0,  // CM1
+      4.0,  // CM2
+      18.0, // RW
+      10.0, // CAM
+      22.0, // LW
+      30.0  // ST
+    ],
+    "433":[
+      0.2,  // GK
+      2.0,  // RB
+      3.9,  // CB1
+      3.9,  // CB2
+      2.0,  // LB
+      6.0,  // CM1
+      6.0,  // CM2
+      6.0,  // CM3
+      18.0, // RW
+      22.0, // LW
+      30.0  // ST
+    ],
+    "442":[
+      0.2,  // GK
+      2.0,  // RB
+      3.9,  // CB1
+      3.9,  // CB2
+      2.0,  // LB
+      15.0, // LM
+      6.0,  // CM1
+      6.0,  // CM2
+      11.0, // RM
+      25.0, // ST1
+      25.0  // ST2
+    ]
   };
   return shares[currentFormationKey]?.[index] ?? 0;
 }
 
 function assistShareForIndex(index, setPiece=false){
+  // 포메이션별 자리 자체의 어시스트 기본 점유율. 각 포메이션 합계는 정확히 100%.
+  // 세트피스 골일 경우 ST의 어시스트 가중치를 크게 낮춘 뒤 다시 정규화한다.
   const shares = {
-    "4231":[0.2,6.0,0.9,0.9,6.0,7.0,7.0,14.0,21.0,19.0,19.0],
-    "433":[0.2,5.0,0.9,0.9,5.0,10.0,8.0,10.0,18.0,22.0,20.0],
-    "442":[0.2,5.0,0.9,0.9,5.0,17.0,14.0,14.0,17.0,13.0,13.0]
+    "4231":[
+      0.2,  // GK
+      6.0,  // RB
+      0.9,  // CB1
+      0.9,  // CB2
+      6.0,  // LB
+      7.0,  // CM1
+      7.0,  // CM2
+      14.0, // RW
+      21.0, // CAM
+      19.0, // LW
+      19.0  // ST
+    ],
+    "433":[
+      0.2,  // GK
+      5.0,  // RB
+      0.9,  // CB1
+      0.9,  // CB2
+      5.0,  // LB
+      10.0, // CM1
+      8.0,  // CM2
+      10.0, // CM3
+      18.0, // RW
+      22.0, // LW
+      20.0  // ST
+    ],
+    "442":[
+      0.2,  // GK
+      5.0,  // RB
+      0.9,  // CB1
+      0.9,  // CB2
+      5.0,  // LB
+      17.0, // LM
+      14.0, // CM1
+      14.0, // CM2
+      17.0, // RM
+      13.0, // ST1
+      13.0  // ST2
+    ]
   };
+
   let share = shares[currentFormationKey]?.[index] ?? 0;
-  if(setPiece && slots[index] === "ST") share *= 0.15;
+  const slot = slots[index];
+
+  // SP 골에서는 ST의 어시스트 가능성을 '급감'시키기 위해 기존 몫의 15%만 유지.
+  // 나머지 선수들과 함께 최종적으로 다시 정규화되므로 ST 비중이 크게 줄어든다.
+  if(setPiece && slot === "ST"){
+    share *= 0.15;
+  }
   return share;
 }
 
@@ -5720,13 +6075,23 @@ function buildContributionWeights(type, excludeName=null, setPiece=false){
     .map((player,index)=>({player,index,slot:slots[index]}))
     .filter(x=>x.player && (!excludeName || x.player.name !== excludeName));
 
+  const groupCounts = {};
+  candidates.forEach(item=>{
+    const key = contributionGroupKey(item.slot, type);
+    groupCounts[key] = (groupCounts[key] || 0) + 1;
+  });
+
   return candidates.map(item=>{
     const baseShare = type === "goal"
       ? goalShareForIndex(item.index)
       : assistShareForIndex(item.index, setPiece);
+
+    // 득점/도움 모두 포메이션 내 각 자리별 비율이 이미 개별 선수 몫.
     const perPlayerShare = baseShare;
+
     const ovrFactor = playerOvrContributionFactor(item.player.ovr);
     const weight = perPlayerShare * ovrFactor;
+
     return {...item, baseShare, perPlayerShare, ovrFactor, weight};
   }).filter(item=>item.weight > 0);
 }
@@ -5767,14 +6132,18 @@ function pickSpursScorer(scorerState, roundNumber){
 
   scorerState.goalCounts[name] = (scorerState.goalCounts[name] || 0) + 1;
 
+  // 득점자 선택 확률과 세트피스 표시는 분리.
+  // CB 득점 중 일부만 SP로 보이게 하되 득점 확률 자체에는 영향을 주지 않는다.
   const setPiece = picked?.slot === "CB" && Math.random() < 0.90;
   return {name, setPiece};
 }
 
 function pickSpursAssist(scorerName, setPiece=false){
+  // 일반 득점은 85%, CB 세트피스 득점은 75% 확률로 도움 발생.
   const assistChance = setPiece ? 0.75 : 0.85;
   if(Math.random() > assistChance) return null;
 
+  // SP 골에서는 ST 어시스트 가중치를 크게 낮춘 분포를 사용.
   const picked = pickWeightedContribution("assist", scorerName, setPiece);
   return picked?.player?.name || null;
 }
@@ -6519,13 +6888,39 @@ $("#gameOverRestart").onclick = ()=>{
   $("#gameOverOverlay").classList.remove("show");
   reset();
 };
+function openInfoOverlay(id){
+  const overlay = document.getElementById(id);
+  if(!overlay) return;
+  overlay.classList.add("show");
+  overlay.setAttribute("aria-hidden","false");
+}
+function closeInfoOverlay(id){
+  const overlay = document.getElementById(id);
+  if(!overlay) return;
+  overlay.classList.remove("show");
+  overlay.setAttribute("aria-hidden","true");
+}
+$("#chemistryInfoFab")?.addEventListener("click", ()=>openInfoOverlay("chemistryInfoOverlay"));
+$("#chemistryInfoClose")?.addEventListener("click", ()=>closeInfoOverlay("chemistryInfoOverlay"));
+$("#chemistryInfoOverlay")?.addEventListener("click", e=>{
+  if(e.target === $("#chemistryInfoOverlay")) closeInfoOverlay("chemistryInfoOverlay");
+});
+$("#cardInfoFab")?.addEventListener("click", ()=>openInfoOverlay("cardInfoOverlay"));
+$("#cardInfoClose")?.addEventListener("click", ()=>closeInfoOverlay("cardInfoOverlay"));
+$("#cardInfoOverlay")?.addEventListener("click", e=>{
+  if(e.target === $("#cardInfoOverlay")) closeInfoOverlay("cardInfoOverlay");
+});
 $("#billboardFab")?.addEventListener("click", openBillboard);
 $("#billboardClose")?.addEventListener("click", closeBillboard);
 $("#billboardOverlay")?.addEventListener("click", e=>{
   if(e.target === $("#billboardOverlay")) closeBillboard();
 });
 document.addEventListener("keydown", e=>{
-  if(e.key === "Escape") closeBillboard();
+  if(e.key === "Escape"){
+    closeBillboard();
+    closeInfoOverlay("chemistryInfoOverlay");
+    closeInfoOverlay("cardInfoOverlay");
+  }
 });
 
 $("#managerDrawBtn").onclick = ()=>startManagerRoulette();
