@@ -1680,6 +1680,159 @@
   .season-review-rating{color:#f4d77b;font-size:13px}
   .season-review-ga{color:#d9e5fb;font-size:12px}
 
+
+  .billboard-fab{
+    position:fixed;
+    right:18px;
+    top:18px;
+    z-index:9000;
+    border:1px solid rgba(255,255,255,.28);
+    background:#ffffff;
+    color:#102652;
+    border-radius:999px;
+    padding:10px 16px;
+    font-size:11px;
+    font-weight:1000;
+    letter-spacing:1.2px;
+    box-shadow:0 10px 30px rgba(0,0,0,.28);
+    cursor:pointer;
+  }
+  .billboard-fab:hover{transform:translateY(-1px)}
+  .billboard-overlay{
+    position:fixed;
+    inset:0;
+    z-index:10000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+    background:rgba(3,8,20,.78);
+    backdrop-filter:blur(7px);
+  }
+  .billboard-overlay.show{display:flex}
+  .billboard-modal{
+    width:min(920px,96vw);
+    max-height:88vh;
+    overflow:auto;
+    border:1px solid #334d7b;
+    border-radius:24px;
+    background:linear-gradient(180deg,#101d36,#081225);
+    box-shadow:0 28px 80px rgba(0,0,0,.5);
+  }
+  .billboard-modal-head{
+    position:sticky;
+    top:0;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    padding:16px 18px;
+    background:rgba(16,29,54,.96);
+    border-bottom:1px solid #2a3e65;
+    backdrop-filter:blur(8px);
+  }
+  .billboard-title{font-size:18px;font-weight:1000;color:#fff;letter-spacing:.5px}
+  .billboard-sub{margin-top:3px;font-size:10px;color:#8298c2}
+  .billboard-close{
+    border:1px solid #334d7b;
+    background:#0a152b;
+    color:#dce8ff;
+    width:34px;height:34px;border-radius:10px;
+    font-size:18px;font-weight:900;cursor:pointer
+  }
+  .billboard-table-wrap{padding:12px}
+  .billboard-table{
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0 6px;
+    table-layout:fixed;
+  }
+  .billboard-table th{
+    color:#728bb7;
+    font-size:9px;
+    font-weight:950;
+    letter-spacing:.5px;
+    padding:5px 7px;
+    text-align:center;
+  }
+  .billboard-table th:nth-child(2){text-align:left}
+  .billboard-table td{
+    padding:10px 7px;
+    background:#0d1a31;
+    border-top:1px solid #1d3154;
+    border-bottom:1px solid #1d3154;
+    color:#dbe6fb;
+    font-size:11px;
+    font-weight:850;
+    text-align:center;
+  }
+  .billboard-table td:first-child{
+    border-left:1px solid #1d3154;
+    border-radius:10px 0 0 10px;
+    font-size:14px;font-weight:1000;color:#f5d475
+  }
+  .billboard-table td:last-child{
+    border-right:1px solid #1d3154;
+    border-radius:0 10px 10px 0;
+  }
+  .billboard-table td:nth-child(2){
+    text-align:left;color:#fff;font-weight:1000;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .billboard-empty{
+    padding:34px 14px;text-align:center;color:#738ab5;font-size:12px
+  }
+  .billboard-register{
+    margin-top:14px;
+    padding:14px;
+    border:1px solid #2b426e;
+    border-radius:18px;
+    background:#0c1930;
+  }
+  .billboard-register-title{
+    color:#fff;font-size:14px;font-weight:1000;letter-spacing:.3px
+  }
+  .billboard-register-preview{
+    margin-top:6px;color:#879bc3;font-size:10px;line-height:1.6
+  }
+  .billboard-register-row{
+    display:flex;gap:8px;margin-top:10px
+  }
+  .billboard-nickname{
+    flex:1;min-width:0;
+    border:1px solid #344b76;
+    background:#071226;
+    color:#fff;
+    border-radius:12px;
+    padding:11px 12px;
+    outline:none;
+    font-size:12px;font-weight:850
+  }
+  .billboard-nickname:focus{border-color:#6e91d4}
+  .billboard-submit{
+    flex:0 0 auto;
+    border:0;border-radius:12px;
+    background:#fff;color:#102652;
+    padding:0 16px;
+    font-size:11px;font-weight:1000;
+    cursor:pointer
+  }
+  .billboard-submit:disabled{opacity:.45;cursor:default}
+  .billboard-status{
+    min-height:18px;margin-top:8px;
+    color:#95aad0;font-size:10px;font-weight:850
+  }
+  .billboard-status.ok{color:#9ce3c7}
+  .billboard-status.error{color:#ff9c9c}
+  @media(max-width:650px){
+    .billboard-fab{right:10px;top:10px;padding:9px 12px;font-size:9px}
+    .billboard-table th:nth-child(3),.billboard-table td:nth-child(3){display:none}
+    .billboard-table th,.billboard-table td{padding-left:4px;padding-right:4px;font-size:9px}
+    .billboard-register-row{flex-direction:column}
+    .billboard-submit{padding:11px 14px}
+  }
+
   .game-credit{
     margin-top:16px;
     text-align:right;
@@ -1815,6 +1968,21 @@
 </style>
 </head>
 <body>
+<button id="billboardFab" class="billboard-fab" type="button">BILLBOARD · TOP 20</button>
+<div id="billboardOverlay" class="billboard-overlay" aria-hidden="true">
+  <div class="billboard-modal">
+    <div class="billboard-modal-head">
+      <div>
+        <div class="billboard-title">THE LILYWHITES 38 · BILLBOARD</div>
+        <div class="billboard-sub">ALL TIME TOP 20 · 승점 ↓ · 리그 순위 ↑ · 팀 OVR 낮은 순</div>
+      </div>
+      <button id="billboardClose" class="billboard-close" type="button">×</button>
+    </div>
+    <div id="billboardContent" class="billboard-table-wrap">
+      <div class="billboard-empty">기록을 불러오는 중...</div>
+    </div>
+  </div>
+</div>
 <div class="wrap">
   <div class="hero">
     <div class="brand">
@@ -4422,12 +4590,230 @@ function clearSeasonGoalTimers(){
   seasonSimulationGoalTimers = [];
 }
 
+
+const LILY_SUPABASE_URL = "https://bjgjdioqgbmbievqogfs.supabase.co";
+const LILY_SUPABASE_KEY = "sb_publishable_OZFxmAOevXOpMh4yNVotQQ_zNZujbo4";
+let latestSeasonBillboardRecord = null;
+let billboardSubmitting = false;
+
+function escapeBillboardHtml(value){
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function getSeasonTopScorers(scorerState){
+  const entries = Object.entries(scorerState?.goalCounts || {});
+  if(!entries.length) return {names:"-", goals:0};
+  const maxGoals = Math.max(...entries.map(([,goals])=>Number(goals)||0));
+  const leaders = entries
+    .filter(([,goals])=>(Number(goals)||0) === maxGoals)
+    .map(([name])=>getPlayerDisplayName(name));
+  return {
+    names: leaders.join(" · "),
+    goals: maxGoals
+  };
+}
+
+function buildBillboardRecord(place, state, teamRatings, scorerState){
+  const top = getSeasonTopScorers(scorerState);
+  return {
+    league_rank: place,
+    points: state.points,
+    team_ovr: Number(teamRatings.overall.toFixed(2)),
+    top_scorer: top.names,
+    top_scorer_goals: top.goals
+  };
+}
+
+async function billboardRequest(path, options={}){
+  const headers = {
+    "apikey": LILY_SUPABASE_KEY,
+    ...options.headers
+  };
+  const response = await fetch(`${LILY_SUPABASE_URL}/rest/v1/${path}`, {
+    ...options,
+    headers
+  });
+  if(!response.ok){
+    let detail = "";
+    try{ detail = await response.text(); }catch{}
+    throw new Error(`BILLBOARD ${response.status} ${detail}`);
+  }
+  if(response.status === 204) return null;
+  const txt = await response.text();
+  return txt ? JSON.parse(txt) : null;
+}
+
+async function loadBillboard(){
+  const content = $("#billboardContent");
+  if(content) content.innerHTML = '<div class="billboard-empty">기록을 불러오는 중...</div>';
+  try{
+    const data = await billboardRequest(
+      "leaderboard?select=id,nickname,league_rank,points,team_ovr,top_scorer,top_scorer_goals,created_at&order=points.desc,league_rank.asc,team_ovr.asc,created_at.asc&limit=20"
+    );
+    renderBillboard(data || []);
+  }catch(error){
+    console.error(error);
+    if(content) content.innerHTML = '<div class="billboard-empty">BILLBOARD 기록을 불러오지 못했습니다.</div>';
+  }
+}
+
+function renderBillboard(rows){
+  const content = $("#billboardContent");
+  if(!content) return;
+  if(!rows.length){
+    content.innerHTML = '<div class="billboard-empty">아직 등록된 기록이 없습니다.<br>첫 번째 기록을 남겨보세요.</div>';
+    return;
+  }
+  content.innerHTML = `
+    <table class="billboard-table">
+      <colgroup>
+        <col style="width:48px">
+        <col style="width:22%">
+        <col style="width:70px">
+        <col style="width:62px">
+        <col style="width:72px">
+        <col>
+      </colgroup>
+      <thead>
+        <tr>
+          <th>순위</th>
+          <th>닉네임</th>
+          <th>리그</th>
+          <th>승점</th>
+          <th>OVR</th>
+          <th>최다 득점자</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map((row,index)=>`
+          <tr>
+            <td>${index+1}</td>
+            <td title="${escapeBillboardHtml(row.nickname)}">${escapeBillboardHtml(row.nickname)}</td>
+            <td>${Number(row.league_rank)}위</td>
+            <td>${Number(row.points)}</td>
+            <td>${Number(row.team_ovr).toFixed(1)}</td>
+            <td>${escapeBillboardHtml(row.top_scorer)} · ${Number(row.top_scorer_goals)}골</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+async function openBillboard(){
+  const overlay = $("#billboardOverlay");
+  if(overlay){
+    overlay.classList.add("show");
+    overlay.setAttribute("aria-hidden","false");
+  }
+  await loadBillboard();
+}
+
+function closeBillboard(){
+  const overlay = $("#billboardOverlay");
+  if(overlay){
+    overlay.classList.remove("show");
+    overlay.setAttribute("aria-hidden","true");
+  }
+}
+
+function renderBillboardRegistration(record){
+  return `
+    <div class="billboard-register">
+      <div class="billboard-register-title">BILLBOARD에 시즌 기록 등록</div>
+      <div class="billboard-register-preview">
+        프리미어리그 ${record.league_rank}위 · ${record.points} pts · 팀 OVR ${record.team_ovr.toFixed(1)}<br>
+        최다 득점자 ${escapeBillboardHtml(record.top_scorer)} · ${record.top_scorer_goals}골
+      </div>
+      <div class="billboard-register-row">
+        <input id="billboardNickname" class="billboard-nickname" type="text" maxlength="20" autocomplete="off" placeholder="닉네임을 입력하세요">
+        <button id="billboardSubmit" class="billboard-submit" type="button">기록 등록</button>
+      </div>
+      <div id="billboardStatus" class="billboard-status">전체 기간 TOP 20에 도전합니다.</div>
+    </div>
+  `;
+}
+
+async function submitBillboardRecord(){
+  if(billboardSubmitting || !latestSeasonBillboardRecord) return;
+  const input = $("#billboardNickname");
+  const button = $("#billboardSubmit");
+  const status = $("#billboardStatus");
+  const nickname = String(input?.value || "").trim();
+
+  if(!nickname){
+    if(status){
+      status.className = "billboard-status error";
+      status.textContent = "닉네임을 입력해주세요.";
+    }
+    return;
+  }
+
+  billboardSubmitting = true;
+  if(button) button.disabled = true;
+  if(status){
+    status.className = "billboard-status";
+    status.textContent = "기록을 등록하는 중...";
+  }
+
+  try{
+    const payload = {
+      nickname:nickname.slice(0,20),
+      ...latestSeasonBillboardRecord
+    };
+    const inserted = await billboardRequest("leaderboard", {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "Prefer":"return=representation"
+      },
+      body:JSON.stringify(payload)
+    });
+    const insertedId = inserted?.[0]?.id;
+
+    const top20 = await billboardRequest(
+      "leaderboard?select=id,nickname,league_rank,points,team_ovr,top_scorer,top_scorer_goals,created_at&order=points.desc,league_rank.asc,team_ovr.asc,created_at.asc&limit=20"
+    );
+    const rankIndex = (top20 || []).findIndex(row=>String(row.id) === String(insertedId));
+
+    if(status){
+      status.className = "billboard-status ok";
+      status.textContent = rankIndex >= 0
+        ? `등록 완료 · BILLBOARD ${rankIndex+1}위`
+        : "등록 완료 · 현재 TOP 20 밖입니다.";
+    }
+    if(input) input.disabled = true;
+    if(button){
+      button.disabled = true;
+      button.textContent = "등록 완료";
+    }
+    setTimeout(()=>{
+      openBillboard();
+    }, 550);
+  }catch(error){
+    console.error(error);
+    billboardSubmitting = false;
+    if(button) button.disabled = false;
+    if(status){
+      status.className = "billboard-status error";
+      status.textContent = "등록에 실패했습니다. 잠시 후 다시 시도해주세요.";
+    }
+  }
+}
+
 function finishSeasonSimulation(state, teamRatings, scorerState){
   seasonSimulationRunning = false;
   seasonSimulationTimer = null;
   clearSeasonGoalTimers();
 
   const place = calculateFinalRank(state.points);
+  latestSeasonBillboardRecord = buildBillboardRecord(place, state, teamRatings, scorerState);
+  billboardSubmitting = false;
   const summary = $("#simSummary");
   if(summary){
     summary.innerHTML = `
@@ -4437,8 +4823,13 @@ function finishSeasonSimulation(state, teamRatings, scorerState){
         <div class="season-summary-points">${state.points} pts</div>
         <div class="season-summary-record">${state.w}승 ${state.d}무 ${state.l}패 · ${state.gf}득점 ${state.ga}실점 · 팀 OVR ${teamRatings.overall.toFixed(1)}</div>
       </div>
+      ${renderBillboardRegistration(latestSeasonBillboardRecord)}
       ${renderSeasonPlayerReview(scorerState)}
     `;
+    $("#billboardSubmit")?.addEventListener("click", submitBillboardRecord);
+    $("#billboardNickname")?.addEventListener("keydown", e=>{
+      if(e.key === "Enter") submitBillboardRecord();
+    });
   }
 
   const btn = $("#finalSimBtn");
@@ -4669,6 +5060,15 @@ $("#gameOverRestart").onclick = ()=>{
   $("#gameOverOverlay").classList.remove("show");
   reset();
 };
+$("#billboardFab")?.addEventListener("click", openBillboard);
+$("#billboardClose")?.addEventListener("click", closeBillboard);
+$("#billboardOverlay")?.addEventListener("click", e=>{
+  if(e.target === $("#billboardOverlay")) closeBillboard();
+});
+document.addEventListener("keydown", e=>{
+  if(e.key === "Escape") closeBillboard();
+});
+
 $("#managerDrawBtn").onclick = startManagerRoulette;
 $("#simBtn").onclick = simulate;
 $("#finalSimBtn").onclick = simulate;
