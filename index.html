@@ -1384,8 +1384,12 @@
     border-color:#72e0a4;
     box-shadow:0 0 0 2px rgba(114,224,164,.18),0 0 22px rgba(114,224,164,.18);
   }
-  .manager-reveal-card.drag-ready{cursor:grab}
-  .manager-reveal-card.drag-ready:active{cursor:grabbing}
+  .manager-reveal-card.drag-ready{
+    cursor:pointer;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .manager-reveal-card.drag-ready:active{transform:scale(.99)}
   .xi-manager-slot .manager-mini-label{
     font-size:9px;
     color:#f1d984;
@@ -3145,7 +3149,7 @@ function startManagerRoulette(){
                   <span>OVR</span>
                 </div>
               </div>
-              <div class="manager-card-label">팀 보정 ${managerBoostText} · MY SPURS XI의 감독 빈 자리로 드래그하세요</div>
+              <div class="manager-card-label">팀 보정 ${managerBoostText} · 카드를 누르거나 감독 빈 자리로 드래그하세요</div>
             </div>`;
 
           const managerCard = $("#pendingManagerCard");
@@ -3159,6 +3163,10 @@ function startManagerRoulette(){
             managerCard.addEventListener("dragend", ()=>{
               const managerSlot = $("#xiManagerSlot");
               if(managerSlot) managerSlot.classList.remove("drop-ready");
+            });
+
+            managerCard.addEventListener("click", ()=>{
+              if(selectedManager && !managerPlaced) placeManager();
             });
           }
         }
@@ -5089,6 +5097,9 @@ if(xiManagerDropSlot){
     e.preventDefault();
     xiManagerDropSlot.classList.remove("drop-ready");
     placeManager();
+  });
+  xiManagerDropSlot.addEventListener("click", ()=>{
+    if(selectedManager && !managerPlaced) placeManager();
   });
 }
 
