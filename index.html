@@ -3165,6 +3165,8 @@ function startManagerRoulette(){
               if(managerSlot) managerSlot.classList.remove("drop-ready");
             });
 
+            // 모바일에서는 HTML5 drag가 안정적으로 동작하지 않으므로
+            // 감독 카드를 탭/클릭하는 것만으로 바로 감독 슬롯에 배치합니다.
             managerCard.addEventListener("click", ()=>{
               if(selectedManager && !managerPlaced) placeManager();
             });
@@ -3975,7 +3977,7 @@ function renderPitch(){
         clearDropHints();
       });
     } else {
-      node.innerHTML = `<div class="node-top"><div class="slot-label">${slot}</div></div><div class="name" style="color:#6d7fa8">빈 자리</div><div class="meta">드래그해서 배치</div>`;
+      node.innerHTML = `<div class="node-top"><div class="slot-label">${slot}</div></div><div class="name" style="color:#6d7fa8">빈 자리</div><div class="meta">드래그 or 터치</div>`;
     }
 
     node.addEventListener("dragover", e=>{
