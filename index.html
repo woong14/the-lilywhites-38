@@ -4200,26 +4200,27 @@ function getTeamDisplayName(name){
   return premierLeagueTeamDisplayNames[name] || name;
 }
 
+// DATA SOURCE: the_lilywhites_38_team_ratings_config(1).xlsx · first sheet "팀 능력치"
 const premierLeague2627TeamRatings = {
-  "Arsenal":                {att:93, mid:93, def:92},
-  "Manchester City":       {att:93, mid:94, def:91},
-  "Liverpool":             {att:93, mid:91, def:90},
-  "Chelsea":               {att:90, mid:89, def:88},
-  "Manchester United":     {att:88, mid:88, def:87},
-  "Newcastle United":      {att:88, mid:87, def:86},
-  "Aston Villa":           {att:88, mid:87, def:85},
-  "Brighton & Hove Albion":{att:85, mid:86, def:82},
-  "Crystal Palace":        {att:84, mid:84, def:84},
-  "AFC Bournemouth":       {att:84, mid:83, def:82},
-  "Nottingham Forest":     {att:82, mid:82, def:83},
-  "Brentford":             {att:83, mid:81, def:82},
-  "Fulham":                {att:82, mid:83, def:81},
-  "Everton":               {att:80, mid:81, def:83},
-  "Leeds United":          {att:80, mid:80, def:78},
-  "Sunderland":            {att:78, mid:79, def:78},
-  "Ipswich Town":          {att:78, mid:78, def:77},
-  "Hull City":             {att:76, mid:77, def:76},
-  "Coventry City":         {att:77, mid:77, def:76}
+  "Arsenal":{att:89,mid:93,def:92,homeWeight:1.07,matchupWeight:1.00},
+  "Manchester City":{att:93,mid:92,def:89,homeWeight:1.05,matchupWeight:0.95},
+  "Liverpool":{att:91,mid:90,def:89,homeWeight:1.07,matchupWeight:1.00},
+  "Chelsea":{att:90,mid:88,def:87,homeWeight:1.07,matchupWeight:1.02},
+  "Manchester United":{att:88,mid:89,def:86,homeWeight:1.06,matchupWeight:1.00},
+  "Newcastle United":{att:86,mid:85,def:86,homeWeight:1.06,matchupWeight:1.03},
+  "Aston Villa":{att:86,mid:86,def:85,homeWeight:1.06,matchupWeight:0.99},
+  "Brighton & Hove Albion":{att:84,mid:86,def:82,homeWeight:1.06,matchupWeight:1.00},
+  "Crystal Palace":{att:84,mid:84,def:83,homeWeight:1.06,matchupWeight:0.95},
+  "AFC Bournemouth":{att:86,mid:83,def:83,homeWeight:1.06,matchupWeight:1.00},
+  "Nottingham Forest":{att:81,mid:84,def:83,homeWeight:1.06,matchupWeight:1.01},
+  "Brentford":{att:84,mid:82,def:82,homeWeight:1.06,matchupWeight:1.00},
+  "Fulham":{att:82,mid:83,def:81,homeWeight:1.06,matchupWeight:1.00},
+  "Everton":{att:80,mid:81,def:83,homeWeight:1.06,matchupWeight:1.00},
+  "Leeds United":{att:80,mid:80,def:78,homeWeight:1.06,matchupWeight:1.01},
+  "Sunderland":{att:81,mid:83,def:83,homeWeight:1.06,matchupWeight:0.95},
+  "Ipswich Town":{att:78,mid:78,def:77,homeWeight:1.05,matchupWeight:1.00},
+  "Hull City":{att:82,mid:82,def:82,homeWeight:1.06,matchupWeight:0.98},
+  "Coventry City":{att:77,mid:77,def:76,homeWeight:1.05,matchupWeight:1.00}
 };
 
 let seasonSimulationTimer = null;
@@ -4249,9 +4250,13 @@ function getMyTeamRatings(){
 }
 
 function getOpponentRatings(name){
-  const r = premierLeague2627TeamRatings[name] || {att:81,mid:81,def:81};
+  const r = premierLeague2627TeamRatings[name] || {
+    att:81,mid:81,def:81,homeWeight:1.06,matchupWeight:1.00
+  };
   return {
     ...r,
+    homeWeight:Number.isFinite(r.homeWeight) ? r.homeWeight : 1.06,
+    matchupWeight:Number.isFinite(r.matchupWeight) ? r.matchupWeight : 1.00,
     overall:(r.att+r.mid+r.def)/3
   };
 }
@@ -4292,14 +4297,18 @@ function buildMatchModel(myRatings, opponentRatings, venue){
   let myXg = 1.04 * myChanceMultiplier * Math.exp(myAttackEdge / 25);
   let oppXg = 1.04 * oppChanceMultiplier * Math.exp(oppAttackEdge / 25);
 
-  // 홈/원정 득점 보정도 과도하지 않게 완화.
+  // 팀별 홈 가중치 / 토트넘 상대 상성 가중치.
+  // 값이 높을수록 상대팀이 토트넘에게 더 까다롭게 작동한다.
   if(venue === "H"){
     myXg *= 1.06;
     oppXg *= 0.95;
   }else{
     myXg *= 0.95;
-    oppXg *= 1.06;
+    oppXg *= opponentRatings.homeWeight;
   }
+
+  // 상성 가중치는 홈/원정과 무관하게 상대 득점 기대값에 적용.
+  oppXg *= opponentRatings.matchupWeight;
 
   myXg = clamp(myXg, 0.15, 3.10);
   oppXg = clamp(oppXg, 0.15, 3.10);
