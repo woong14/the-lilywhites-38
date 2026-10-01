@@ -1,0 +1,4719 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SPURS 38 - Fan Draft</title>
+<style>
+  :root{
+    --bg:#071120;
+    --panel:#101b34;
+    --panel2:#142243;
+    --panel3:#1a2f63;
+    --line:#2f4374;
+    --line2:#4767a8;
+    --text:#f7f9ff;
+    --muted:#93a4c9;
+    --gold:#f4d27b;
+    --green:#72e0a4;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    color:var(--text);
+    min-height:100vh;
+    background:
+      radial-gradient(circle at top,#1a2a57 0,#0d1730 28%,#091121 58%,#050a15 100%);
+  }
+  .wrap{max-width:1260px;margin:auto;padding:28px 18px 50px}
+  .hero{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:22px}
+  .brand h1{margin:0;font-size:clamp(34px,6vw,70px);line-height:.9;letter-spacing:-3px}
+  .brand p{margin:18px 0 0;color:var(--muted)}
+  .badge{border:1px solid var(--line);background:#0d1833d8;padding:10px 14px;border-radius:999px;color:#dbe5ff;font-size:14px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .card{
+    background:linear-gradient(180deg,rgba(17,29,56,.96),rgba(12,20,38,.96));
+    border:1px solid var(--line);border-radius:24px;padding:20px;box-shadow:0 18px 50px rgba(0,0,0,.35);
+  }
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  button{
+    border:0;border-radius:14px;padding:13px 16px;background:#fff;color:#0c1326;font-weight:900;cursor:pointer;
+    transition:.18s transform,.18s opacity,.18s box-shadow;
+    box-shadow:0 8px 20px rgba(255,255,255,.08);
+  }
+  button:hover{transform:translateY(-1px)}
+  button.secondary{background:#203357;color:#fff;border:1px solid #364f82}
+  button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+  .season{
+    display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+    background:linear-gradient(180deg,#0c152b,#0a1123);border:1px solid var(--line);padding:14px 16px;border-radius:18px;margin:14px 0 16px
+  }
+  .season strong{font-size:30px;letter-spacing:-1px}
+  .season small{display:block;color:var(--muted);margin-top:3px}
+  .season .live{display:inline-flex;gap:8px;align-items:center}
+  .dot{width:8px;height:8px;background:#6de2a2;border-radius:999px;box-shadow:0 0 12px #6de2a2}
+
+  
+
+  .gameover-overlay{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    background:
+      radial-gradient(circle at center,rgba(95,0,0,.42),rgba(0,0,0,.94) 62%),
+      #000;
+    color:#fff;
+    overflow:hidden;
+  }
+  .gameover-overlay.show{display:flex;animation:gameOverFade .32s ease-out both}
+  .gameover-overlay::before{
+    content:"";
+    position:absolute;
+    inset:-10%;
+    background:
+      repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 5px);
+    opacity:.3;
+    pointer-events:none;
+  }
+  .gameover-title{
+    position:relative;
+    z-index:2;
+    font-size:clamp(64px,13vw,180px);
+    font-weight:1000;
+    letter-spacing:-7px;
+    line-height:.8;
+    text-shadow:0 0 18px rgba(255,0,0,.68),0 0 60px rgba(255,0,0,.32);
+    animation:gameOverGlitch .17s steps(2,end) 5;
+  }
+  .gameover-sub{
+    position:relative;
+    z-index:2;
+    margin-top:24px;
+    font-size:clamp(14px,2vw,24px);
+    font-weight:900;
+    letter-spacing:5px;
+    color:#ffb4b4;
+  }
+  .gameover-restart{
+    position:relative;
+    z-index:2;
+    margin-top:34px;
+    background:#fff;
+    color:#150a0a;
+    box-shadow:0 0 30px rgba(255,255,255,.18);
+  }
+  .shatter-piece{
+    position:fixed;
+    z-index:10001;
+    width:42px;
+    height:30px;
+    border:1px solid rgba(255,255,255,.42);
+    border-radius:4px;
+    pointer-events:none;
+    background:linear-gradient(135deg,#f8fbff,#c8ddf4 45%,#426085);
+    box-shadow:0 5px 15px rgba(0,0,0,.35);
+    animation:shatterFly .85s cubic-bezier(.12,.7,.3,1) forwards;
+  }
+  .screen-crack{
+    position:fixed;
+    inset:0;
+    z-index:10000;
+    pointer-events:none;
+    opacity:0;
+    background:
+      linear-gradient(24deg,transparent 49.4%,rgba(255,255,255,.8) 49.7%,transparent 50.1%),
+      linear-gradient(112deg,transparent 49.5%,rgba(255,255,255,.45) 49.8%,transparent 50.1%),
+      linear-gradient(164deg,transparent 49.5%,rgba(255,255,255,.35) 49.8%,transparent 50.1%);
+    animation:crackFlash .42s ease-out forwards;
+  }
+  .easter-shake{animation:screenShake .46s linear}
+  @keyframes gameOverFade{from{opacity:0}to{opacity:1}}
+  @keyframes gameOverGlitch{
+    0%{transform:translate(0)}
+    25%{transform:translate(-8px,3px) skewX(-3deg)}
+    50%{transform:translate(7px,-3px) skewX(2deg)}
+    75%{transform:translate(-4px,1px)}
+    100%{transform:translate(0)}
+  }
+  @keyframes shatterFly{
+    0%{transform:translate(0,0) rotate(0deg) scale(1);opacity:1}
+    100%{transform:translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(.45);opacity:0}
+  }
+  @keyframes crackFlash{
+    0%{opacity:0}
+    20%{opacity:1}
+    100%{opacity:0}
+  }
+  @keyframes screenShake{
+    0%,100%{transform:translate(0)}
+    15%{transform:translate(-8px,5px)}
+    30%{transform:translate(9px,-6px)}
+    45%{transform:translate(-6px,-4px)}
+    60%{transform:translate(7px,5px)}
+    75%{transform:translate(-4px,2px)}
+  }
+
+  .season-preview{
+    margin:16px 0 0;
+    border:1px solid var(--line);
+    border-radius:20px;
+    background:linear-gradient(180deg,#0d1730,#0a1325);
+    overflow:hidden;
+    box-shadow:0 10px 24px rgba(0,0,0,.22);
+  }
+  .season-preview.empty{
+    min-height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--muted);
+    text-align:center;
+    padding:22px 18px;
+  }
+  .season-preview-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:12px 14px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0));
+  }
+  .season-preview-top strong{font-size:15px}
+  .season-preview-top span{font-size:12px;color:var(--muted)}
+  .season-preview img{
+    display:block;
+    width:100%;
+    height:auto;
+    background:#08101f;
+  }
+  .season-preview-note{
+    padding:10px 14px 14px;
+    font-size:12px;
+    color:#c9d8fa;
+  }
+  .card aside .season-preview{}
+  #seasonPreview{margin-top:14px}
+
+
+  .roulette-box{
+    position:relative;
+    height:80px;
+    overflow:hidden;
+    border-radius:18px;
+    border:1px solid var(--line);
+    background:#0d1830;
+    margin-bottom:16px;
+  }
+  .roulette-center-line{
+    position:absolute;left:0;right:0;top:50%;height:0;border-top:2px solid rgba(255,255,255,.22);z-index:3;
+  }
+  .roulette-window-top,.roulette-window-bottom{display:none}
+  .roulette-list{position:absolute;left:0;right:0;top:0;transition:transform .08s linear}
+  .roulette-item{
+    height:80px;display:grid;grid-template-rows:44px 36px;align-items:stretch;
+    text-align:center;padding:0;
+  }
+  .roulette-item strong{display:flex;align-items:center;justify-content:center;font-size:28px;letter-spacing:-1px;border-bottom:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.02)}
+  .roulette-item span{display:flex;align-items:center;justify-content:center;font-size:12px;color:#b8c8ea;padding:0 14px;background:rgba(255,255,255,.015)}
+
+  .prepick-list{display:grid;grid-template-columns:1fr;gap:9px}
+  .prepick-row{
+    display:grid;grid-template-columns:105px 1fr auto;gap:12px;align-items:center;
+    min-height:62px;padding:11px 13px;border-radius:15px;cursor:pointer;
+    background:linear-gradient(180deg,#13213f,#0f1a32);border:1px solid #2c416e;
+    transition:.16s transform,.16s border-color,.16s background;
+  }
+  .prepick-row:hover{transform:translateY(-1px);border-color:#7897dc;background:linear-gradient(180deg,#182b52,#12203e)}
+  .prepick-row.disabled{
+    cursor:not-allowed;
+    background:linear-gradient(180deg,#0f1628,#0b1221);
+    border-color:#273551;
+    opacity:.56;
+    filter:saturate(.38) grayscale(.22);
+    box-shadow:inset 0 2px 8px rgba(0,0,0,.22);
+  }
+  .prepick-row.disabled:hover{
+    transform:none;
+    border-color:#273551;
+    background:linear-gradient(180deg,#0f1628,#0b1221);
+  }
+  .prepick-row.disabled .prepick-name,
+  .prepick-row.disabled .prepick-nationality,
+  .prepick-row.disabled .prepick-positions,
+  .prepick-row.disabled .prepick-tenure{color:#7f8daa !important}
+  .prepick-row.prepick-legend{
+    border-color:rgba(225,191,111,.46);
+    background:linear-gradient(90deg,rgba(28,23,13,.96),rgba(49,39,17,.94));
+  }
+  .prepick-row.prepick-legend .prepick-name,
+  .prepick-row.prepick-legend .prepick-nationality,
+  .prepick-row.prepick-legend .prepick-positions,
+  .prepick-row.prepick-legend .prepick-tenure{color:#f1d78b}
+  .prepick-row.prepick-toty{
+    border-color:rgba(216,177,79,.48);
+    background:linear-gradient(90deg,#090b10,#171a22);
+  }
+  .prepick-row.prepick-toty .prepick-name,
+  .prepick-row.prepick-toty .prepick-nationality,
+  .prepick-row.prepick-toty .prepick-positions,
+  .prepick-row.prepick-toty .prepick-tenure{color:#f4d889}
+  .prepick-status{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    justify-content:center;
+    gap:5px;
+    min-width:92px;
+  }
+  .picked-badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:3px 7px;
+    border-radius:999px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.09);
+    color:#b8c2d7;
+    font-size:9px;
+    font-weight:900;
+    letter-spacing:.45px;
+    line-height:1;
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.2);
+    white-space:nowrap;
+  }
+  .prepick-nationality{font-size:12px;color:#b8c8ec;font-weight:800;white-space:nowrap}\n  .flag-inline{display:inline-flex;align-items:center;gap:8px}\n  .flag-icon{display:inline-flex;width:18px;height:12px;overflow:hidden;border-radius:2px;box-shadow:0 0 0 1px rgba(255,255,255,.18)}\n  .flag-icon svg{display:block;width:18px;height:12px}\n
+  .prepick-name{font-size:16px;font-weight:900;letter-spacing:-.25px}
+  .prepick-positions{margin-top:5px;font-size:10px;color:#8fa8dd;font-weight:800;letter-spacing:.2px}
+  .prepick-tenure{font-size:12px;color:#8296c5;white-space:nowrap;text-align:right}
+  .reveal-stage{display:none;margin-top:14px;min-height:230px;align-items:center;justify-content:center;perspective:900px}
+  .reveal-stage.show{display:flex}
+  .manager-reveal-card{
+    position:relative;
+    overflow:hidden;
+    border-radius:22px;
+    padding:16px;
+    border:1px solid #d6ba64;
+    background:
+      radial-gradient(circle at top right,rgba(255,255,255,.14),transparent 28%),
+      linear-gradient(145deg,#4f3f18,#34290f 55%,#211a0b);
+    box-shadow:0 14px 34px rgba(0,0,0,.3);
+  }
+  .manager-reveal-card .reveal-name{color:#fff5cf}
+  .manager-reveal-card .reveal-nation,
+  .manager-reveal-card .reveal-tenure{color:#dbc980}
+  .manager-reveal-card .reveal-ovr{
+    background:linear-gradient(180deg,#fff2c8,#e4bb55);
+    color:#20180a;
+  }
+  .manager-reveal-card .manager-card-label{
+    margin-top:10px;
+    text-align:center;
+    color:#ead58a;
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:1px;
+  }
+
+  .reveal-card{
+    position:relative;overflow:hidden;width:min(340px,95%);padding:18px;border-radius:26px;border:1px solid #7293db;
+    background:radial-gradient(circle at top right,rgba(255,255,255,.18),transparent 28%),linear-gradient(160deg,#203f80,#172d5a 48%,#101b34);
+    box-shadow:0 24px 60px rgba(0,0,0,.42);animation:cardReveal .62s cubic-bezier(.2,.8,.2,1) both;
+  }
+  @keyframes cardReveal{0%{transform:rotateY(90deg) scale(.85);opacity:0}65%{transform:rotateY(-7deg) scale(1.03);opacity:1}100%{transform:rotateY(0) scale(1);opacity:1}}
+
+
+
+  .tier-sol{
+    position:relative;
+    overflow:hidden;
+    border-color:#ff5d5d !important;
+    color:#fff !important;
+    background:
+      radial-gradient(circle at top right,rgba(255,255,255,.16),transparent 26%),
+      linear-gradient(145deg,#7a0d16 0%,#4d0710 48%,#25040a 100%) !important;
+    box-shadow:
+      0 0 0 1px rgba(255,93,93,.32),
+      0 0 32px rgba(255,30,45,.30),
+      0 18px 42px rgba(0,0,0,.42) !important;
+  }
+  .tier-sol::after{
+    content:"";
+    position:absolute;
+    inset:-35%;
+    pointer-events:none;
+    background:linear-gradient(115deg,transparent 42%,rgba(255,120,120,.18) 48%,rgba(255,255,255,.14) 51%,transparent 57%);
+    transform:translateX(-25%) rotate(7deg);
+    animation:solDangerSweep 2.2s ease-in-out infinite;
+  }
+  @keyframes solDangerSweep{
+    0%,25%{transform:translateX(-35%) rotate(7deg);opacity:.25}
+    55%{opacity:.7}
+    100%{transform:translateX(35%) rotate(7deg);opacity:.25}
+  }
+  .tier-sol > *{position:relative;z-index:1}
+  .tier-sol .reveal-name,
+  .tier-sol .reveal-nation,
+  .tier-sol .reveal-tenure,
+  .tier-sol .reveal-note{color:#fff !important}
+  .tier-sol .reveal-ovr{
+    background:linear-gradient(145deg,#ff6a72,#a81323 58%,#5d0710) !important;
+    color:#fff !important;
+    box-shadow:0 9px 24px rgba(255,40,55,.34) !important;
+  }
+  .tier-sol .position-chip{
+    background:rgba(255,255,255,.1);
+    border-color:rgba(255,255,255,.18);
+    color:#fff;
+  }
+  .tier-sol .drag-instruction{
+    background:rgba(255,65,75,.12);
+    border-color:rgba(255,95,105,.34);
+    color:#ffd7da;
+  }
+  .sol-warning{
+    margin-top:7px;
+    font-size:10px;
+    font-weight:950;
+    letter-spacing:1.2px;
+    color:#ffb3b8;
+  }
+
+
+  .wonder-reveal-flash{
+    position:fixed;
+    inset:0;
+    z-index:9997;
+    pointer-events:none;
+    background:
+      radial-gradient(circle at 50% 42%,rgba(255,255,255,.84) 0 5%,rgba(196,139,255,.58) 14%,rgba(126,74,214,.34) 30%,rgba(255,255,255,0) 58%);
+    opacity:0;
+    animation:wonderRevealFlash .98s ease-out forwards;
+  }
+  @keyframes wonderRevealFlash{
+    0%{opacity:0}
+    12%{opacity:1}
+    38%{opacity:.75}
+    100%{opacity:0}
+  }
+  .wonder-reveal-rings{
+    position:fixed;
+    left:50%;
+    top:44%;
+    width:620px;
+    height:620px;
+    z-index:9996;
+    pointer-events:none;
+    transform:translate(-50%,-50%) scale(.3);
+    opacity:0;
+    background:
+      repeating-radial-gradient(circle,
+        rgba(220,190,255,.72) 0 10px,
+        rgba(137,93,230,.28) 10px 22px,
+        transparent 22px 46px);
+    -webkit-mask:radial-gradient(circle, transparent 0 14%, #000 20%, transparent 70%);
+    mask:radial-gradient(circle, transparent 0 14%, #000 20%, transparent 70%);
+    animation:wonderRevealRings 1.28s cubic-bezier(.12,.7,.16,1) forwards;
+  }
+  @keyframes wonderRevealRings{
+    0%{opacity:0;transform:translate(-50%,-50%) scale(.22)}
+    18%{opacity:.9}
+    65%{opacity:.42}
+    100%{opacity:0;transform:translate(-50%,-50%) scale(1.22)}
+  }
+  .wonder-reveal-title{
+    position:fixed;
+    left:50%;
+    top:21%;
+    z-index:9998;
+    pointer-events:none;
+    transform:translate(-50%,-10px) scale(.72);
+    opacity:0;
+    color:#fff;
+    font-size:32px;
+    line-height:1;
+    font-weight:1000;
+    letter-spacing:4px;
+    text-shadow:
+      0 0 8px rgba(255,255,255,.95),
+      0 0 22px rgba(182,118,255,.86),
+      0 0 42px rgba(106,73,235,.7);
+    animation:wonderRevealTitle 1.45s cubic-bezier(.18,.82,.21,1) forwards;
+  }
+  @keyframes wonderRevealTitle{
+    0%{opacity:0;transform:translate(-50%,18px) scale(.62);filter:blur(7px)}
+    18%{opacity:1;transform:translate(-50%,0) scale(1.08);filter:blur(0)}
+    45%{opacity:1;transform:translate(-50%,0) scale(1)}
+    100%{opacity:0;transform:translate(-50%,-10px) scale(.96)}
+  }
+  .reveal-card.wonder-reveal-enter{
+    animation:wonderCardEnter 1.08s cubic-bezier(.12,.82,.17,1);
+  }
+  @keyframes wonderCardEnter{
+    0%{opacity:0;transform:scale(.62) rotateX(16deg);filter:brightness(2.1) saturate(1.3) blur(7px)}
+    28%{opacity:1;transform:scale(1.07) rotateX(0deg);filter:brightness(1.45) saturate(1.2) blur(0)}
+    58%{transform:scale(.985);filter:brightness(1.12)}
+    100%{transform:scale(1);filter:brightness(1)}
+  }
+
+  .tier-wonder{
+    position:relative;
+    overflow:hidden;
+    border-color:#d8c2ff !important;
+    color:#f8f4ff !important;
+    background:
+      linear-gradient(135deg,
+        rgba(70,35,131,.98) 0%,
+        rgba(95,49,173,.98) 26%,
+        rgba(77,45,148,.98) 50%,
+        rgba(50,27,101,.99) 100%) !important;
+    box-shadow:
+      0 0 0 1px rgba(223,206,255,.38),
+      0 0 28px rgba(142,97,227,.34),
+      0 18px 42px rgba(0,0,0,.34) !important;
+  }
+  .tier-wonder::after{
+    content:"";
+    position:absolute;
+    inset:-55%;
+    pointer-events:none;
+    background:linear-gradient(
+      110deg,
+      transparent 39%,
+      rgba(255,255,255,0) 43%,
+      rgba(246,228,255,.18) 47%,
+      rgba(194,143,255,.34) 50%,
+      rgba(255,255,255,.16) 53%,
+      rgba(255,255,255,0) 58%,
+      transparent 62%
+    );
+    transform:translateX(-28%) rotate(7deg);
+    animation:wonderShimmer 3.2s ease-in-out infinite;
+  }
+  @keyframes wonderShimmer{
+    0%,22%{transform:translateX(-35%) rotate(7deg);opacity:.42}
+    48%{opacity:.88}
+    78%,100%{transform:translateX(35%) rotate(7deg);opacity:.42}
+  }
+  .tier-wonder > *{position:relative;z-index:1}
+  .tier-wonder .reveal-name,
+  .tier-wonder .reveal-nation,
+  .tier-wonder .reveal-tenure,
+  .tier-wonder .reveal-note{color:#f8f4ff !important}
+  .tier-wonder .reveal-ovr{
+    background:linear-gradient(145deg,#f0e2ff,#c89bff 55%,#8456d8);
+    color:#271344;
+    box-shadow:0 9px 24px rgba(113,64,202,.32);
+  }
+  .player-node.tier-wonder{
+    color:#f8f4ff !important;
+    background:
+      linear-gradient(130deg,#6036b0,#492680 45%,#35195d 100%) !important;
+    border-color:#d8c2ff !important;
+    box-shadow:0 0 0 1px rgba(223,206,255,.35),0 0 20px rgba(158,113,255,.28),0 10px 24px rgba(0,0,0,.25) !important;
+  }
+  .player-node.tier-wonder .slot-label,
+  .player-node.tier-wonder .name,
+  .player-node.tier-wonder .meta{color:#f8f4ff !important}
+  .ovr-wonder-label{
+    margin-top:6px;
+    padding:3px 9px;
+    min-width:80px;
+    border-radius:999px;
+    background:rgba(58,26,112,.16);
+    border:1px solid rgba(72,33,139,.24);
+    color:#ffffff;
+    font-size:9px;
+    font-weight:950;
+    letter-spacing:.9px;
+    line-height:1;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    white-space:nowrap;
+  }
+  .tier-wonder .position-chip{
+    background:rgba(255,255,255,.1);
+    border-color:rgba(255,255,255,.18);
+    color:#fff;
+  }
+  .tier-wonder .drag-instruction{
+    color:#efe5ff;
+    background:rgba(255,255,255,.08);
+    border-color:rgba(221,203,255,.22);
+  }
+  .wonder-chip-small{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:3px 8px;
+    border-radius:999px;
+    background:linear-gradient(90deg,#4d2c90,#a77cf7);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.35);
+    font-size:9px;
+    font-weight:950;
+    letter-spacing:.9px;
+    box-shadow:0 4px 12px rgba(98,53,182,.2);
+  }
+  .slot.tier-wonder b,.slot.tier-wonder span,.slot.tier-wonder .sub{color:#f8f4ff !important}
+
+  .prime-reveal-flash{
+    position:fixed;
+    inset:0;
+    z-index:9997;
+    pointer-events:none;
+    background:
+      radial-gradient(circle at 50% 42%,rgba(255,255,255,.96) 0 4%,rgba(179,231,255,.62) 15%,rgba(255,195,241,.28) 31%,rgba(255,255,255,0) 58%);
+    opacity:0;
+    animation:primeRevealFlash .95s ease-out forwards;
+  }
+  @keyframes primeRevealFlash{
+    0%{opacity:0}
+    12%{opacity:1}
+    35%{opacity:.72}
+    100%{opacity:0}
+  }
+  .prime-reveal-rays{
+    position:fixed;
+    left:50%;
+    top:44%;
+    width:620px;
+    height:620px;
+    z-index:9996;
+    pointer-events:none;
+    transform:translate(-50%,-50%) scale(.25) rotate(0deg);
+    opacity:0;
+    background:
+      repeating-conic-gradient(
+        from 0deg,
+        rgba(255,255,255,.58) 0deg 4deg,
+        rgba(145,211,255,.16) 4deg 10deg,
+        transparent 10deg 18deg
+      );
+    -webkit-mask:radial-gradient(circle,transparent 0 10%,#000 21%,transparent 69%);
+    mask:radial-gradient(circle,transparent 0 10%,#000 21%,transparent 69%);
+    animation:primeRevealRays 1.25s cubic-bezier(.12,.7,.16,1) forwards;
+  }
+  @keyframes primeRevealRays{
+    0%{opacity:0;transform:translate(-50%,-50%) scale(.22) rotate(-12deg)}
+    18%{opacity:.85}
+    60%{opacity:.42}
+    100%{opacity:0;transform:translate(-50%,-50%) scale(1.25) rotate(18deg)}
+  }
+  .prime-reveal-title{
+    position:fixed;
+    left:50%;
+    top:21%;
+    z-index:9998;
+    pointer-events:none;
+    transform:translate(-50%,-10px) scale(.72);
+    opacity:0;
+    color:#fff;
+    font-size:32px;
+    line-height:1;
+    font-weight:1000;
+    letter-spacing:4px;
+    text-shadow:
+      0 0 8px rgba(255,255,255,.95),
+      0 0 22px rgba(134,210,255,.86),
+      0 0 42px rgba(212,158,255,.55);
+    animation:primeRevealTitle 1.4s cubic-bezier(.18,.82,.21,1) forwards;
+  }
+  @keyframes primeRevealTitle{
+    0%{opacity:0;transform:translate(-50%,18px) scale(.62);filter:blur(7px)}
+    18%{opacity:1;transform:translate(-50%,0) scale(1.08);filter:blur(0)}
+    45%{opacity:1;transform:translate(-50%,0) scale(1)}
+    100%{opacity:0;transform:translate(-50%,-10px) scale(.96)}
+  }
+  .reveal-card.prime-reveal-enter{
+    animation:primeCardEnter 1.05s cubic-bezier(.12,.82,.17,1);
+  }
+  @keyframes primeCardEnter{
+    0%{opacity:0;transform:scale(.62) rotateX(16deg);filter:brightness(2.6) blur(7px)}
+    28%{opacity:1;transform:scale(1.07) rotateX(0deg);filter:brightness(1.65) blur(0)}
+    58%{transform:scale(.985);filter:brightness(1.16)}
+    100%{transform:scale(1);filter:brightness(1)}
+  }
+
+  .tier-prime{
+    position:relative;
+    overflow:hidden;
+    border-color:#ffffff !important;
+    color:#10182a !important;
+    background:
+      linear-gradient(120deg,
+        rgba(255,255,255,.98) 0%,
+        rgba(236,246,255,.98) 19%,
+        rgba(255,244,250,.98) 36%,
+        rgba(244,255,250,.98) 53%,
+        rgba(245,242,255,.98) 72%,
+        rgba(255,255,255,.99) 100%) !important;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.75),
+      0 0 28px rgba(217,238,255,.42),
+      0 18px 42px rgba(0,0,0,.34) !important;
+  }
+  .tier-prime::after{
+    content:"";
+    position:absolute;
+    inset:-55%;
+    pointer-events:none;
+    background:linear-gradient(
+      110deg,
+      transparent 39%,
+      rgba(255,255,255,0) 43%,
+      rgba(153,232,255,.42) 47%,
+      rgba(255,197,239,.38) 50%,
+      rgba(255,238,170,.34) 53%,
+      rgba(255,255,255,0) 58%,
+      transparent 62%
+    );
+    transform:translateX(-28%) rotate(7deg);
+    animation:primeShimmer 3.2s ease-in-out infinite;
+  }
+  @keyframes primeShimmer{
+    0%,22%{transform:translateX(-35%) rotate(7deg);opacity:.45}
+    48%{opacity:.9}
+    78%,100%{transform:translateX(35%) rotate(7deg);opacity:.45}
+  }
+  .tier-prime > *{position:relative;z-index:1}
+  .tier-prime .reveal-name,
+  .tier-prime .reveal-nation,
+  .tier-prime .reveal-tenure,
+  .tier-prime .reveal-note{color:#17213a !important}
+  .tier-prime .reveal-ovr{
+    background:linear-gradient(145deg,#152443,#36527c 55%,#91b8d8);
+    color:#fff;
+    box-shadow:0 9px 24px rgba(40,77,118,.28);
+  }
+  .player-node.tier-prime{
+    color:#10182a !important;
+    background:
+      linear-gradient(125deg,#ffffff,#edf8ff 34%,#fff3fb 57%,#f1fff8 77%,#ffffff) !important;
+    border-color:#fff !important;
+    box-shadow:0 0 0 1px rgba(255,255,255,.78),0 0 20px rgba(218,241,255,.35),0 10px 24px rgba(0,0,0,.25) !important;
+  }
+  .player-node.tier-prime .slot-label,
+  .player-node.tier-prime .name,
+  .player-node.tier-prime .meta{color:#17213a !important}
+
+  .reveal-ovr{
+    width:90px;height:96px;border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:linear-gradient(180deg,#fff2ca,#edc45e);color:#17203b;font-weight:950;box-shadow:0 10px 28px rgba(244,210,123,.28);
+    padding:8px 6px;
+  }
+  .reveal-ovr strong{font-size:35px;line-height:1}
+  .reveal-ovr span{font-size:10px;letter-spacing:1px;margin-top:3px}
+  .ovr-prime-label{
+    margin-top:6px;
+    padding:3px 7px;
+    border-radius:999px;
+    background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.28);
+    color:#eef6ff;
+    font-size:9px;
+    font-weight:950;
+    letter-spacing:.9px;
+    line-height:1;
+    white-space:nowrap;
+  }
+  .tier-prime .ovr-prime-label{
+    background:rgba(20,34,61,.28);
+    border-color:rgba(30,54,92,.22);
+    color:#ffffff;
+  }
+  .tier-prime .drag-instruction{
+    color:#17213a;
+    background:rgba(23,33,58,.08);
+    border-color:rgba(23,33,58,.16);
+  }
+  .node-top{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:6px;
+    margin-bottom:3px;
+  }
+  .prime-chip-small{
+    flex:0 0 auto;
+    padding:2px 5px;
+    border-radius:999px;
+    background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.18);
+    color:#f5fbff;
+    font-size:7px;
+    font-weight:950;
+    letter-spacing:.55px;
+    line-height:1;
+    white-space:nowrap;
+  }
+  .player-node.tier-prime .prime-chip-small{
+    background:rgba(22,38,64,.09);
+    border-color:rgba(22,38,64,.14);
+    color:#223557;
+  }
+
+  .legend-reveal-flash{
+    position:fixed;inset:0;pointer-events:none;z-index:60;
+    background:
+      radial-gradient(circle at center, rgba(255,241,196,.58) 0%, rgba(255,241,196,.18) 20%, rgba(255,241,196,0) 48%),
+      linear-gradient(180deg, rgba(255,245,215,.22), rgba(255,255,255,0));
+    animation:legendFlash .95s ease-out forwards;
+  }
+  @keyframes legendFlash{
+    0%{opacity:0;transform:scale(.96)}
+    15%{opacity:1}
+    100%{opacity:0;transform:scale(1.04)}
+  }
+  .legend-reveal-rays{
+    position:fixed;left:50%;top:50%;width:520px;height:520px;pointer-events:none;z-index:61;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:conic-gradient(from 0deg,
+      rgba(255,239,181,0) 0deg,
+      rgba(255,239,181,.55) 18deg,
+      rgba(255,255,255,0) 36deg,
+      rgba(255,230,140,.42) 58deg,
+      rgba(255,255,255,0) 78deg,
+      rgba(255,244,206,.42) 110deg,
+      rgba(255,255,255,0) 140deg,
+      rgba(255,224,125,.34) 180deg,
+      rgba(255,255,255,0) 220deg,
+      rgba(255,239,181,.38) 260deg,
+      rgba(255,255,255,0) 300deg,
+      rgba(255,230,140,.24) 340deg,
+      rgba(255,255,255,0) 360deg);
+    filter:blur(1px);
+    opacity:.9;
+    animation:legendRays 1.45s ease-out forwards;
+  }
+  @keyframes legendRays{
+    0%{opacity:0;transform:translate(-50%,-50%) scale(.42) rotate(0deg)}
+    30%{opacity:.95}
+    100%{opacity:0;transform:translate(-50%,-50%) scale(1.18) rotate(58deg)}
+  }
+  .legend-reveal-title{
+    position:fixed;left:50%;top:17%;transform:translateX(-50%);
+    z-index:62;pointer-events:none;
+    color:#fff6d7;font-size:40px;font-weight:1000;letter-spacing:3px;
+    text-shadow:0 0 12px rgba(255,227,133,.42),0 0 28px rgba(255,245,210,.3),0 4px 12px rgba(0,0,0,.35);
+    animation:legendTitle 1.6s ease-out forwards;
+    white-space:nowrap;
+  }
+  @keyframes legendTitle{
+    0%{opacity:0;transform:translateX(-50%) translateY(-10px) scale(.84)}
+    20%{opacity:1}
+    100%{opacity:0;transform:translateX(-50%) translateY(-2px) scale(1.02)}
+  }
+  .reveal-card.legend-reveal-enter{
+    animation:legendCardEnter 1.08s cubic-bezier(.12,.82,.17,1);
+  }
+  @keyframes legendCardEnter{
+    0%{opacity:0;transform:scale(.58) rotateX(16deg);filter:brightness(2.8) blur(8px)}
+    26%{opacity:1;transform:scale(1.08) rotateX(0deg);filter:brightness(1.8) blur(0)}
+    58%{transform:scale(.985);filter:brightness(1.12)}
+    100%{transform:scale(1);filter:brightness(1)}
+  }
+
+  .tier-legend{
+    position:relative;
+    overflow:hidden;
+    border-color:#f6ebc2 !important;
+    color:#2a2010 !important;
+    background:
+      linear-gradient(140deg,
+        rgba(255,251,236,.99) 0%,
+        rgba(247,228,171,.98) 22%,
+        rgba(255,244,208,.99) 38%,
+        rgba(225,191,111,.97) 58%,
+        rgba(255,246,218,.98) 77%,
+        rgba(183,139,63,.98) 100%) !important;
+    box-shadow:
+      0 0 0 1px rgba(255,247,220,.82),
+      0 0 30px rgba(255,221,134,.34),
+      0 18px 44px rgba(0,0,0,.34) !important;
+  }
+  .tier-legend::after{
+    content:"";
+    position:absolute;inset:-58%;pointer-events:none;
+    background:
+      linear-gradient(118deg,
+        transparent 37%,
+        rgba(255,255,255,0) 42%,
+        rgba(255,255,255,.38) 46%,
+        rgba(255,236,168,.48) 50%,
+        rgba(255,255,255,.18) 54%,
+        rgba(255,255,255,0) 58%,
+        transparent 63%);
+    transform:translateX(-35%) rotate(8deg);
+    animation:legendShimmer 2.8s ease-in-out infinite;
+  }
+  @keyframes legendShimmer{
+    0%,22%{transform:translateX(-38%) rotate(8deg);opacity:.5}
+    46%{opacity:1}
+    80%,100%{transform:translateX(38%) rotate(8deg);opacity:.55}
+  }
+  .tier-legend > *{position:relative;z-index:1}
+  .tier-legend .reveal-name,
+  .tier-legend .reveal-nation,
+  .tier-legend .reveal-tenure,
+  .tier-legend .reveal-note{color:#2a2010 !important}
+  .tier-legend .reveal-ovr{
+    background:linear-gradient(145deg,#4f390f,#9d7832 52%,#f2df9a);
+    color:#fffdf3;
+    box-shadow:0 9px 24px rgba(122,86,27,.30);
+  }
+  .tier-legend .drag-instruction{
+    color:#433112;
+    background:rgba(67,49,18,.08);
+    border-color:rgba(67,49,18,.16);
+  }
+  .player-node.tier-legend{
+    color:#2a2010 !important;
+    background:
+      linear-gradient(135deg,#fffdf2,#f5e7bb 30%,#fff4cf 54%,#d4ac63 78%,#fff7db) !important;
+    border-color:#fff0ca !important;
+    box-shadow:0 0 0 1px rgba(255,249,230,.84),0 0 22px rgba(255,221,136,.32),0 10px 24px rgba(0,0,0,.25) !important;
+  }
+  .player-node.tier-legend .slot-label,
+  .player-node.tier-legend .name,
+  .player-node.tier-legend .meta{color:#3a2b0f !important}
+  .ovr-legend-label{
+    margin-top:6px;
+    padding:3px 7px;
+    border-radius:999px;
+    background:rgba(55,39,13,.12);
+    border:1px solid rgba(55,39,13,.18);
+    color:#fff7db;
+    font-size:9px;
+    font-weight:950;
+    letter-spacing:.8px;
+    line-height:1;
+    white-space:nowrap;
+  }
+  .tier-legend .ovr-legend-label{
+    background:rgba(45,31,8,.20);
+    border-color:rgba(45,31,8,.16);
+    color:#fff7d5;
+  }
+  .legend-chip-small{
+    flex:0 0 auto;
+    padding:2px 5px;
+    border-radius:999px;
+    background:rgba(57,41,14,.10);
+    border:1px solid rgba(57,41,14,.12);
+    color:#4b3814;
+    font-size:7px;
+    font-weight:950;
+    letter-spacing:.52px;
+    line-height:1;
+    white-space:nowrap;
+  }
+  .slot.tier-legend b,.slot.tier-legend span,.slot.tier-legend .sub{color:#2a2010 !important}
+  .roulette-item.legend-season-item{
+    background:linear-gradient(90deg, rgba(255,247,221,.06), rgba(255,220,120,.12), rgba(255,247,221,.06));
+    border-top:1px solid rgba(255,233,168,.10);
+    border-bottom:1px solid rgba(255,233,168,.10);
+  }
+  .roulette-item.legend-season-item strong{color:#fff0bb}
+  .roulette-item.legend-season-item span{color:#ead7a0}
+
+  .goldenboot-reveal-flash{
+    position:fixed;
+    inset:0;
+    z-index:9997;
+    pointer-events:none;
+    background:
+      radial-gradient(circle at 50% 42%,rgba(152,255,226,.90) 0 5%,rgba(58,218,178,.40) 18%,rgba(6,47,39,.18) 38%,rgba(0,0,0,0) 64%);
+    opacity:0;
+    animation:goldenBootFlash .95s ease-out forwards;
+  }
+  @keyframes goldenBootFlash{
+    0%{opacity:0}
+    12%{opacity:1}
+    38%{opacity:.58}
+    100%{opacity:0}
+  }
+  .goldenboot-shatter{
+    position:fixed;
+    left:50%;
+    top:44%;
+    width:600px;
+    height:600px;
+    z-index:9996;
+    pointer-events:none;
+    transform:translate(-50%,-50%) scale(.30);
+    opacity:0;
+    background:
+      repeating-conic-gradient(
+        from 0deg,
+        rgba(166,255,233,.85) 0deg 2deg,
+        transparent 2deg 15deg,
+        rgba(77,221,183,.70) 15deg 17deg,
+        transparent 17deg 31deg
+      );
+    -webkit-mask:radial-gradient(circle,transparent 0 15%,#000 17% 60%,transparent 64%);
+    mask:radial-gradient(circle,transparent 0 15%,#000 17% 60%,transparent 64%);
+    filter:drop-shadow(0 0 8px rgba(98,239,204,.48));
+    animation:goldenBootShatter 1.25s cubic-bezier(.12,.72,.16,1) forwards;
+  }
+  @keyframes goldenBootShatter{
+    0%{opacity:0;transform:translate(-50%,-50%) scale(.25) rotate(-9deg);filter:blur(3px)}
+    20%{opacity:1;filter:blur(0)}
+    48%{opacity:.9}
+    100%{opacity:0;transform:translate(-50%,-50%) scale(1.5) rotate(24deg);filter:blur(1px)}
+  }
+  .goldenboot-reveal-title{
+    position:fixed;
+    left:50%;
+    top:21%;
+    z-index:9998;
+    pointer-events:none;
+    transform:translate(-50%,0) scale(.72);
+    opacity:0;
+    color:#b8ffec;
+    font-size:34px;
+    line-height:1;
+    font-weight:1000;
+    letter-spacing:4px;
+    text-shadow:
+      0 0 8px rgba(184,255,236,.95),
+      0 0 22px rgba(69,222,181,.78),
+      0 0 42px rgba(16,124,98,.55);
+    animation:goldenBootTitle 1.45s cubic-bezier(.18,.82,.21,1) forwards;
+  }
+  @keyframes goldenBootTitle{
+    0%{opacity:0;transform:translate(-50%,18px) scale(.62);filter:blur(7px)}
+    18%{opacity:1;transform:translate(-50%,0) scale(1.08);filter:blur(0)}
+    48%{opacity:1;transform:translate(-50%,0) scale(1)}
+    100%{opacity:0;transform:translate(-50%,-10px) scale(.96)}
+  }
+  .reveal-card.goldenboot-reveal-enter{
+    animation:goldenBootCardEnter 1.1s cubic-bezier(.12,.82,.17,1);
+  }
+  @keyframes goldenBootCardEnter{
+    0%{opacity:0;transform:scale(.58) rotateX(16deg);filter:brightness(2.4) blur(8px)}
+    26%{opacity:1;transform:scale(1.09) rotateX(0deg);filter:brightness(1.52) blur(0)}
+    60%{transform:scale(.985);filter:brightness(1.10)}
+    100%{transform:scale(1);filter:brightness(1)}
+  }
+
+  .tier-goldenboot{
+    position:relative;
+    overflow:hidden;
+    border-color:#8df1d5 !important;
+    color:#dcfff5 !important;
+    background:
+      linear-gradient(140deg,#08251f 0%,#105143 28%,#1b8068 48%,#0d493b 70%,#061c18 100%) !important;
+    box-shadow:
+      0 0 0 1px rgba(141,241,213,.30),
+      0 0 28px rgba(64,221,180,.22),
+      0 18px 42px rgba(0,0,0,.40) !important;
+  }
+  .tier-goldenboot::after{
+    content:"";
+    position:absolute;
+    inset:-55%;
+    pointer-events:none;
+    background:linear-gradient(
+      110deg,
+      transparent 39%,
+      rgba(255,255,255,0) 43%,
+      rgba(206,255,243,.16) 47%,
+      rgba(108,240,206,.36) 50%,
+      rgba(225,255,247,.18) 53%,
+      rgba(255,255,255,0) 58%,
+      transparent 62%
+    );
+    transform:translateX(-34%) rotate(7deg);
+    animation:goldenBootShimmer 3s ease-in-out infinite;
+  }
+  @keyframes goldenBootShimmer{
+    0%,22%{transform:translateX(-38%) rotate(7deg);opacity:.42}
+    48%{opacity:.88}
+    80%,100%{transform:translateX(38%) rotate(7deg);opacity:.45}
+  }
+  .tier-goldenboot > *{position:relative;z-index:1}
+  .tier-goldenboot .reveal-name,
+  .tier-goldenboot .reveal-nation,
+  .tier-goldenboot .reveal-tenure,
+  .tier-goldenboot .reveal-note{color:#dcfff5 !important}
+  .tier-goldenboot .reveal-ovr{
+    background:linear-gradient(145deg,#c9fff1,#77e4c7 52%,#29977b);
+    color:#06241c;
+    box-shadow:0 9px 24px rgba(55,193,156,.30);
+  }
+  .tier-goldenboot .drag-instruction{
+    color:#d7fff4;
+    background:rgba(116,243,208,.08);
+    border-color:rgba(116,243,208,.18);
+  }
+  .player-node.tier-goldenboot{
+    color:#dcfff5 !important;
+    background:linear-gradient(135deg,#08251f,#115443 44%,#0b392f 100%) !important;
+    border-color:#8df1d5 !important;
+    box-shadow:0 0 0 1px rgba(141,241,213,.28),0 0 20px rgba(64,221,180,.18),0 10px 24px rgba(0,0,0,.30) !important;
+  }
+  .player-node.tier-goldenboot .slot-label,
+  .player-node.tier-goldenboot .name,
+  .player-node.tier-goldenboot .meta{color:#dcfff5 !important}
+  .ovr-goldenboot-label{
+    margin-top:6px;
+    padding:3px 8px;
+    border-radius:999px;
+    background:rgba(4,39,31,.22);
+    border:1px solid rgba(4,39,31,.22);
+    color:#e7fff8;
+    font-size:9px;
+    font-weight:950;
+    letter-spacing:.75px;
+    line-height:1;
+    white-space:nowrap;
+  }
+  .goldenboot-chip-small{
+    flex:0 0 auto;
+    padding:2px 5px;
+    border-radius:999px;
+    background:rgba(141,241,213,.10);
+    border:1px solid rgba(141,241,213,.18);
+    color:#d0fff2;
+    font-size:7px;
+    font-weight:950;
+    letter-spacing:.5px;
+    line-height:1;
+    white-space:nowrap;
+  }
+  .slot.tier-goldenboot b,.slot.tier-goldenboot span,.slot.tier-goldenboot .sub{color:#dcfff5 !important}
+
+  .toty-reveal-flash{
+    position:fixed;
+    inset:0;
+    z-index:9997;
+    pointer-events:none;
+    background:
+      radial-gradient(circle at 50% 42%,rgba(255,220,112,.90) 0 4%,rgba(188,138,38,.42) 15%,rgba(20,16,7,.18) 35%,rgba(0,0,0,0) 62%);
+    opacity:0;
+    animation:totyRevealFlash 1s ease-out forwards;
+  }
+  @keyframes totyRevealFlash{
+    0%{opacity:0}
+    12%{opacity:1}
+    38%{opacity:.62}
+    100%{opacity:0}
+  }
+  .toty-reveal-rays{
+    position:fixed;
+    left:50%;
+    top:44%;
+    width:620px;
+    height:620px;
+    z-index:9996;
+    pointer-events:none;
+    transform:translate(-50%,-50%) scale(.24) rotate(-12deg);
+    opacity:0;
+    background:
+      repeating-conic-gradient(
+        from 0deg,
+        rgba(246,211,114,.72) 0deg 3deg,
+        rgba(246,211,114,.12) 3deg 9deg,
+        transparent 9deg 17deg
+      );
+    -webkit-mask:radial-gradient(circle,transparent 0 9%,#000 21%,transparent 69%);
+    mask:radial-gradient(circle,transparent 0 9%,#000 21%,transparent 69%);
+    animation:totyRevealRays 1.3s cubic-bezier(.12,.7,.16,1) forwards;
+  }
+  @keyframes totyRevealRays{
+    0%{opacity:0;transform:translate(-50%,-50%) scale(.22) rotate(-12deg)}
+    18%{opacity:.9}
+    62%{opacity:.42}
+    100%{opacity:0;transform:translate(-50%,-50%) scale(1.28) rotate(20deg)}
+  }
+  .toty-reveal-title{
+    position:fixed;
+    left:50%;
+    top:21%;
+    z-index:9998;
+    pointer-events:none;
+    transform:translate(-50%,-10px) scale(.72);
+    opacity:0;
+    color:#f4d889;
+    font-size:34px;
+    line-height:1;
+    font-weight:1000;
+    letter-spacing:5px;
+    text-shadow:
+      0 0 8px rgba(244,216,137,.95),
+      0 0 22px rgba(216,177,79,.72),
+      0 0 42px rgba(145,101,24,.5);
+    animation:totyRevealTitle 1.45s cubic-bezier(.18,.82,.21,1) forwards;
+  }
+  @keyframes totyRevealTitle{
+    0%{opacity:0;transform:translate(-50%,18px) scale(.62);filter:blur(7px)}
+    18%{opacity:1;transform:translate(-50%,0) scale(1.08);filter:blur(0)}
+    48%{opacity:1;transform:translate(-50%,0) scale(1)}
+    100%{opacity:0;transform:translate(-50%,-10px) scale(.96)}
+  }
+  .reveal-card.toty-reveal-enter{
+    animation:totyCardEnter 1.08s cubic-bezier(.12,.82,.17,1);
+  }
+  @keyframes totyCardEnter{
+    0%{opacity:0;transform:scale(.60) rotateX(16deg);filter:brightness(2.2) saturate(1.25) blur(7px)}
+    27%{opacity:1;transform:scale(1.08) rotateX(0deg);filter:brightness(1.48) saturate(1.18) blur(0)}
+    60%{transform:scale(.985);filter:brightness(1.10)}
+    100%{transform:scale(1);filter:brightness(1)}
+  }
+
+  .tier-toty{
+    position:relative;
+    overflow:hidden;
+    border-color:#d8b14f !important;
+    color:#f6d884 !important;
+    background:
+      linear-gradient(140deg,
+        rgba(9,11,16,.99) 0%,
+        rgba(18,20,27,.99) 34%,
+        rgba(11,13,18,.99) 67%,
+        rgba(5,6,9,.99) 100%) !important;
+    box-shadow:
+      0 0 0 1px rgba(216,177,79,.32),
+      0 0 24px rgba(216,177,79,.18),
+      0 18px 42px rgba(0,0,0,.42) !important;
+  }
+  .tier-toty::after{
+    content:"";
+    position:absolute;
+    inset:-56%;
+    pointer-events:none;
+    background:linear-gradient(
+      112deg,
+      transparent 38%,
+      rgba(255,255,255,0) 43%,
+      rgba(255,231,158,.12) 47%,
+      rgba(216,177,79,.28) 50%,
+      rgba(255,241,195,.14) 53%,
+      rgba(255,255,255,0) 58%,
+      transparent 63%
+    );
+    transform:translateX(-34%) rotate(7deg);
+    animation:totyShimmer 3s ease-in-out infinite;
+  }
+  @keyframes totyShimmer{
+    0%,22%{transform:translateX(-38%) rotate(7deg);opacity:.42}
+    48%{opacity:.88}
+    80%,100%{transform:translateX(38%) rotate(7deg);opacity:.46}
+  }
+  .tier-toty > *{position:relative;z-index:1}
+  .tier-toty .reveal-name,
+  .tier-toty .reveal-nation,
+  .tier-toty .reveal-tenure,
+  .tier-toty .reveal-note{color:#f7dc8f !important}
+  .tier-toty .reveal-ovr{
+    background:linear-gradient(145deg,#c9a24d,#f1da98 54%,#8a6a1d);
+    color:#17130a;
+    box-shadow:0 9px 24px rgba(186,145,47,.26);
+  }
+  .tier-toty .drag-instruction{
+    color:#f3d27a;
+    background:rgba(216,177,79,.08);
+    border-color:rgba(216,177,79,.18);
+  }
+  .player-node.tier-toty{
+    color:#f7dc8f !important;
+    background:
+      linear-gradient(135deg,#0b0c11,#171a22 40%,#0e1016 100%) !important;
+    border-color:#d8b14f !important;
+    box-shadow:0 0 0 1px rgba(216,177,79,.30),0 0 20px rgba(216,177,79,.16),0 10px 24px rgba(0,0,0,.3) !important;
+  }
+  .player-node.tier-toty .slot-label,
+  .player-node.tier-toty .name,
+  .player-node.tier-toty .meta{color:#f7dc8f !important}
+  .ovr-toty-label{
+    margin-top:6px;
+    padding:3px 8px;
+    border-radius:999px;
+    background:rgba(18,14,5,.28);
+    border:1px solid rgba(18,14,5,.24);
+    color:#fff0ba;
+    font-size:9px;
+    font-weight:950;
+    letter-spacing:.8px;
+    line-height:1;
+    white-space:nowrap;
+  }
+  .tier-toty .ovr-toty-label{
+    background:rgba(17,13,5,.34);
+    border-color:rgba(17,13,5,.24);
+    color:#fff0ba;
+  }
+  .toty-chip-small{
+    flex:0 0 auto;
+    padding:2px 5px;
+    border-radius:999px;
+    background:rgba(216,177,79,.12);
+    border:1px solid rgba(216,177,79,.20);
+    color:#f4d889;
+    font-size:7px;
+    font-weight:950;
+    letter-spacing:.55px;
+    line-height:1;
+    white-space:nowrap;
+  }
+  .slot.tier-toty b,.slot.tier-toty span,.slot.tier-toty .sub{color:#f7dc8f !important}
+
+  .tier-platinum{
+    border-color:#e9f3ff !important;
+    background:
+      linear-gradient(135deg,
+        #4f6f9f 0%,
+        #6c8fbe 22%,
+        #9db8db 46%,
+        #7898c3 70%,
+        #526d98 100%) !important;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.22),
+      0 0 24px rgba(170,205,245,.24),
+      0 14px 30px rgba(0,0,0,.28) !important;
+  }
+  .tier-gold{
+    border-color:#e8c35b !important;
+    background:linear-gradient(160deg,#6a5422,#3b321c 50%,#241f15) !important;
+    box-shadow:0 0 0 1px rgba(255,231,155,.14),0 0 24px rgba(232,195,91,.18),0 16px 36px rgba(0,0,0,.30) !important;
+  }
+  .tier-silver{
+    border-color:#4d6fae !important;
+    background:linear-gradient(160deg,#203f80,#172d5a 48%,#101b34) !important;
+    box-shadow:0 0 0 1px rgba(117,151,218,.14),0 0 18px rgba(51,91,166,.14),0 14px 30px rgba(0,0,0,.28) !important;
+  }
+  .tier-base{
+    border-color:#c3ccd9 !important;
+    background:linear-gradient(160deg,#4b5667,#333b48 52%,#222832) !important;
+    box-shadow:0 0 0 1px rgba(255,255,255,.12),0 0 18px rgba(205,214,226,.12),0 14px 30px rgba(0,0,0,.28) !important;
+  }
+  .player-node.tier-platinum .slot-label,.player-node.tier-platinum .meta{color:#f0fbff}
+  .player-node.tier-gold .slot-label,.player-node.tier-gold .meta{color:#ffe8a0}
+  .player-node.tier-silver .slot-label,.player-node.tier-silver .meta{color:#c8d8ff}
+  .player-node.tier-base .slot-label,.player-node.tier-base .meta{color:#e3e8f0}
+
+  .reveal-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+  .reveal-nation{font-size:12px;color:#bfd0f6;font-weight:800;margin-bottom:5px;line-height:1.2}
+  .reveal-name{font-size:25px;font-weight:950;line-height:1.05;letter-spacing:-.7px}
+  .reveal-tenure{font-size:12px;color:#9cafda;margin-top:6px}.reveal-stat span{font-size:10px;color:#aab9da}
+  .reveal-note{text-align:center;margin-top:12px;font-size:12px;color:#cbd8f5}
+  .position-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+  .position-chip{padding:5px 8px;border-radius:999px;background:rgba(9,20,40,.28);border:1px solid rgba(255,255,255,.16);font-size:10px;font-weight:900;letter-spacing:.5px}
+  .drag-ready{cursor:grab;user-select:none}
+  .drag-ready:active{cursor:grabbing}
+  .drop-valid{outline:3px solid rgba(109,226,162,.8)!important;box-shadow:0 0 22px rgba(109,226,162,.42)!important}
+  .drop-invalid{opacity:.42}
+  .player-node.dragging{opacity:.45}
+  .drag-instruction{margin-top:12px;padding:10px 12px;border-radius:14px;background:rgba(104,144,226,.12);border:1px solid rgba(121,161,241,.28);font-size:12px;color:#d6e2ff;text-align:center;font-weight:800}
+  .players{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .player-card{
+    position:relative;overflow:hidden;min-height:180px;cursor:pointer;border-radius:22px;
+    border:1px solid rgba(103,134,205,.55);
+    background:
+      radial-gradient(circle at top right,rgba(255,255,255,.16),transparent 25%),
+      linear-gradient(160deg,#1b346a 0,#15284f 42%,#101b34 100%);
+    padding:14px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 10px 26px rgba(0,0,0,.22);
+    transition:.18s transform,.18s box-shadow,.18s border-color;
+  }
+  .player-card:before{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(135deg,rgba(255,255,255,.1),transparent 32%,transparent 65%,rgba(255,255,255,.06));
+    pointer-events:none;
+  }
+  .player-card:hover{transform:translateY(-3px) scale(1.01);box-shadow:0 18px 34px rgba(0,0,0,.32);border-color:#9cb8ff}
+  .player-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .ovr-badge{
+    width:62px;height:62px;border-radius:18px;display:flex;flex-direction:column;justify-content:center;align-items:center;
+    background:linear-gradient(180deg,#fff2cb,#f0c65f);
+    color:#1a2140;font-weight:900;box-shadow:0 8px 20px rgba(244,210,123,.28);
+    flex:0 0 auto;
+  }
+  .ovr-badge .n{font-size:28px;line-height:1}
+  .ovr-badge .t{font-size:10px;letter-spacing:1px;margin-top:2px}
+  .name-wrap{min-width:0}
+  .player-name{font-size:20px;font-weight:900;line-height:1.05;margin:0 0 8px;letter-spacing:-.4px}
+  .mini-tags{display:flex;gap:6px;flex-wrap:wrap}
+  .mini-tag{font-size:11px;padding:5px 8px;border-radius:999px;background:#243b6e;border:1px solid rgba(255,255,255,.12);color:#dfe8ff}
+  .season-chip{font-size:11px;padding:5px 8px;border-radius:999px;background:#162746;color:#9fb7ef;border:1px solid rgba(255,255,255,.08)}
+  .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+  .stat-box{background:rgba(7,14,28,.34);border:1px solid rgba(255,255,255,.08);padding:9px;border-radius:14px;text-align:center}
+  .stat-box strong{display:block;font-size:19px}
+  .stat-box span{font-size:10px;color:#a5b4d7}
+  .pick-hint{margin-top:12px;font-size:12px;color:#bed0ff;opacity:.84;font-weight:700}
+
+  .xi-head{
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    align-items:center;
+    gap:12px;
+  }
+  .xi-title-wrap{min-width:0}
+  .xi-manager-slot{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:160px;
+    min-height:64px;
+    padding:8px 11px;
+    border-radius:14px;
+    border:1px dashed #425a8d;
+    background:linear-gradient(145deg,#111d37,#0c162b);
+    box-shadow:0 8px 20px rgba(0,0,0,.18);
+    text-align:center;
+  }
+  .xi-manager-slot.show{
+    border-style:solid;
+    border-color:#d4b65f;
+    background:linear-gradient(145deg,#4a3a16,#2d2410);
+    box-shadow:0 8px 20px rgba(0,0,0,.22);
+  }
+  .xi-manager-slot.drop-ready{
+    border-style:solid;
+    border-color:#72e0a4;
+    box-shadow:0 0 0 2px rgba(114,224,164,.18),0 0 22px rgba(114,224,164,.18);
+  }
+  .manager-reveal-card.drag-ready{cursor:grab}
+  .manager-reveal-card.drag-ready:active{cursor:grabbing}
+  .xi-manager-slot .manager-mini-label{
+    font-size:9px;
+    color:#f1d984;
+    font-weight:900;
+    letter-spacing:.8px;
+    margin-bottom:3px;
+  }
+  .xi-manager-slot .manager-mini-name{
+    font-size:12px;
+    color:#fff6d9;
+    font-weight:950;
+    line-height:1.15;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .xi-manager-slot .manager-mini-meta{
+    margin-top:3px;
+    font-size:10px;
+    color:#e9cf7c;
+    font-weight:850;
+  }
+  .xi-manager-slot:not(.show) .manager-mini-label{color:#7589b3}
+  .xi-manager-slot:not(.show) .manager-mini-name{color:#7182a8}
+  .xi-manager-slot:not(.show) .manager-mini-meta{color:#536588}
+  .xi-manager-slot .manager-mini-tenure{
+    margin-top:2px;
+    font-size:9px;
+    color:#d9c57d;
+    font-weight:750;
+    line-height:1.2;
+  }
+  .xi-manager-slot:not(.show) .manager-mini-tenure{color:#536588}
+
+  .pitch{
+    position:relative;height:530px;margin-top:12px;border-radius:22px;overflow:hidden;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0)),
+      repeating-linear-gradient(180deg,#113b28 0,#113b28 44px,#0f3523 44px,#0f3523 88px);
+    border:1px solid #2b5f4d;
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.03);
+  }
+  .pitch::before{content:"";position:absolute;inset:14px;border:2px solid rgba(255,255,255,.28);border-radius:12px}
+  
+  .halfline{position:absolute;left:14px;right:14px;top:50%;border-top:2px solid rgba(255,255,255,.23)}
+  .box{position:absolute;left:23%;right:23%;height:72px;border:2px solid rgba(255,255,255,.22)}
+  .box.top{top:14px;border-bottom:none;border-radius:0 0 10px 10px}
+  .box.bottom{bottom:14px;border-top:none;border-radius:10px 10px 0 0}
+  .goal{position:absolute;left:37%;right:37%;height:20px;border:2px solid rgba(255,255,255,.18)}
+  .goal.top{top:14px;border-bottom:none;border-radius:0 0 8px 8px}
+  .goal.bottom{bottom:14px;border-top:none;border-radius:8px 8px 0 0}
+  .player-node{position:absolute;transform:translate(-50%,-50%);width:126px;height:78px;padding:8px 8px 7px;border-radius:16px;background:rgba(10,20,36,.78);border:1px solid rgba(255,255,255,.14);text-align:center;backdrop-filter: blur(4px);overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start}
+  .player-node.empty{background:rgba(14,24,42,.45);border-style:dashed}
+  .player-node .slot-label{font-size:10px;color:#bdd2ff;margin-bottom:0;font-weight:800;letter-spacing:.35px;line-height:1}
+  .player-node .name{font-size:11px;line-height:1.2;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;margin-top:3px}
+  .player-node .meta{font-size:10px;color:#aab8d6;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%}
+  .player-node .meta strong{font-weight:900;color:inherit}
+
+  .squad{display:none;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:14px}
+  .slot{background:#0b1326;border:1px dashed #344467;border-radius:14px;padding:11px;min-height:72px}
+  .slot b{display:block;font-size:13px;color:#a8b6d8;margin-bottom:5px}
+  .slot span{font-size:14px}
+  .slot .sub{margin-top:6px;font-size:14px;color:#aab8d6}
+  .slot .sub strong{font-weight:900;color:inherit}
+  .filled{border-style:solid;background:#111c36}
+
+  .slot.tier-prime b,.slot.tier-prime span,.slot.tier-prime .sub{color:#17213a !important}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+  .stat{background:#0b1326;border:1px solid var(--line);border-radius:14px;padding:11px;text-align:center}
+  .stat strong{display:block;font-size:22px}
+  .stat span{font-size:11px;color:var(--muted)}
+  .stat.stat-ovr{background:#ffffff;border-color:#ffffff;color:#13264f}
+  .stat.stat-ovr strong{color:#13264f}
+  .stat.stat-ovr span{color:#13264f}
+
+  .roulette-actions{align-items:center}
+  .reset-align-right{margin-left:auto}
+  .final-sim-btn{
+    display:none;
+    width:100%;
+    margin-top:12px;
+    background:#ffffff !important;
+    color:#0d1730 !important;
+    border:1px solid rgba(255,255,255,.95) !important;
+    font-weight:950;
+    box-shadow:0 10px 26px rgba(255,255,255,.12);
+  }
+  .final-sim-btn:hover{
+    background:#eef3ff !important;
+    color:#0d1730 !important;
+  }
+
+  .formation-modal{
+    position:fixed;
+    inset:0;
+    z-index:10000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    background:rgba(4,9,20,.78);
+    backdrop-filter:blur(10px);
+  }
+  .formation-modal.show{display:flex}
+  .formation-modal-card{
+    width:min(560px,92vw);
+    padding:28px;
+    border-radius:24px;
+    border:1px solid #31466f;
+    background:
+      radial-gradient(circle at top right,rgba(85,126,210,.18),transparent 34%),
+      linear-gradient(145deg,#142241,#0f1930);
+    box-shadow:0 26px 80px rgba(0,0,0,.5);
+    text-align:center;
+  }
+  .formation-modal-kicker{
+    color:#86a8ec;
+    font-size:11px;
+    font-weight:950;
+    letter-spacing:1.8px;
+    margin-bottom:8px;
+  }
+  .formation-modal-card h2{margin:0 0 8px;font-size:24px}
+  .formation-modal-sub{color:#91a3c7;font-size:13px;margin-bottom:14px}
+  .formation-disclaimer{
+    margin:0 0 18px;
+    padding:13px 14px;
+    border:1px solid rgba(126,155,214,.24);
+    border-radius:14px;
+    background:rgba(8,16,32,.48);
+    text-align:left;
+  }
+  .formation-disclaimer strong{
+    display:block;
+    margin-bottom:6px;
+    color:#d9e5ff;
+    font-size:12px;
+    letter-spacing:.3px;
+  }
+  .formation-disclaimer p{
+    margin:3px 0;
+    color:#98a9cb;
+    font-size:11px;
+    line-height:1.55;
+  }
+  .formation-buttons{display:flex;gap:10px;flex-wrap:wrap}
+  .formation-btn{flex:1 1 120px;padding:13px 14px;border-radius:14px;border:1px solid #344a78;background:#101a31;color:#dfe8fb;font-weight:900;letter-spacing:.2px;cursor:pointer;transition:.18s ease}
+  .formation-btn:hover{transform:translateY(-1px);border-color:#4f6ca9;background:#162546}
+  .formation-btn.active{background:linear-gradient(135deg,#25467e,#172a4e);border-color:#83a5e5;color:#fff;box-shadow:0 8px 22px rgba(37,70,126,.28)}
+
+  .result{margin-top:15px;background:#0b1326;border:1px solid var(--line);border-radius:18px;padding:16px}
+  #finalSimBtn + #result{margin-top:12px}
+  .result h2{margin:0 0 6px}
+  .result .big{font-size:40px;font-weight:900;letter-spacing:-1px}
+  .table{width:100%;border-collapse:collapse;margin-top:10px}
+  .table td{padding:7px 4px;border-bottom:1px solid #202b48;font-size:14px}
+  .table td:last-child{text-align:right;font-weight:800}
+
+  .season-sim-shell{display:flex;flex-direction:column;gap:12px}
+  .season-sim-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+  .season-sim-title{font-size:18px;font-weight:1000;color:#fff}
+  .season-sim-sub{font-size:11px;color:#7f92bd;margin-top:3px}
+  .season-sim-teamovr{
+    flex:0 0 auto;padding:7px 10px;border-radius:12px;
+    background:#111d38;border:1px solid #26375f;color:#cfdbf5;
+    font-size:11px;font-weight:900
+  }
+  .season-sim-teamovr strong{color:#fff;font-size:16px;margin-left:5px}
+
+  .sim-current{
+    position:relative;overflow:hidden;border:1px solid #324a7c;border-radius:18px;
+    background:linear-gradient(145deg,#13213f,#0d172d 68%,#0a1225);
+    padding:18px;min-height:122px;box-shadow:0 14px 30px rgba(0,0,0,.24)
+  }
+  .sim-round-line{display:flex;align-items:center;justify-content:space-between;gap:10px;position:relative;z-index:1}
+  .sim-round-badge{
+    display:inline-flex;align-items:center;justify-content:center;padding:5px 9px;border-radius:999px;
+    background:#24447c;border:1px solid #3f66a5;color:#eaf2ff;font-size:10px;font-weight:1000;letter-spacing:.5px
+  }
+  .sim-date{font-size:10px;color:#8ba0ca}
+  .sim-matchup{position:relative;z-index:1;margin-top:13px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}
+  .sim-team{text-align:center}
+  .sim-team-name{font-size:16px;font-weight:1000;color:#fff;line-height:1.15}
+  .sim-team-meta{font-size:10px;color:#8fa4ce;margin-top:5px}
+  .sim-versus{font-size:11px;font-weight:1000;color:#59709f}
+  .sim-live-result{position:relative;z-index:1;margin-top:14px;text-align:center;font-size:23px;font-weight:1000;letter-spacing:1px}
+  .sim-live-result.win{color:#7af0b1}
+  .sim-live-result.draw{color:#f5d77d}
+  .sim-live-result.loss{color:#ff8c95}
+  .sim-live-result.wait{color:#8092b7;font-size:13px;letter-spacing:.2px}
+  .sim-scoreboard{
+    position:relative;z-index:1;margin-top:14px;
+    display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px
+  }
+  .sim-score-team{font-size:13px;font-weight:950;color:#dbe7fb;text-align:center;min-width:0}
+  .sim-score{
+    min-width:92px;text-align:center;font-size:34px;font-weight:1000;letter-spacing:2px;color:#fff;
+    padding:6px 12px;border-radius:14px;background:#081226;border:1px solid #2c4372;
+    box-shadow:inset 0 0 22px rgba(69,105,168,.12)
+  }
+  .sim-clock-row{position:relative;z-index:1;margin-top:8px;text-align:center}
+  .sim-clock{
+    display:inline-flex;align-items:center;justify-content:center;min-width:54px;
+    padding:4px 8px;border-radius:999px;background:#172745;border:1px solid #304a79;
+    color:#9db3de;font-size:10px;font-weight:1000
+  }
+  .sim-event{
+    position:relative;z-index:1;height:18px;margin-top:7px;text-align:center;
+    color:#86efb8;font-size:11px;font-weight:950;letter-spacing:.2px
+  }
+  .sim-score-pulse{animation:simScorePulse .34s ease-out}
+  @keyframes simScorePulse{0%{transform:scale(1)}45%{transform:scale(1.17)}100%{transform:scale(1)}}
+
+  .sim-history-title{font-size:11px;font-weight:900;color:#7e91bb;letter-spacing:.5px;margin-top:2px}
+  .sim-history{display:flex;flex-direction:column;gap:7px;max-height:520px;overflow:auto;padding-right:3px}
+  .sim-history-row{
+    display:grid;grid-template-columns:50px 1fr 86px;align-items:center;gap:10px;
+    padding:9px 11px;border-radius:12px;background:#0d172d;border:1px solid #1d2a49;
+    animation:simRowEnter .26s ease-out
+  }
+  @keyframes simRowEnter{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:translateY(0)}}
+  .sim-history-round{font-size:11px;font-weight:1000;color:#8196c2}
+  .sim-history-match{font-size:12px;font-weight:850;color:#dce7fb}
+  .sim-history-match small{display:block;margin-top:2px;font-size:9px;font-weight:700;color:#657aa5}
+  .sim-history-result{text-align:right;font-size:14px;font-weight:1000}
+  .sim-history-result.win{color:#72e8a8}
+  .sim-history-result.draw{color:#efd276}
+  .sim-history-result.loss{color:#fa838d}
+
+  .season-summary{
+    border-radius:18px;border:1px solid #314a7c;background:linear-gradient(145deg,#13213e,#0b1429);
+    padding:18px;text-align:center;animation:simSummaryEnter .5s ease-out
+  }
+  @keyframes simSummaryEnter{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+  .season-summary-kicker{font-size:10px;color:#8094bf;font-weight:900;letter-spacing:1px}
+  .season-summary-rank{font-size:48px;color:#fff;font-weight:1000;letter-spacing:-2px;margin-top:4px}
+  .season-summary-points{font-size:17px;color:#c6d4ef;font-weight:900}
+  .season-summary-record{font-size:12px;color:#7f93bd;margin-top:7px}
+
+  .season-review{
+    margin-top:14px;
+    border:1px solid #263b66;
+    border-radius:18px;
+    overflow:hidden;
+    background:#0a1429;
+  }
+  .season-review-head{
+    display:grid;
+    grid-template-columns:minmax(130px,1fr) 58px 50px 50px;
+    gap:8px;
+    align-items:center;
+    padding:10px 12px;
+    background:#12203b;
+    border-bottom:1px solid #263b66;
+    color:#7f95c0;
+    font-size:10px;
+    font-weight:950;
+    letter-spacing:.5px;
+  }
+  .season-review-head span:not(:first-child){text-align:center}
+  .season-review-list{display:flex;flex-direction:column}
+  .season-review-row{
+    display:grid;
+    grid-template-columns:minmax(130px,1fr) 58px 50px 50px;
+    gap:8px;
+    align-items:center;
+    padding:10px 12px;
+    border-bottom:1px solid #182744;
+  }
+  .season-review-row:last-child{border-bottom:0}
+  .season-review-player{min-width:0}
+  .season-review-name{
+    color:#eef4ff;
+    font-size:12px;
+    font-weight:950;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .season-review-pos{
+    margin-top:2px;
+    color:#687fa9;
+    font-size:9px;
+    font-weight:800;
+  }
+  .season-review-rating,
+  .season-review-ga{
+    text-align:center;
+    font-weight:1000;
+  }
+  .season-review-rating{color:#f4d77b;font-size:13px}
+  .season-review-ga{color:#d9e5fb;font-size:12px}
+
+  .game-credit{
+    margin-top:16px;
+    text-align:right;
+    color:#6f81aa;
+    font-size:11px;
+    line-height:1.65;
+  }
+  .game-credit strong{color:#9db1dc;font-weight:800}
+
+  .footer{margin-top:14px;color:#7381a8;font-size:12px}
+  @media(max-width:980px){.grid{grid-template-columns:1fr}.hero{align-items:flex-start;flex-direction:column}.players{grid-template-columns:1fr}}
+  @media(max-width:540px){.prepick-row{grid-template-columns:74px 1fr 82px;gap:8px}.prepick-status{min-width:82px}.prepick-tenure{text-align:right;margin-top:0;font-size:10px}.picked-badge{font-size:8px;padding:3px 5px}.player-node{width:104px;height:76px}.pitch{height:500px}.roulette-item strong{font-size:24px}.xi-head{grid-template-columns:1fr auto}.xi-manager-slot{grid-row:2;grid-column:1 / -1;justify-self:center}.xi-head>#formationLabel{grid-column:2;grid-row:1}}
+
+  .tier-hero{
+    background:
+      radial-gradient(circle at 18% 20%, rgba(255,255,255,.92), rgba(255,255,255,0) 28%),
+      linear-gradient(150deg, #eefbff 0%, #83CBEB 42%, #22789d 100%);
+    border-color:rgba(109, 193, 226, .48);
+    box-shadow:0 10px 24px rgba(73,149,190,.28);
+    color:#0f2d3f;
+  }
+  .tier-hero .reveal-ovr{
+    background:linear-gradient(145deg, #0d4561, #156082 58%, #0a3347) !important;
+    color:#fff !important;
+    box-shadow:0 9px 24px rgba(21,96,130,.34) !important;
+  }
+  .ovr-hero-label{
+    margin-top:6px;
+    padding:3px 8px;
+    border-radius:999px;
+    background:rgba(10,51,71,.18);
+    border:1px solid rgba(10,51,71,.14);
+    color:#083148;
+    font-size:9px;
+    font-weight:950;
+    letter-spacing:.75px;
+    line-height:1;
+    white-space:nowrap;
+  }
+  .hero-chip-small{
+    flex:0 0 auto;
+    padding:2px 5px;
+    border-radius:999px;
+    background:rgba(9,69,97,.12);
+    border:1px solid rgba(9,69,97,.16);
+    color:#0d4561;
+    font-size:7px;
+    font-weight:950;
+    letter-spacing:.52px;
+    line-height:1;
+    white-space:nowrap;
+  }
+  .slot.tier-hero b,.slot.tier-hero span,.slot.tier-hero .sub{color:#0f2d3f !important}
+
+  .hero-reveal-flash{
+    position:fixed; inset:0; z-index:9997; pointer-events:none;
+    background:radial-gradient(circle at 50% 42%, rgba(255,255,255,.90) 0 5%, rgba(131,203,235,.62) 15%, rgba(29,114,151,.28) 36%, rgba(0,0,0,0) 62%);
+    opacity:0; animation:heroRevealFlash .96s ease-out forwards;
+  }
+  @keyframes heroRevealFlash{0%{opacity:0} 12%{opacity:1} 38%{opacity:.62} 100%{opacity:0}}
+  .hero-reveal-burst{
+    position:fixed; left:50%; top:44%; width:620px; height:620px; z-index:9996; pointer-events:none;
+    transform:translate(-50%,-50%) scale(.26) rotate(-8deg); opacity:0;
+    background:repeating-conic-gradient(from 0deg, rgba(235,250,255,.92) 0deg 4deg, rgba(131,203,235,.14) 4deg 10deg, transparent 10deg 18deg, rgba(36,120,157,.72) 18deg 20deg, transparent 20deg 30deg);
+    -webkit-mask:radial-gradient(circle, transparent 0 10%, #000 18%, transparent 68%);
+    mask:radial-gradient(circle, transparent 0 10%, #000 18%, transparent 68%);
+    animation:heroRevealBurst 1.26s cubic-bezier(.12,.7,.16,1) forwards;
+  }
+  @keyframes heroRevealBurst{0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(-12deg)} 18%{opacity:1} 62%{opacity:.48} 100%{opacity:0;transform:translate(-50%,-50%) scale(1.18) rotate(18deg)}}
+  .hero-reveal-title{position:fixed; left:50%; top:21%; z-index:9998; pointer-events:none; transform:translate(-50%,0) scale(.72); opacity:0; color:#dff7ff; font-size:34px; line-height:1; font-weight:1000; letter-spacing:4px; text-shadow:0 0 18px rgba(131,203,235,.85), 0 0 40px rgba(31,121,163,.42); animation:heroRevealTitle 1.32s cubic-bezier(.16,.84,.22,1) forwards;}
+  @keyframes heroRevealTitle{0%{opacity:0;transform:translate(-50%,-8px) scale(.55)} 20%{opacity:1;transform:translate(-50%,0) scale(1.02)} 72%{opacity:1} 100%{opacity:0;transform:translate(-50%,6px) scale(.95)}}
+
+  .tier-winner{
+    background:
+      radial-gradient(circle at 18% 20%, rgba(255,255,255,.92), rgba(255,255,255,0) 26%),
+      linear-gradient(150deg, #fff7d8 0%, #FFC000 46%, #ff9c00 100%);
+    border-color:rgba(255, 194, 39, .52);
+    box-shadow:0 10px 24px rgba(255,164,0,.28);
+    color:#5a3900;
+  }
+  .tier-winner .reveal-ovr{
+    background:linear-gradient(145deg, #7a5300, #b97d00 58%, #5a3900) !important;
+    color:#fff8e0 !important;
+    box-shadow:0 9px 24px rgba(185,125,0,.34) !important;
+  }
+  .ovr-winner-label{
+    margin-top:6px;
+    padding:4px 8px;
+    min-width:96px;
+    border-radius:14px;
+    background:rgba(90,57,0,.28);
+    border:1px solid rgba(255,255,255,.18);
+    color:#ffffff;
+    font-size:9px;
+    font-weight:950;
+    letter-spacing:.72px;
+    line-height:1.08;
+    white-space:normal;
+    text-align:center;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:1px;
+  }
+  .winner-chip-small{
+    flex:0 0 auto; padding:2px 5px; border-radius:999px; background:rgba(90,57,0,.10); border:1px solid rgba(90,57,0,.14); color:#704700; font-size:7px; font-weight:950; letter-spacing:.52px; line-height:1; white-space:nowrap;
+  }
+  .slot.tier-winner b,.slot.tier-winner span,.slot.tier-winner .sub{color:#5a3900 !important}
+
+  .player-node.tier-hero .slot-label,
+  .player-node.tier-hero .name,
+  .player-node.tier-hero .meta,
+  .player-node.tier-hero .meta strong{
+    color:#0b2636 !important;
+    text-shadow:none !important;
+  }
+  .player-node.tier-winner .slot-label,
+  .player-node.tier-winner .name,
+  .player-node.tier-winner .meta,
+  .player-node.tier-winner .meta strong{
+    color:#4b2f00 !important;
+    text-shadow:none !important;
+  }
+
+  .winner-reveal-flash{position:fixed; inset:0; z-index:9997; pointer-events:none; background:radial-gradient(circle at 50% 42%, rgba(255,255,255,.92) 0 5%, rgba(255,192,0,.68) 16%, rgba(255,153,0,.28) 36%, rgba(0,0,0,0) 62%); opacity:0; animation:winnerRevealFlash .96s ease-out forwards;}
+  @keyframes winnerRevealFlash{0%{opacity:0} 12%{opacity:1} 38%{opacity:.64} 100%{opacity:0}}
+  .winner-reveal-crown{position:fixed; left:50%; top:43%; width:640px; height:640px; z-index:9996; pointer-events:none; transform:translate(-50%,-50%) scale(.24); opacity:0; background:repeating-conic-gradient(from 0deg, rgba(255,246,194,.90) 0deg 3deg, rgba(255,200,41,.28) 3deg 10deg, transparent 10deg 17deg); -webkit-mask:radial-gradient(circle, transparent 0 10%, #000 20%, transparent 66%); mask:radial-gradient(circle, transparent 0 10%, #000 20%, transparent 66%); filter:drop-shadow(0 0 10px rgba(255,192,0,.5)); animation:winnerRevealCrown 1.28s cubic-bezier(.12,.72,.16,1) forwards;}
+  @keyframes winnerRevealCrown{0%{opacity:0;transform:translate(-50%,-50%) scale(.18) rotate(-8deg)} 18%{opacity:1} 62%{opacity:.52} 100%{opacity:0;transform:translate(-50%,-50%) scale(1.15) rotate(10deg)}}
+  .winner-reveal-title{position:fixed; left:50%; top:20%; z-index:9998; pointer-events:none; transform:translate(-50%,0) scale(.68); opacity:0; color:#fff4c8; font-size:30px; line-height:1; font-weight:1000; letter-spacing:3px; text-shadow:0 0 16px rgba(255,192,0,.92), 0 0 34px rgba(255,153,0,.48); animation:winnerRevealTitle 1.34s cubic-bezier(.16,.84,.22,1) forwards;}
+  @keyframes winnerRevealTitle{0%{opacity:0;transform:translate(-50%,-8px) scale(.55)} 20%{opacity:1;transform:translate(-50%,0) scale(1.02)} 72%{opacity:1} 100%{opacity:0;transform:translate(-50%,6px) scale(.95)}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <div class="brand">
+      <h1>The Lilywhites 38</h1>
+      <p>토트넘 시즌 드래프트 비영리 팬게임 · v1.0</p>
+    </div>
+    <div class="badge">카드 드래프트 + 38경기 시뮬레이션</div>
+  </div>
+
+  <div id="formationModal" class="formation-modal show">
+    <div class="formation-modal-card">
+      <div class="formation-modal-kicker">THE LILYWHITES 38</div>
+      <h2>시작 포메이션 선택</h2>
+      <div class="formation-modal-sub">포메이션을 선택하면 바로 드래프트가 시작됩니다.</div>
+      <div class="formation-disclaimer">
+        <strong>안내</strong>
+        <p>이 게임은 토트넘 팬이 만든 비영리 팬메이드 게임입니다.</p>
+        <p>선수 및 감독의 OVR은 실제 공식 데이터가 아닌, 게임 밸런스를 위해 임의로 설정한 수치입니다.</p>
+      </div>
+      <div class="formation-buttons">
+        <button class="formation-btn" data-formation="4231">4-2-3-1</button>
+        <button class="formation-btn" data-formation="433">4-3-3</button>
+        <button class="formation-btn" data-formation="442">4-4-2</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <section class="card">
+      <div class="row roulette-actions">
+        <button id="drawBtn">시즌 룰렛 돌리기</button>
+        <button id="managerDrawBtn" class="secondary" disabled>감독 룰렛 돌리기</button>
+        <button id="rerollBtn" class="secondary" disabled>리롤 2회</button>
+        <button class="secondary reset-align-right" id="resetBtn">처음부터</button>
+      </div>
+      <button id="finalSimBtn" class="final-sim-btn">시즌 시뮬레이션 시작하기</button>
+      <div id="result" class="result" style="display:none"></div>
+
+      <div class="season">
+        <div>
+          <strong id="seasonName">시즌을 뽑아주세요</strong>
+          <small id="seasonInfo">룰렛을 돌려 시즌을 정한 뒤, 그 시즌 선수 1명을 선택합니다.</small>
+        </div>
+        <div id="pickCount">0 / 11</div>
+      </div>
+
+      <div class="roulette-box">
+        <div class="roulette-center-line"></div>
+        <div class="roulette-window-top"></div>
+        <div class="roulette-window-bottom"></div>
+        <div id="rouletteList" class="roulette-list"></div>
+      </div>
+      <div id="players" class="prepick-list"></div>
+      <div id="revealStage" class="reveal-stage"></div>
+
+    </section>
+
+    <aside class="card">
+      <div class="xi-head">
+        <div class="xi-title-wrap">
+          <h2 style="margin:0">MY SPURS XI</h2>
+        </div>
+        <div id="xiManagerSlot" class="xi-manager-slot">
+          <div>
+            <div class="manager-mini-label">MANAGER</div>
+            <div id="xiManagerName" class="manager-mini-name">감독 빈 자리</div>
+            <div id="xiManagerMeta" class="manager-mini-meta">OVR -</div>
+            <div id="xiManagerTenure" class="manager-mini-tenure">Tottenham -</div>
+          </div>
+        </div>
+        <div id="formationLabel" style="color:var(--muted);font-size:13px;text-align:right">4-2-3-1</div>
+      </div>
+
+      <div id="pitch" class="pitch">
+        <div class="halfline"></div>
+        <div class="box top"></div><div class="box bottom"></div>
+        <div class="goal top"></div><div class="goal bottom"></div>
+      </div>
+
+      <div id="squad" class="squad"></div>
+
+      <div class="stats">
+        <div class="stat"><strong id="atk">0</strong><span>ATT</span></div>
+        <div class="stat"><strong id="mid">0</strong><span>MID</span></div>
+        <div class="stat"><strong id="def">0</strong><span>DEF</span></div>
+        <div class="stat stat-ovr"><strong id="ovr">0</strong><span>OVR</span></div>
+      </div>
+
+      <div id="seasonPreview" class="season-preview empty">선택된 시즌 포스터가 여기에 표시됩니다.</div>
+
+      <button id="simBtn" style="display:none" style="width:100%;margin-top:14px" disabled>38경기 시뮬레이션</button>
+
+      <div class="game-credit">
+        <div>만든이 <strong>Chat GPT</strong></div>
+        <div>관리감독 <strong>웅이</strong></div>
+      </div>
+      <div class="footer">선수 OVR은 팬게임용 임의 수치이며 실제 공식 능력치가 아닙니다.</div>
+    </aside>
+  </div>
+</div>
+
+<div id="gameOverOverlay" class="gameover-overlay">
+  <div class="gameover-title">GAME OVER</div>
+  <div class="gameover-sub">솔 캠벨</div>
+  <button id="gameOverRestart" class="gameover-restart">처음부터 다시</button>
+</div>
+
+<script>
+const seasonPosterMap = {
+  "1992/93": null,
+  "1993/94": null,
+  "1994/95": null,
+  "1995/96": null,
+  "1996/97": null,
+  "1997/98": null,
+  "1998/99": null,
+  "1999/00": null,
+  "2000/01": null,
+  "2001/02": null,
+  "2002/03": null,
+  "2003/04": null,
+  "2004/05": null,
+  "2005/06": null,
+  "2006/07": null,
+  "2007/08": null,
+  "2008/09": null,
+  "2009/10": null,
+  "2010/11": null,
+  "2011/12": null,
+  "2012/13": null,
+  "2013/14": null,
+  "2014/15": null,
+  "2015/16": null,
+  "2016/17": null,
+  "2017/18": null,
+  "2018/19": null,
+  "2019/20": null,
+  "2020/21": null,
+  "2021/22": null,
+  "2022/23": null,
+  "2023/24": null,
+  "2024/25": null,
+  "2025/26": null
+};
+
+function clamp(v, min, max){ return Math.max(min, Math.min(max, Math.round(v))); }
+
+function makePlayer(name,pos,ovr){
+  return [name,pos,ovr];
+}
+
+function makeSeason(name, info, lineup, poster=null){
+  return {
+    name,
+    info,
+    poster,
+    players: lineup.map(([n,p,o])=>makePlayer(n,p,o))
+  };
+}
+
+const seasons = [
+  makeSeason("1992/93", "더그 리버모어·레이 클레멘스 · 리그 8위 · FA컵 4강", [["Erik Thorstvedt","GK",84],["Dean Austin","RB",76],["Gary Mabbutt","CB",82],["Neil Ruddock","CB",80],["Justin Edinburgh","LB",79],["Paul Allen","LW",77],["Gary Samways","CM",79],["Steve Sedgley","CM",78],["Nick Barmby","RW",80],["Darren Anderton","CAM",82],["Teddy Sheringham","ST",90]], seasonPosterMap["1992/93"]),
+  makeSeason("1993/94", "오시 아르딜레스 · 리그 15위 · 리그컵 8강", [["Erik Thorstvedt","GK",83],["Dean Austin","RB",76],["Sol Campbell","CB",79],["Colin Calderwood","CB",77],["Justin Edinburgh","LB",79],["Nick Barmby","LW",81],["Gary Samways","CM",79],["Jason Dozzell","CM",78],["Darren Anderton","RW",83],["Steve Sedgley","CAM",78],["Teddy Sheringham","ST",86]], seasonPosterMap["1993/94"]),
+  makeSeason("1994/95", "아르딜레스→게리 프랜시스 · 리그 7위 · FA컵 4강", [["Ian Walker","GK",82],["Dean Austin","RB",77],["Gary Mabbutt","CB",81],["Sol Campbell","CB",82],["Justin Edinburgh","LB",79],["Nick Barmby","LW",81],["Colin Calderwood","CM",77],["David Howells","CM",79],["Darren Anderton","RW",84],["Jurgen Klinsmann","CAM",90],["Teddy Sheringham","ST",87]], seasonPosterMap["1994/95"]),
+  makeSeason("1995/96", "게리 프랜시스 · 리그 8위 · 인터토토컵 조별리그", [["Ian Walker","GK",83],["Dean Austin","RB",77],["Gary Mabbutt","CB",80],["Sol Campbell","CB",83],["Chris Wilson","LB",74],["Ronny Rosenthal","LW",78],["Jason Dozzell","CM",77],["David Howells","CM",79],["Ruel Fox","RW",81],["Chris Armstrong","CAM",83],["Teddy Sheringham","ST",86]], seasonPosterMap["1995/96"]),
+  makeSeason("1996/97", "게리 프랜시스 · 리그 10위 · FA컵 32강", [["Ian Walker","GK",83],["Stephen Carr","RB",76],["Sol Campbell","CB",84],["Colin Calderwood","CB",76],["Justin Edinburgh","LB",78],["Chris Wilson","LW",74],["Allan Nielsen","CM",81],["David Howells","CM",78],["Andy Sinton","RW",77],["Steffen Iversen","CAM",79],["Teddy Sheringham","ST",85]], seasonPosterMap["1996/97"]),
+  makeSeason("1997/98", "게리 프랜시스→크리스천 그로스 · 리그 14위 · FA컵 16강", [["Ian Walker","GK",82],["Stephen Carr","RB",78],["Sol Campbell","CB",85],["Ramon Vega","CB",80],["Chris Wilson","LB",74],["David Ginola","LW",86],["Steffen Freund","CM",80],["Allan Nielsen","CM",81],["Ruel Fox","RW",79],["Jurgen Klinsmann","CAM",86],["Les Ferdinand","ST",84]], seasonPosterMap["1997/98"]),
+  makeSeason("1998/99", "조지 그레이엄 · 리그 11위 · 리그컵 우승", [["Ian Walker","GK",83],["Stephen Carr","RB",79],["Sol Campbell","CB",86],["Ramon Vega","CB",79],["Justin Edinburgh","LB",80],["David Ginola","LW",89],["Steffen Freund","CM",81],["Allan Nielsen","CM",82],["Darren Anderton","RW",85],["Chris Armstrong","CAM",80],["Steffen Iversen","ST",82]], seasonPosterMap["1998/99"]),
+  makeSeason("1999/00", "조지 그레이엄 · 리그 10위 · UEFA컵 2라운드", [["Ian Walker","GK",83],["Stephen Carr","RB",82],["Sol Campbell","CB",87],["Chris Perry","CB",78],["Mauricio Taricco","LB",78],["David Ginola","LW",86],["Steffen Freund","CM",80],["Tim Sherwood","CM",80],["Øyvind Leonhardsen","RW",79],["Steffen Iversen","CAM",84],["Les Ferdinand","ST",83]], seasonPosterMap["1999/00"]),
+  makeSeason("2000/01", "조지 그레이엄→글렌 호들 · 리그 12위 · FA컵 4강", [["Neil Sullivan","GK",80],["Stephen Carr","RB",84],["Sol Campbell","CB",88],["Chris Perry","CB",78],["Gary Doherty","LB",76],["Øyvind Leonhardsen","LW",79],["Stephen Clemence","CM",76],["Tim Sherwood","CM",79],["Darren Anderton","RW",81],["Sergiy Rebrov","CAM",81],["Les Ferdinand","ST",83]], seasonPosterMap["2000/01"]),
+  makeSeason("2001/02", "글렌 호들 · 리그 9위 · 리그컵 준우승", [["Neil Sullivan","GK",81],["Chris Perry","RB",78],["Dean Richards","CB",82],["Ledley King","CB",85],["Mauricio Taricco","LB",79],["Christian Ziege","LW",82],["Gus Poyet","CM",83],["Tim Sherwood","CM",79],["Darren Anderton","RW",81],["Teddy Sheringham","CAM",84],["Les Ferdinand","ST",82]], seasonPosterMap["2001/02"]),
+  makeSeason("2002/03", "글렌 호들 · 리그 10위 · 리그컵 16강", [["Kasey Keller","GK",82],["Stephen Carr","RB",84],["Dean Richards","CB",81],["Ledley King","CB",82],["Mauricio Taricco","LB",78],["Gus Poyet","LW",82],["Goran Bunjevcevic","CM",77],["Darren Anderton","CM",80],["Simon Davies","RW",80],["Teddy Sheringham","CAM",86],["Robbie Keane","ST",83]], seasonPosterMap["2002/03"]),
+  makeSeason("2003/04", "글렌 호들→데이비드 플리트 · 리그 14위 · 리그컵 8강", [["Kasey Keller","GK",82],["Stephen Carr","RB",82],["Dean Richards","CB",80],["Anthony Gardner","CB",77],["Mauricio Taricco","LB",77],["Rohan Ricketts","LW",78],["Ledley King","CM",84],["Stéphane Dalmat","CM",79],["Darren Anderton","RW",80],["Frederic Kanouté","CAM",84],["Robbie Keane","ST",83]], seasonPosterMap["2003/04"]),
+  makeSeason("2004/05", "자크 상티니→마르틴 욜 · 리그 9위 · FA컵 8강", [["Paul Robinson","GK",82],["Noé Pamarot","RB",77],["Noureddine Naybet","CB",79],["Ledley King","CB",85],["Erik Edman","LB",79],["Andy Reid","LW",78],["Michael Carrick","CM",83],["Pedro Mendes","CM",80],["Sean Davies","RW",77],["Robbie Keane","CAM",84],["Jermain Defoe","ST",84]], seasonPosterMap["2004/05"]),
+  makeSeason("2005/06", "마르틴 욜 · 리그 5위 · FA컵 32강", [["Paul Robinson","GK",83],["Paul Stalteri","RB",78],["Michael Dawson","CB",80],["Ledley King","CB",87],["Young-Pyo Lee","LB",79],["Edgar Davids","LW",84],["Michael Carrick","CM",84],["Jermaine Jenas","CM",80],["Aaron Lennon","RW",79],["Mido","CAM",83],["Robbie Keane","ST",84]], seasonPosterMap["2005/06"]),
+  makeSeason("2006/07", "마르틴 욜 · 리그 5위 · UEFA컵 8강", [["Paul Robinson","GK",82],["Pascal Chimbonda","RB",80],["Michael Dawson","CB",81],["Ledley King","CB",85],["Young-Pyo Lee","LB",79],["Steed Malbranque","LW",80],["Didier Zokora","CM",80],["Jermaine Jenas","CM",81],["Aaron Lennon","RW",81],["Dimitar Berbatov","CAM",88],["Robbie Keane","ST",83]], seasonPosterMap["2006/07"]),
+  makeSeason("2007/08", "마르틴 욜→후안데 라모스 · 리그 11위 · 리그컵 우승", [["Paul Robinson","GK",81],["Pascal Chimbonda","RB",79],["Michael Dawson","CB",82],["Younès Kaboul","CB",80],["Young-Pyo Lee","LB",81],["Steed Malbranque","LW",80],["Didier Zokora","CM",79],["Jermaine Jenas","CM",81],["Aaron Lennon","RW",82],["Dimitar Berbatov","CAM",87],["Robbie Keane","ST",85]], seasonPosterMap["2007/08"]),
+  makeSeason("2008/09", "후안데 라모스→해리 레드냅 · 리그 8위 · 리그컵 준우승", [["Heurelho Gomes","GK",80],["Vedran Ćorluka","RB",81],["Jonathan Woodgate","CB",83],["Ledley King","CB",84],["Benoît Assou-Ekotto","LB",80],["Luka Modrić","LW",84],["Didier Zokora","CM",78],["Jermaine Jenas","CM",80],["Aaron Lennon","RW",83],["Roman Pavlyuchenko","CAM",82],["Darren Bent","ST",81]], seasonPosterMap["2008/09"]),
+  makeSeason("2009/10", "해리 레드냅 · 리그 4위 · FA컵 4강", [["Heurelho Gomes","GK",82],["Vedran Ćorluka","RB",81],["Michael Dawson","CB",84],["Sébastien Bassong","CB",80],["Benoît Assou-Ekotto","LB",81],["Gareth Bale","LW",84],["Wilson Palacios","CM",80],["Tom Huddlestone","CM",81],["Aaron Lennon","RW",84],["Peter Crouch","CAM",84],["Jermain Defoe","ST",86]], seasonPosterMap["2009/10"]),
+  makeSeason("2010/11", "해리 레드냅 · 리그 5위 · 챔피언스리그 8강", [["Heurelho Gomes","GK",81],["Alan Hutton","RB",79],["Michael Dawson","CB",84],["William Gallas","CB",83],["Benoît Assou-Ekotto","LB",81],["Gareth Bale","LW",89],["Wilson Palacios","CM",79],["Luka Modrić","CM",86],["Aaron Lennon","RW",84],["Rafael van der Vaart","CAM",86],["Peter Crouch","ST",84]], seasonPosterMap["2010/11"]),
+  makeSeason("2011/12", "해리 레드냅 · 리그 4위 · FA컵 4강", [["Brad Friedel","GK",82],["Kyle Walker","RB",85],["Younès Kaboul","CB",81],["Ledley King","CB",83],["Benoît Assou-Ekotto","LB",82],["Gareth Bale","LW",90],["Scott Parker","CM",85],["Luka Modrić","CM",87],["Aaron Lennon","RW",85],["Rafael van der Vaart","CAM",85],["Emmanuel Adebayor","ST",84]], seasonPosterMap["2011/12"]),
+  makeSeason("2012/13", "안드레 빌라스보아스 · 리그 5위 · 유로파리그 8강", [["Hugo Lloris","GK",85],["Kyle Walker","RB",84],["Michael Dawson","CB",82],["Jan Vertonghen","CB",87],["Benoît Assou-Ekotto","LB",80],["Sandro","CM",82],["Mousa Dembélé","CM",85],["Aaron Lennon","RW",82],["Clint Dempsey","CAM",82],["Gareth Bale","LW",93],["Jermain Defoe","ST",85]], seasonPosterMap["2012/13"]),
+  makeSeason("2013/14", "빌라스보아스→팀 셔우드 · 리그 6위 · 유로파리그 16강", [["Hugo Lloris","GK",86],["Kyle Walker","RB",84],["Michael Dawson","CB",81],["Jan Vertonghen","CB",85],["Danny Rose","LB",81],["Paulinho","CM",81],["Mousa Dembélé","CM",84],["Aaron Lennon","RW",81],["Christian Eriksen","CAM",86],["Gylfi Sigurdsson","LW",81],["Roberto Soldado","ST",79]], seasonPosterMap["2013/14"]),
+  makeSeason("2014/15", "마우리시오 포체티노 · 리그 5위 · 리그컵 준우승", [["Hugo Lloris","GK",87],["Kyle Walker","RB",83],["Eric Dier","CB",80],["Jan Vertonghen","CB",85],["Danny Rose","LB",83],["Ryan Mason","CM",80],["Nabil Bentaleb","CM",79],["Erik Lamela","RW",82],["Christian Eriksen","CAM",87],["Nacer Chadli","LW",80],["Harry Kane","ST",90]], seasonPosterMap["2014/15"]),
+  makeSeason("2015/16", "마우리시오 포체티노 · 리그 3위 · 유로파리그 16강", [["Hugo Lloris","GK",87],["Kyle Walker","RB",85],["Toby Alderweireld","CB",90],["Jan Vertonghen","CB",87],["Danny Rose","LB",86],["Eric Dier","CM",83],["Mousa Dembélé","CM",87],["Erik Lamela","RW",84],["Dele Alli","CAM",89],["Christian Eriksen","LW",88],["Harry Kane","ST",91]], seasonPosterMap["2015/16"]),
+  makeSeason("2016/17", "마우리시오 포체티노 · 리그 2위 · FA컵 4강", [["Hugo Lloris","GK",88],["Kyle Walker","RB",87],["Toby Alderweireld","CB",90],["Jan Vertonghen","CB",89],["Ben Davies","LB",83],["Victor Wanyama","CM",84],["Eric Dier","CM",86],["Christian Eriksen","RW",90],["Dele Alli","CAM",90],["Heung-min Son","LW",90],["Harry Kane","ST",93]], seasonPosterMap["2016/17"]),
+  makeSeason("2017/18", "마우리시오 포체티노 · 리그 3위 · FA컵 4강", [["Hugo Lloris","GK",87],["Kieran Trippier","RB",84],["Davinson Sánchez","CB",83],["Jan Vertonghen","CB",90],["Ben Davies","LB",85],["Mousa Dembélé","CM",85],["Eric Dier","CM",83],["Christian Eriksen","RW",90],["Dele Alli","CAM",87],["Heung-min Son","LW",89],["Harry Kane","ST",93]], seasonPosterMap["2017/18"]),
+  makeSeason("2018/19", "마우리시오 포체티노 · 리그 4위 · 챔피언스리그 준우승", [["Hugo Lloris","GK",89],["Kieran Trippier","RB",83],["Toby Alderweireld","CB",88],["Jan Vertonghen","CB",87],["Ben Davies","LB",82],["Harry Winks","CM",80],["Moussa Sissoko","CM",84],["Lucas Moura","RW",86],["Christian Eriksen","CAM",88],["Heung-min Son","LW",92],["Harry Kane","ST",89]], seasonPosterMap["2018/19"]),
+  makeSeason("2019/20", "포체티노→주제 무리뉴 · 리그 6위 · 챔피언스리그 16강", [["Hugo Lloris","GK",87],["Serge Aurier","RB",81],["Toby Alderweireld","CB",86],["Davinson Sánchez","CB",82],["Ben Davies","LB",81],["Harry Winks","CM",79],["Moussa Sissoko","CM",81],["Lucas Moura","RW",84],["Dele Alli","CAM",84],["Heung-min Son","LW",90],["Harry Kane","ST",92]], seasonPosterMap["2019/20"]),
+  makeSeason("2020/21", "주제 무리뉴→라이언 메이슨 · 리그 7위 · 리그컵 준우승", [["Hugo Lloris","GK",87],["Matt Doherty","RB",79],["Toby Alderweireld","CB",85],["Eric Dier","CB",81],["Ben Davies","LB",80],["Pierre-Emile Højbjerg","CM",83],["Moussa Sissoko","CM",80],["Lucas Moura","RW",84],["Tanguy Ndombele","CAM",83],["Heung-min Son","LW",91],["Harry Kane","ST",95]], seasonPosterMap["2020/21"]),
+  makeSeason("2021/22", "누누→안토니오 콘테 · 리그 4위 · 리그컵 4강", [["Hugo Lloris","GK",86],["Emerson Royal","RB",80],["Cristian Romero","CB",87],["Eric Dier","CB",82],["Ben Davies","LB",82],["Pierre-Emile Højbjerg","CM",82],["Rodrigo Bentancur","CM",83],["Lucas Moura","RW",83],["Sergio Reguilón","LW",80],["Heung-min Son","CAM",93],["Harry Kane","ST",94]], seasonPosterMap["2021/22"]),
+  makeSeason("2022/23", "콘테→스텔리니→라이언 메이슨 · 리그 8위 · 챔피언스리그 16강", [["Hugo Lloris","GK",82],["Emerson Royal","RB",81],["Cristian Romero","CB",89],["Eric Dier","CB",78],["Ben Davies","LB",80],["Pierre-Emile Højbjerg","CM",82],["Rodrigo Bentancur","CM",84],["Dejan Kulusevski","RW",84],["Ivan Perišić","LW",84],["Heung-min Son","CAM",89],["Harry Kane","ST",95]], seasonPosterMap["2022/23"]),
+  makeSeason("2023/24", "엔지 포스테코글루 · 리그 5위 · FA컵 32강", [["Guglielmo Vicario","GK",85],["Pedro Porro","RB",85],["Cristian Romero","CB",87],["Micky van de Ven","CB",86],["Destiny Udogie","LB",85],["Yves Bissouma","CM",82],["Pape Matar Sarr","CM",82],["Dejan Kulusevski","RW",85],["James Maddison","CAM",87],["Brennan Johnson","LW",83],["Heung-min Son","ST",90]], seasonPosterMap["2023/24"]),
+  makeSeason("2024/25", "엔지 포스테코글루 · 리그 17위 · 유로파리그 우승", [["Guglielmo Vicario","GK",85],["Pedro Porro","RB",86],["Cristian Romero","CB",88],["Micky van de Ven","CB",88],["Destiny Udogie","LB",84],["Pape Matar Sarr","CM",83],["Rodrigo Bentancur","CM",85],["Brennan Johnson","RW",84],["Dejan Kulusevski","CAM",86],["Heung-min Son","LW",89],["Dominic Solanke","ST",83]], seasonPosterMap["2024/25"]),
+  makeSeason("2025/26", "토마스 프랭크→이고르 투도르→데 제르비 · 리그 17위 · 슈퍼컵 준우승", [["Guglielmo Vicario","GK",84],["Pedro Porro","RB",86],["Cristian Romero","CB",86],["Micky van de Ven","CB",85],["Djed Spence","LB",82],["João Palhinha","CM",86],["Rodrigo Bentancur","CM",84],["Mohammed Kudus","RW",85],["Xavi Simons","CAM",85],["Mathys Tel","LW",81],["Richarlison","ST",84]], seasonPosterMap["2025/26"]),
+  makeSeason("2026/27", "로베르토 데 제르비 · 리그 진행 중 · 시즌 진행 중", [["Antonín Kinský","GK",84],["Pedro Porro","RB",88],["Jan Paul van Hecke","CB",87],["Micky van de Ven","CB",85],["Destiny Udogie","LB",83],["Sandro Tonali","CM",86],["Rodrigo Bentancur","CM",84],["Lucas Bergvall","CM",83],["Matheus Fernandes","CM",84],["Mohammed Kudus","RW",84],["James Maddison","CAM",86],["Mathys Tel","LW",82],["Omar Marmoush","ST",84],["Dominic Solanke","ST",83],["Sávio","RW",84],["Andrew Robertson","LB",85]], null),
+  makeSeason("THE LEGENDS", "비공식 스퍼스 레전드 스페셜 · 모든 카드 OVR 90+", [["Pat Jennings","GK",93],["Steve Perryman","RB",90],["Ledley King","CB",90],["Gary Mabbutt","CB",91],["Chris Hughton","LB",90],["Danny Blanchflower","CM",93],["Dave Mackay","CM",92],["Glenn Hoddle","CAM",94],["Paul Gascoigne","CAM",92],["Ossie Ardiles","CM",91],["Cliff Jones","LW",90],["Jimmy Greaves","ST",96]], null)
+];
+
+
+function adjustedCardOvr(name, seasonName, baseOvr){
+  return baseOvr;
+}
+function buildPlayerObject(name, pos, ovr, seasonName){
+  const [nation, tenure] = getPlayerMeta(name);
+  const possible = getPlayerPositions(name, pos);
+  return {
+    name,
+    pos: getPrimaryPosition(name, pos),
+    possiblePositions: possible,
+    ovr: adjustedCardOvr(name, seasonName, ovr),
+    season: seasonName,
+    nation,
+    tenure
+  };
+}
+
+
+
+const LEGEND_SEASON_NAME = "THE LEGENDS";
+const LEGEND_TEST_PROBABILITY = 0.01; // THE LEGENDS 실제 확률 1%
+
+const primeTimeSeasonCards = new Set([
+  "Aaron Lennon|2011/12",
+  "Ben Davies|2017/18",
+  "Christian Eriksen|2016/17",
+  "Darren Anderton|1998/99",
+  "Eric Dier|2016/17",
+  "Ledley King|2005/06",
+  "Mousa Dembélé|2015/16",
+  "Robbie Keane|2007/08",
+  "Rodrigo Bentancur|2024/25",
+  "Toby Alderweireld|2016/17"
+]);
+const wonderBoySeasons = new Set([
+  "Harry Kane|2014/15",
+  "Kyle Walker|2011/12",
+  "Ledley King|2001/02"
+]);
+const totySeasonCards = new Set([
+  "Christian Eriksen|2017/18",
+  "Danny Rose|2015/16",
+  "David Ginola|1998/99",
+  "Dele Alli|2015/16",
+  "Dele Alli|2016/17",
+  "Dimitar Berbatov|2006/07",
+  "Gareth Bale|2010/11",
+  "Gareth Bale|2011/12",
+  "Gareth Bale|2012/13",
+  "Harry Kane|2017/18",
+  "Harry Kane|2022/23",
+  "Heung-min Son|2020/21",
+  "Jan Vertonghen|2012/13",
+  "Jan Vertonghen|2017/18",
+  "Jurgen Klinsmann|1994/95",
+  "Kyle Walker|2016/17",
+  "Scott Parker|2011/12",
+  "Stephen Carr|2000/01",
+  "Stephen Carr|2002/03",
+  "Toby Alderweireld|2015/16"
+]);
+const goldenBootSeasonCards = new Set([
+  "Harry Kane|2015/16",
+  "Harry Kane|2016/17",
+  "Harry Kane|2020/21",
+  "Heung-min Son|2021/22",
+  "Teddy Sheringham|1992/93"
+]);
+const heroSeasonCards = new Set([
+  "Heung-min Son|2018/19",
+  "João Palhinha|2025/26",
+  "Lucas Moura|2018/19",
+  "Micky van de Ven|2024/25"
+]);
+const worldCupWinnerSeasonCards = new Set([
+  "Cristian Romero|2022/23",
+  "Hugo Lloris|2018/19",
+  "Pedro Porro|2026/27"
+]);
+const solCampbellSpecialCards = new Set([
+  "Sol Campbell|1993/94",
+  "Sol Campbell|1994/95",
+  "Sol Campbell|1995/96",
+  "Sol Campbell|1996/97",
+  "Sol Campbell|1997/98",
+  "Sol Campbell|1998/99",
+  "Sol Campbell|1999/00",
+  "Sol Campbell|2000/01"
+]);
+
+function pairKey(name, seasonName){
+  return `${name}|${seasonName}`;
+}
+function isLegendSeasonByName(name){
+  return name === LEGEND_SEASON_NAME;
+}
+function isLegendSeason(season){
+  return !!(season && season.name === LEGEND_SEASON_NAME);
+}
+function isLegendCard(player){
+  return !!(player && player.season === LEGEND_SEASON_NAME);
+}
+function isPrimeTime(player){
+  return !!(player && primeTimeSeasonCards.has(pairKey(player.name, player.season)));
+}
+function isWonderBoy(player){
+  return !!(player && wonderBoySeasons.has(pairKey(player.name, player.season)));
+}
+function isTotyPair(name, seasonName){
+  return totySeasonCards.has(pairKey(name, seasonName));
+}
+function isTotyCard(player){
+  return !!(player && isTotyPair(player.name, player.season));
+}
+function isGoldenBootPair(name, seasonName){
+  return goldenBootSeasonCards.has(pairKey(name, seasonName));
+}
+function isGoldenBootCard(player){
+  return !!(player && isGoldenBootPair(player.name, player.season));
+}
+function isHeroCard(player){
+  return !!(player && heroSeasonCards.has(pairKey(player.name, player.season)));
+}
+function isWorldCupWinnerCard(player){
+  return !!(player && worldCupWinnerSeasonCards.has(pairKey(player.name, player.season)));
+}
+function isSolCard(player){
+  return !!(player && solCampbellSpecialCards.has(pairKey(player.name, player.season)));
+}
+
+const playerMeta = {
+  "Aaron Lennon": ["잉글랜드", "2005–2015"],
+  "Alan Hutton": ["스코틀랜드", "2008–2011"],
+  "Allan Nielsen": ["덴마크", "1996–2000"],
+  "Andrew Robertson": ["스코틀랜드", "2026–"],
+  "Andy Reid": ["아일랜드", "2005–2008"],
+  "Andy Sinton": ["잉글랜드", "1996–1999"],
+  "Anthony Gardner": ["잉글랜드", "1999–2006"],
+  "Antonín Kinský": ["체코", "2025–"],
+  "Ben Davies": ["웨일스", "2014–"],
+  "Benoît Assou-Ekotto": ["카메룬", "2006–2015"],
+  "Brad Friedel": ["미국", "2011–2015"],
+  "Brennan Johnson": ["웨일스", "2023–"],
+  "Chris Armstrong": ["잉글랜드", "1995–2002"],
+  "Chris Hughton": ["아일랜드", "1977–1990"],
+  "Chris Perry": ["잉글랜드", "1999–2003"],
+  "Chris Wilson": ["잉글랜드", "1995–1999"],
+  "Christian Eriksen": ["덴마크", "2013–2020"],
+  "Christian Ziege": ["독일", "2001–2004"],
+  "Cliff Jones": ["웨일스", "1958–1968"],
+  "Clint Dempsey": ["미국", "2012–2013"],
+  "Colin Calderwood": ["스코틀랜드", "1993–1999"],
+  "Cristian Romero": ["아르헨티나", "2021–"],
+  "Danny Blanchflower": ["북아일랜드", "1954–1964"],
+  "Danny Rose": ["잉글랜드", "2007–2021"],
+  "Darren Anderton": ["잉글랜드", "1992–2004"],
+  "Darren Bent": ["잉글랜드", "2007–2009"],
+  "Dave Mackay": ["스코틀랜드", "1959–1968"],
+  "David Ginola": ["프랑스", "1997–2000"],
+  "David Howells": ["잉글랜드", "1988–2000"],
+  "Davinson Sánchez": ["콜롬비아", "2017–2023"],
+  "Dean Austin": ["잉글랜드", "1990–1998"],
+  "Dean Richards": ["잉글랜드", "2001–2005"],
+  "Dejan Kulusevski": ["스웨덴", "2022–"],
+  "Dele Alli": ["잉글랜드", "2015–2022"],
+  "Destiny Udogie": ["이탈리아", "2022–"],
+  "Didier Zokora": ["코트디부아르", "2006–2009"],
+  "Dimitar Berbatov": ["불가리아", "2006–2008"],
+  "Djed Spence": ["잉글랜드", "2022–"],
+  "Dominic Solanke": ["잉글랜드", "2024–"],
+  "Edgar Davids": ["네덜란드", "2005–2007"],
+  "Emerson Royal": ["브라질", "2021–2024"],
+  "Emmanuel Adebayor": ["토고", "2011–2015"],
+  "Eric Dier": ["잉글랜드", "2014–2024"],
+  "Erik Edman": ["스웨덴", "2004–2008"],
+  "Erik Lamela": ["아르헨티나", "재적 기간 미상"],
+  "Erik Thorstvedt": ["노르웨이", "1988–1994"],
+  "Frederic Kanouté": ["말리", "2003–2005"],
+  "Gareth Bale": ["웨일스", "2007–2013, 2020–2021"],
+  "Gary Doherty": ["북아일랜드", "2000–2010"],
+  "Gary Mabbutt": ["잉글랜드", "1982–1998"],
+  "Gary Samways": ["잉글랜드", "1989–1994"],
+  "Glenn Hoddle": ["잉글랜드", "1975–1987"],
+  "Goran Bunjevcevic": ["세르비아", "2001–2006"],
+  "Guglielmo Vicario": ["이탈리아", "2023–"],
+  "Gus Poyet": ["우루과이", "2001–2004"],
+  "Gylfi Sigurdsson": ["아이슬란드", "2012–2014"],
+  "Harry Kane": ["잉글랜드", "2009–2023"],
+  "Harry Winks": ["잉글랜드", "2014–2023"],
+  "Heung-min Son": ["대한민국", "2015–2025"],
+  "Heurelho Gomes": ["브라질", "2008–2014"],
+  "Hugo Lloris": ["프랑스", "2012–2023"],
+  "Ian Walker": ["잉글랜드", "1989–2001"],
+  "Ivan Perišić": ["크로아티아", "2022–2024"],
+  "James Maddison": ["잉글랜드", "2023–"],
+  "Jan Paul van Hecke": ["네덜란드", "2026–"],
+  "Jan Vertonghen": ["벨기에", "2012–2020"],
+  "Jason Dozzell": ["잉글랜드", "1993–1997"],
+  "Jermain Defoe": ["잉글랜드", "2004–2008, 2009–2014"],
+  "Jermaine Jenas": ["잉글랜드", "2005–2013"],
+  "Jimmy Greaves": ["잉글랜드", "1961–1970"],
+  "Jonathan Woodgate": ["잉글랜드", "2008–2011"],
+  "João Palhinha": ["포르투갈", "2025–"],
+  "Jurgen Klinsmann": ["독일", "1994–1995, 1997–1998"],
+  "Justin Edinburgh": ["잉글랜드", "1990–2000"],
+  "Kasey Keller": ["미국", "2001–2005"],
+  "Kieran Trippier": ["잉글랜드", "2015–2019"],
+  "Kyle Walker": ["잉글랜드", "2009–2017"],
+  "Ledley King": ["잉글랜드", "1999–2012"],
+  "Les Ferdinand": ["잉글랜드", "1997–2003"],
+  "Lucas Bergvall": ["스웨덴", "2024–"],
+  "Lucas Moura": ["브라질", "2018–2023"],
+  "Luka Modrić": ["크로아티아", "2008–2012"],
+  "Matheus Fernandes": ["브라질", "2026–"],
+  "Mathys Tel": ["프랑스", "2025–"],
+  "Matt Doherty": ["아일랜드", "2020–2023"],
+  "Mauricio Taricco": ["아르헨티나", "1998–2004"],
+  "Michael Carrick": ["잉글랜드", "2004–2006"],
+  "Michael Dawson": ["잉글랜드", "2005–2014"],
+  "Micky van de Ven": ["네덜란드", "2023–"],
+  "Mido": ["이집트", "2005–2007"],
+  "Mohammed Kudus": ["가나", "2025–"],
+  "Mousa Dembélé": ["벨기에", "2012–2019"],
+  "Moussa Sissoko": ["프랑스", "2016–2021"],
+  "Nabil Bentaleb": ["알제리", "2013–2017"],
+  "Nacer Chadli": ["벨기에", "2013–2016"],
+  "Neil Ruddock": ["잉글랜드", "1992–1993"],
+  "Neil Sullivan": ["스코틀랜드", "2000–2003"],
+  "Nick Barmby": ["잉글랜드", "1992–1995"],
+  "Noureddine Naybet": ["모로코", "2004–2006"],
+  "Noé Pamarot": ["프랑스", "2004–2006"],
+  "Omar Marmoush": ["이집트", "2026–"],
+  "Ossie Ardiles": ["아르헨티나", "1978–1988"],
+  "Pape Matar Sarr": ["세네갈", "2021–"],
+  "Pascal Chimbonda": ["프랑스", "2006–2008, 2009–2011"],
+  "Pat Jennings": ["북아일랜드", "1964–1977"],
+  "Paul Allen": ["잉글랜드", "1987–1993"],
+  "Paul Gascoigne": ["잉글랜드", "1988–1992"],
+  "Paul Robinson": ["잉글랜드", "2004–2008"],
+  "Paul Stalteri": ["캐나다", "2005–2008"],
+  "Paulinho": ["브라질", "2013–2015"],
+  "Pedro Mendes": ["포르투갈", "2004–2006"],
+  "Pedro Porro": ["스페인", "2023–"],
+  "Peter Crouch": ["잉글랜드", "2009–2011"],
+  "Pierre-Emile Højbjerg": ["덴마크", "2020–2024"],
+  "Rafael van der Vaart": ["네덜란드", "2010–2012"],
+  "Ramon Vega": ["스위스", "1997–2001"],
+  "Richarlison": ["브라질", "2022–"],
+  "Robbie Keane": ["아일랜드", "2002–2008, 2009–2011"],
+  "Roberto Soldado": ["스페인", "2013–2015"],
+  "Rodrigo Bentancur": ["우루과이", "2022–"],
+  "Rohan Ricketts": ["잉글랜드", "2002–2006"],
+  "Roman Pavlyuchenko": ["러시아", "2008–2012"],
+  "Ronny Rosenthal": ["이스라엘", "1994–1996"],
+  "Ruel Fox": ["잉글랜드", "1995–2000"],
+  "Ryan Mason": ["잉글랜드", "2008–2016"],
+  "Sandro": ["브라질", "2010–2014"],
+  "Sandro Tonali": ["이탈리아", "2026–"],
+  "Scott Parker": ["잉글랜드", "2011–2013"],
+  "Sean Davies": ["잉글랜드", "2004–2006"],
+  "Serge Aurier": ["코트디부아르", "2017–2021"],
+  "Sergio Reguilón": ["스페인", "2020–2024"],
+  "Sergiy Rebrov": ["우크라이나", "2000–2004"],
+  "Simon Davies": ["웨일스", "2000–2005"],
+  "Sol Campbell": ["잉글랜드", "1992–2001"],
+  "Steed Malbranque": ["프랑스", "2006–2011"],
+  "Steffen Freund": ["독일", "1998–2003"],
+  "Steffen Iversen": ["노르웨이", "1996–2003"],
+  "Stephen Carr": ["아일랜드", "1993–2004"],
+  "Stephen Clemence": ["잉글랜드", "1998–2003"],
+  "Steve Perryman": ["잉글랜드", "1969–1986"],
+  "Steve Sedgley": ["잉글랜드", "1989–1994"],
+  "Stéphane Dalmat": ["프랑스", "2003–2004"],
+  "Sávio": ["프랑스", "재적 기간 미상"],
+  "Sébastien Bassong": ["카메룬", "2009–2013"],
+  "Tanguy Ndombele": ["프랑스", "2019–2024"],
+  "Teddy Sheringham": ["잉글랜드", "1992–1997, 2001–2003"],
+  "Tim Sherwood": ["잉글랜드", "1999–2003"],
+  "Toby Alderweireld": ["벨기에", "2015–2021"],
+  "Tom Huddlestone": ["잉글랜드", "2005–2013"],
+  "Vedran Ćorluka": ["크로아티아", "2008–2012"],
+  "Victor Wanyama": ["케냐", "2016–2020"],
+  "William Gallas": ["프랑스", "2010–2013"],
+  "Wilson Palacios": ["온두라스", "2009–2011"],
+  "Xavi Simons": ["네덜란드", "2025–"],
+  "Young-Pyo Lee": ["대한민국", "2005–2008"],
+  "Younès Kaboul": ["프랑스", "2007–2008, 2010–2014"],
+  "Yves Bissouma": ["말리", "2022–"],
+  "Øyvind Leonhardsen": ["노르웨이", "2000–2003"]
+};
+
+const playerPositions = {
+  "Aaron Lennon": ["RW", "RM"],
+  "Alan Hutton": ["RB"],
+  "Allan Nielsen": ["CM"],
+  "Andrew Robertson": ["LB"],
+  "Andy Reid": ["LW", "LM"],
+  "Andy Sinton": ["RW", "RM"],
+  "Anthony Gardner": ["CB"],
+  "Antonín Kinský": ["GK"],
+  "Ben Davies": ["LB", "CB"],
+  "Benoît Assou-Ekotto": ["LB"],
+  "Brad Friedel": ["GK"],
+  "Brennan Johnson": ["RW", "LW"],
+  "Chris Armstrong": ["CAM"],
+  "Chris Hughton": ["LB"],
+  "Chris Perry": ["RB", "CB"],
+  "Chris Wilson": ["LB", "LW"],
+  "Christian Eriksen": ["CAM", "RW", "LW"],
+  "Christian Ziege": ["LW", "LM"],
+  "Cliff Jones": ["LW", "LM"],
+  "Clint Dempsey": ["CAM", "ST"],
+  "Colin Calderwood": ["CB", "CM"],
+  "Cristian Romero": ["CB"],
+  "Danny Blanchflower": ["CM"],
+  "Danny Rose": ["LB"],
+  "Darren Anderton": ["CAM", "RW", "RM"],
+  "Darren Bent": ["ST"],
+  "Dave Mackay": ["CM"],
+  "David Ginola": ["LW"],
+  "David Howells": ["CM"],
+  "Davinson Sánchez": ["CB"],
+  "Dean Austin": ["RB"],
+  "Dean Richards": ["CB"],
+  "Dejan Kulusevski": ["CAM", "RW"],
+  "Dele Alli": ["CAM"],
+  "Destiny Udogie": ["LB"],
+  "Didier Zokora": ["CM"],
+  "Dimitar Berbatov": ["ST"],
+  "Djed Spence": ["RB", "LB"],
+  "Dominic Solanke": ["ST"],
+  "Edgar Davids": ["LW", "CM", "CAM"],
+  "Emerson Royal": ["RB"],
+  "Emmanuel Adebayor": ["ST"],
+  "Eric Dier": ["CB", "CM"],
+  "Erik Edman": ["LB"],
+  "Erik Lamela": ["LM", "RM", "RW", "LW"],
+  "Erik Thorstvedt": ["GK"],
+  "Frederic Kanouté": ["ST", "CAM"],
+  "Gareth Bale": ["LM", "LW", "RW"],
+  "Gary Doherty": ["RB"],
+  "Gary Mabbutt": ["CB"],
+  "Gary Samways": ["CM"],
+  "Glenn Hoddle": ["CAM"],
+  "Goran Bunjevcevic": ["CM"],
+  "Guglielmo Vicario": ["GK"],
+  "Gus Poyet": ["CM", "CAM", "LW"],
+  "Gylfi Sigurdsson": ["LW", "CAM"],
+  "Harry Kane": ["ST"],
+  "Harry Winks": ["CM"],
+  "Heung-min Son": ["LW", "ST", "RW"],
+  "Heurelho Gomes": ["GK"],
+  "Hugo Lloris": ["GK"],
+  "Ian Walker": ["GK"],
+  "Ivan Perišić": ["LW", "RW", "LM", "LB"],
+  "James Maddison": ["CAM", "CM"],
+  "Jan Paul van Hecke": ["CB"],
+  "Jan Vertonghen": ["CB", "LB"],
+  "Jason Dozzell": ["CM"],
+  "Jermain Defoe": ["ST"],
+  "Jermaine Jenas": ["CM"],
+  "Jimmy Greaves": ["ST"],
+  "Jonathan Woodgate": ["CB"],
+  "João Palhinha": ["CM"],
+  "Jurgen Klinsmann": ["ST"],
+  "Justin Edinburgh": ["LB"],
+  "Kasey Keller": ["GK"],
+  "Kieran Trippier": ["RB"],
+  "Kyle Walker": ["RB"],
+  "Ledley King": ["CB"],
+  "Les Ferdinand": ["ST"],
+  "Lucas Bergvall": ["CM", "CAM"],
+  "Lucas Moura": ["RW", "LW"],
+  "Luka Modrić": ["CM"],
+  "Matheus Fernandes": ["CM", "CAM"],
+  "Mathys Tel": ["LW"],
+  "Matt Doherty": ["RB"],
+  "Mauricio Taricco": ["LB"],
+  "Michael Carrick": ["CM"],
+  "Michael Dawson": ["CB"],
+  "Micky van de Ven": ["CB", "LB"],
+  "Mido": ["CAM"],
+  "Mohammed Kudus": ["RW"],
+  "Mousa Dembélé": ["CM", "CAM"],
+  "Moussa Sissoko": ["CM", "RM"],
+  "Nabil Bentaleb": ["CM"],
+  "Nacer Chadli": ["LW", "RW"],
+  "Neil Ruddock": ["CB"],
+  "Neil Sullivan": ["GK"],
+  "Nick Barmby": ["RW", "LW"],
+  "Noureddine Naybet": ["CB"],
+  "Noé Pamarot": ["RB"],
+  "Omar Marmoush": ["ST", "CAM", "LW"],
+  "Ossie Ardiles": ["CM", "CAM"],
+  "Pape Matar Sarr": ["CM"],
+  "Pascal Chimbonda": ["RB"],
+  "Pat Jennings": ["GK"],
+  "Paul Allen": ["LW"],
+  "Paul Gascoigne": ["CAM"],
+  "Paul Robinson": ["GK"],
+  "Paul Stalteri": ["RB"],
+  "Paulinho": ["CM"],
+  "Pedro Mendes": ["CM"],
+  "Pedro Porro": ["RB"],
+  "Peter Crouch": ["ST"],
+  "Pierre-Emile Højbjerg": ["CM"],
+  "Rafael van der Vaart": ["CAM"],
+  "Ramon Vega": ["CB"],
+  "Richarlison": ["ST"],
+  "Robbie Keane": ["ST"],
+  "Roberto Soldado": ["ST"],
+  "Rodrigo Bentancur": ["CM"],
+  "Rohan Ricketts": ["LW", "LM"],
+  "Roman Pavlyuchenko": ["ST"],
+  "Ronny Rosenthal": ["LW", "LM"],
+  "Ruel Fox": ["RW", "RM"],
+  "Ryan Mason": ["CM"],
+  "Sandro": ["CM"],
+  "Sandro Tonali": ["CM"],
+  "Scott Parker": ["CM"],
+  "Sean Davies": ["RW", "RM"],
+  "Serge Aurier": ["RB"],
+  "Sergio Reguilón": ["LB"],
+  "Sergiy Rebrov": ["CAM"],
+  "Simon Davies": ["RW", "RM"],
+  "Sol Campbell": ["CB"],
+  "Steed Malbranque": ["LW", "LM"],
+  "Steffen Freund": ["CM"],
+  "Steffen Iversen": ["CAM", "ST"],
+  "Stephen Carr": ["RB"],
+  "Stephen Clemence": ["CM"],
+  "Steve Perryman": ["RB", "CM"],
+  "Steve Sedgley": ["CM", "CAM"],
+  "Stéphane Dalmat": ["CM"],
+  "Sávio": ["RW"],
+  "Sébastien Bassong": ["CB"],
+  "Tanguy Ndombele": ["CAM"],
+  "Teddy Sheringham": ["ST"],
+  "Tim Sherwood": ["CM"],
+  "Toby Alderweireld": ["CB"],
+  "Tom Huddlestone": ["CM"],
+  "Vedran Ćorluka": ["RB"],
+  "Victor Wanyama": ["CM"],
+  "William Gallas": ["CB"],
+  "Wilson Palacios": ["CM"],
+  "Xavi Simons": ["CAM"],
+  "Young-Pyo Lee": ["LB"],
+  "Younès Kaboul": ["CB"],
+  "Yves Bissouma": ["CM"],
+  "Øyvind Leonhardsen": ["RW", "LW"]
+};
+
+const playerDisplayNames = {
+  "Aaron Lennon": "아론 레넌",
+  "Alan Hutton": "앨런 허튼",
+  "Allan Nielsen": "알란 닐센",
+  "Andrew Robertson": "앤드루 로버트슨",
+  "Andy Reid": "앤디 리드",
+  "Andy Sinton": "앤디 신튼",
+  "Anthony Gardner": "앤서니 가드너",
+  "Antonín Kinský": "안토닌 킨스키",
+  "Ben Davies": "벤 데이비스",
+  "Benoît Assou-Ekotto": "베누아 아수에코토",
+  "Brad Friedel": "브래드 프리델",
+  "Brennan Johnson": "브레넌 존슨",
+  "Chris Armstrong": "크리스 암스트롱",
+  "Chris Hughton": "크리스 휴턴",
+  "Chris Perry": "크리스 페리",
+  "Chris Wilson": "크리스 윌슨",
+  "Christian Eriksen": "크리스티안 에릭센",
+  "Christian Ziege": "크리스티안 치게",
+  "Cliff Jones": "클리프 존스",
+  "Clint Dempsey": "클린트 뎀프시",
+  "Colin Calderwood": "콜린 칼더우드",
+  "Cristian Romero": "크리스티안 로메로",
+  "Danny Blanchflower": "대니 블랜치플라워",
+  "Danny Rose": "대니 로즈",
+  "Darren Anderton": "대런 앤더튼",
+  "Darren Bent": "대런 벤트",
+  "Dave Mackay": "데이브 매카이",
+  "David Ginola": "다비드 지놀라",
+  "David Howells": "데이비드 하웰스",
+  "Davinson Sánchez": "다빈손 산체스",
+  "Dean Austin": "딘 오스틴",
+  "Dean Richards": "딘 리처즈",
+  "Dejan Kulusevski": "데얀 쿨루셉스키",
+  "Dele Alli": "델레 알리",
+  "Destiny Udogie": "데스티니 우도기",
+  "Didier Zokora": "디디에 조코라",
+  "Dimitar Berbatov": "디미타르 베르바토프",
+  "Djed Spence": "제드 스펜스",
+  "Dominic Solanke": "도미닉 솔란케",
+  "Edgar Davids": "에드가르 다비즈",
+  "Emerson Royal": "에메르송 로얄",
+  "Emmanuel Adebayor": "에마뉘엘 아데바요르",
+  "Eric Dier": "에릭 다이어",
+  "Erik Edman": "에리크 에드만",
+  "Erik Lamela": "에릭 라멜라",
+  "Erik Thorstvedt": "에리크 토르스트베트",
+  "Frederic Kanouté": "프레데릭 카누테",
+  "Gareth Bale": "가레스 베일",
+  "Gary Doherty": "게리 도허티",
+  "Gary Mabbutt": "게리 매버트",
+  "Gary Samways": "게리 샘웨이스",
+  "Glenn Hoddle": "글렌 호들",
+  "Goran Bunjevcevic": "고란 부니예브체비치",
+  "Guglielmo Vicario": "굴리엘모 비카리오",
+  "Gus Poyet": "거스 포옛",
+  "Gylfi Sigurdsson": "길피 시구르드손",
+  "Harry Kane": "해리 케인",
+  "Harry Winks": "해리 윙크스",
+  "Heung-min Son": "손흥민",
+  "Heurelho Gomes": "에우렐류 고메스",
+  "Hugo Lloris": "위고 요리스",
+  "Ian Walker": "이안 워커",
+  "Ivan Perišić": "이반 페리시치",
+  "James Maddison": "제임스 매디슨",
+  "Jan Paul van Hecke": "얀 폴 판 헤케",
+  "Jan Vertonghen": "얀 베르통언",
+  "Jason Dozzell": "제이슨 도젤",
+  "Jermain Defoe": "저메인 데포",
+  "Jermaine Jenas": "저메인 제나스",
+  "Jimmy Greaves": "지미 그리브스",
+  "Jonathan Woodgate": "조너선 우드게이트",
+  "João Palhinha": "주앙 팔리냐",
+  "Jurgen Klinsmann": "위르겐 클린스만",
+  "Justin Edinburgh": "저스틴 에든버러",
+  "Kasey Keller": "케이시 켈러",
+  "Kieran Trippier": "키어런 트리피어",
+  "Kyle Walker": "카일 워커",
+  "Ledley King": "레들리 킹",
+  "Les Ferdinand": "레스 퍼디낸드",
+  "Lucas Bergvall": "루카스 베리발",
+  "Lucas Moura": "루카스 모우라",
+  "Luka Modrić": "루카 모드리치",
+  "Matheus Fernandes": "마테우스 페르난데스",
+  "Mathys Tel": "마티스 텔",
+  "Matt Doherty": "맷 도허티",
+  "Mauricio Taricco": "마우리시오 타리코",
+  "Michael Carrick": "마이클 캐릭",
+  "Michael Dawson": "마이클 도슨",
+  "Micky van de Ven": "미키 판더펜",
+  "Mido": "미도",
+  "Mohammed Kudus": "모하메드 쿠두스",
+  "Mousa Dembélé": "무사 뎀벨레",
+  "Moussa Sissoko": "무사 시소코",
+  "Nabil Bentaleb": "나빌 벤탈렙",
+  "Nacer Chadli": "나세르 샤들리",
+  "Neil Ruddock": "닐 러독",
+  "Neil Sullivan": "닐 설리번",
+  "Nick Barmby": "닉 밤비",
+  "Noureddine Naybet": "누레딘 나이베트",
+  "Noé Pamarot": "노에 파마로",
+  "Omar Marmoush": "오마르 마르무시",
+  "Ossie Ardiles": "오시 아르딜레스",
+  "Pape Matar Sarr": "파페 마타르 사르",
+  "Pascal Chimbonda": "파스칼 심봉다",
+  "Pat Jennings": "팻 제닝스",
+  "Paul Allen": "폴 앨런",
+  "Paul Gascoigne": "폴 개스코인",
+  "Paul Robinson": "폴 로빈슨",
+  "Paul Stalteri": "폴 스탈테리",
+  "Paulinho": "파울리뉴",
+  "Pedro Mendes": "페드루 멘데스",
+  "Pedro Porro": "페드로 포로",
+  "Peter Crouch": "피터 크라우치",
+  "Pierre-Emile Højbjerg": "피에르에밀 호이비에르",
+  "Rafael van der Vaart": "라파엘 판데르파르트",
+  "Ramon Vega": "라몬 베가",
+  "Richarlison": "히샬리송",
+  "Robbie Keane": "로비 킨",
+  "Roberto Soldado": "로베르토 솔다도",
+  "Rodrigo Bentancur": "로드리고 벤탄쿠르",
+  "Rohan Ricketts": "로한 리케츠",
+  "Roman Pavlyuchenko": "로만 파블류첸코",
+  "Ronny Rosenthal": "로니 로젠탈",
+  "Ruel Fox": "루엘 폭스",
+  "Ryan Mason": "라이언 메이슨",
+  "Sandro": "산드루",
+  "Sandro Tonali": "산드로 토날리",
+  "Scott Parker": "스콧 파커",
+  "Sean Davies": "션 데이비스",
+  "Serge Aurier": "세르주 오리에",
+  "Sergio Reguilón": "세르히오 레길론",
+  "Sergiy Rebrov": "세르히 레브로프",
+  "Simon Davies": "사이먼 데이비스",
+  "Sol Campbell": "솔 캠벨",
+  "Steed Malbranque": "스티드 말브랑크",
+  "Steffen Freund": "슈테펜 프로인트",
+  "Steffen Iversen": "스테펜 이베르센",
+  "Stephen Carr": "스티븐 카",
+  "Stephen Clemence": "스티븐 클레멘스",
+  "Steve Perryman": "스티브 페리먼",
+  "Steve Sedgley": "스티브 세즐리",
+  "Stéphane Dalmat": "스테판 달마",
+  "Sávio": "사비우",
+  "Sébastien Bassong": "세바스티앵 바송",
+  "Tanguy Ndombele": "탕기 은돔벨레",
+  "Teddy Sheringham": "테디 셰링엄",
+  "Tim Sherwood": "팀 셔우드",
+  "Toby Alderweireld": "토비 알데르베이럴트",
+  "Tom Huddlestone": "톰 허들스톤",
+  "Vedran Ćorluka": "베드란 촐루카",
+  "Victor Wanyama": "빅터 완야마",
+  "William Gallas": "윌리엄 갈라스",
+  "Wilson Palacios": "윌손 팔라시오스",
+  "Xavi Simons": "사비 시몬스",
+  "Young-Pyo Lee": "이영표",
+  "Younès Kaboul": "유네스 카불",
+  "Yves Bissouma": "이브 비수마",
+  "Øyvind Leonhardsen": "외빈 레온하르센"
+};
+
+function getPlayerDisplayName(name){
+  return playerDisplayNames[name] || name;
+}
+
+
+function getPlayerMeta(name){
+  return playerMeta[name] || ["국적 미상","재적 기간 미상"];
+}
+function getPlayerPositions(name, fallbackPos=null){
+  const arr = playerPositions[name];
+  if(Array.isArray(arr) && arr.length) return [...new Set(arr.filter(Boolean))];
+  if(fallbackPos) return [fallbackPos];
+  return [];
+}
+function getPrimaryPosition(name, fallbackPos=""){
+  const arr = getPlayerPositions(name, fallbackPos);
+  return arr[0] || fallbackPos || "";
+}
+
+
+const managers = [
+  {name:"빌 니콜슨", ovr:95, tenure:"1958–1974", weight:0.5},
+  {name:"주제 무리뉴", ovr:90, tenure:"2019–2021", weight:1},
+  {name:"안토니오 콘테", ovr:89, tenure:"2021–2023", weight:1},
+  {name:"마우리시오 포체티노", ovr:87, tenure:"2014–2019", weight:1},
+  {name:"로베르토 데 제르비", ovr:86, tenure:"2026–", weight:1},
+  {name:"엔지 포스테코글루", ovr:85, tenure:"2023–2025", weight:1},
+  {name:"해리 레드냅", ovr:84, tenure:"2008–2012", weight:1},
+  {name:"마르틴 욜", ovr:83, tenure:"2004–2007", weight:1},
+  {name:"조지 그레이엄", ovr:82, tenure:"1998–2001", weight:1},
+  {name:"누누 에스피리투 산투", ovr:81, tenure:"2021", weight:1},
+  {name:"안드레 빌라스보아스", ovr:81, tenure:"2012–2013", weight:1},
+  {name:"글렌 호들", ovr:80, tenure:"2001–2003", weight:1},
+  {name:"후안데 라모스", ovr:80, tenure:"2007–2008", weight:1},
+  {name:"게리 프랜시스", ovr:79, tenure:"1994–1997", weight:1},
+  {name:"이고르 투도르", ovr:79, tenure:"2026", weight:1},
+  {name:"토마스 프랭크", ovr:78, tenure:"2025–2026", weight:1},
+  {name:"오시 아르딜레스", ovr:78, tenure:"1993–1994", weight:1},
+  {name:"팀 셔우드", ovr:77, tenure:"2013–2014", weight:1},
+  {name:"자크 상티니", ovr:76, tenure:"2004", weight:1},
+  {name:"라이언 메이슨", ovr:76, tenure:"2021 · 2023", weight:1},
+  {name:"데이비드 플리트", ovr:75, tenure:"2003–2004", weight:1},
+  {name:"크리스천 그로스", ovr:74, tenure:"1997–1998", weight:1}
+];
+
+let selectedManager = null;
+let managerPlaced = false;
+let managerRolling = false;
+let managerIndex = 0;
+let managerTimer = null;
+const MANAGER_REPEAT = 40;
+
+function getManagerBoost(manager = selectedManager){
+  if(!manager || !managerPlaced) return 0;
+  if(manager.name === "빌 니콜슨") return 3;
+  if(manager.ovr >= 90) return 2;
+  if(manager.ovr >= 85) return 1;
+  if(manager.ovr >= 80) return 0;
+  return -1;
+}
+
+function formatManagerBoost(boost = getManagerBoost()){
+  return `${boost >= 0 ? "+" : ""}${boost}`;
+}
+
+function applyManagerBoost(value){
+  return clamp(value + getManagerBoost(), 0, 99);
+}
+
+// 팀 라인 평균 기준:
+// 4-2-3-1: ATT = RW/LW/ST, MID = CM/CM/CAM
+// 4-3-3:   ATT = RW/LW/ST, MID = CM/CM/CM
+// 4-4-2:   ATT = ST/ST,    MID = LM/CM/CM/RM
+const formations = {
+  "4231": {
+    label: "4-2-3-1",
+    slots: ["GK","RB","CB","CB","LB","CM","CM","RW","CAM","LW","ST"],
+    pitchLayout: [
+      {x:50,y:89},
+      {x:88,y:73},{x:63,y:69},{x:37,y:69},{x:12,y:73},
+      {x:36,y:52},{x:64,y:52},
+      {x:84,y:35},{x:50,y:30},{x:16,y:35},
+      {x:50,y:14}
+    ],
+    def:[0,1,2,3,4],
+    mid:[5,6,8],
+    att:[7,9,10]
+  },
+  "433": {
+    label: "4-3-3",
+    slots: ["GK","RB","CB","CB","LB","CM","CM","CM","RW","LW","ST"],
+    pitchLayout: [
+      {x:50,y:89},
+      {x:88,y:73},{x:63,y:69},{x:37,y:69},{x:12,y:73},
+      {x:24,y:47},{x:50,y:52},{x:76,y:47},
+      {x:82,y:16},{x:18,y:16},
+      {x:50,y:12}
+    ],
+    def:[0,1,2,3,4],
+    mid:[5,6,7],
+    att:[8,9,10]
+  },
+  "442": {
+    label: "4-4-2",
+    slots: ["GK","RB","CB","CB","LB","LM","CM","CM","RM","ST","ST"],
+    pitchLayout: [
+      {x:50,y:89},
+      {x:88,y:73},{x:63,y:69},{x:37,y:69},{x:12,y:73},
+      {x:16,y:35},{x:35,y:50},{x:65,y:50},{x:84,y:35},
+      {x:35,y:16},{x:65,y:16}
+    ],
+    def:[0,1,2,3,4],
+    mid:[5,6,7,8],
+    att:[9,10]
+  }
+};
+let currentFormationKey = "4231";
+let formationChosen = false;
+let slots = [...formations[currentFormationKey].slots];
+let pitchLayout = formations[currentFormationKey].pitchLayout.map(p=>({...p}));
+let statGroups = {
+  def:[...formations[currentFormationKey].def],
+  mid:[...formations[currentFormationKey].mid],
+  att:[...formations[currentFormationKey].att]
+};
+let drafted = [];
+let currentSeason = null;
+let isRolling = false;
+let rouletteIndex = 0;
+let rouletteTimer = null;
+let pendingPlayer = null;
+let dragSource = null;
+let rerollRemaining = 2;
+const ROULETTE_REPEAT = 60;
+
+const $ = s => document.querySelector(s);
+
+
+function applyFormation(key, options={}){
+  const {silent=false, fromPopup=false} = options;
+  if(!formations[key]) return;
+  const locked = draftedCount() > 0 || !!pendingPlayer || isRolling;
+  if(locked && key !== currentFormationKey){
+    document.querySelectorAll(".formation-btn").forEach(btn=>{
+      btn.classList.toggle("active", btn.dataset.formation === currentFormationKey);
+    });
+    if(!silent) alert("포메이션은 첫 선수 선택 전까지만 변경할 수 있습니다.");
+    return;
+  }
+  currentFormationKey = key;
+  slots = [...formations[key].slots];
+  pitchLayout = formations[key].pitchLayout.map(p=>({...p}));
+  statGroups = {
+    def:[...formations[key].def],
+    mid:[...formations[key].mid],
+    att:[...formations[key].att]
+  };
+  const formationLabel = document.querySelector("#formationLabel");
+  if(formationLabel) formationLabel.textContent = formations[key].label;
+  document.querySelectorAll(".formation-btn").forEach(btn=>{
+    btn.classList.toggle("active", btn.dataset.formation === key);
+  });
+  const formationHint = document.querySelector("#formationHint");
+  if(formationHint){
+    formationHint.textContent = draftedCount() > 0
+      ? "포메이션은 첫 선수 선택 전까지만 변경 가능합니다."
+      : `첫 선수 선택 전까지만 변경 가능합니다. 현재 포메이션: ${formations[key].label}`;
+  }
+  renderSquad();
+  renderPitch();
+  if(currentSeason && !pendingPlayer && !isRolling) renderPlayers();
+}
+
+function buildManagerRoulette(){
+  // 감독 룰렛은 시즌 룰렛과 같은 메인 룰렛 창을 사용합니다.
+}
+
+function setRouletteMode(mode){
+  const list = $("#rouletteList");
+  if(mode === "manager"){
+    list.innerHTML = "";
+    const loop = [];
+    for(let r=0;r<MANAGER_REPEAT;r++) loop.push(...managers);
+    loop.forEach(m=>{
+      const item = document.createElement("div");
+      item.className = "roulette-item";
+      item.innerHTML = `<strong>${m.name}</strong><span>${m.tenure} · OVR ${m.ovr}</span>`;
+      list.appendChild(item);
+    });
+    managerIndex = managers.length * Math.floor(MANAGER_REPEAT/3);
+    list.style.transition = "none";
+    list.style.transform = `translateY(-${managerIndex * 80}px)`;
+  }else{
+    buildRoulette();
+  }
+}
+
+function renderXIManagerCard(){
+  const slot = $("#xiManagerSlot");
+  const name = $("#xiManagerName");
+  const meta = $("#xiManagerMeta");
+  const tenure = $("#xiManagerTenure");
+  if(!slot || !name || !meta || !tenure) return;
+
+  if(selectedManager && managerPlaced){
+    slot.classList.add("show");
+    const boost = formatManagerBoost();
+    name.textContent = selectedManager.name;
+    meta.textContent = `OVR ${selectedManager.ovr} · 팀 보정 ${boost}`;
+    tenure.textContent = `Tottenham ${selectedManager.tenure}`;
+  }else{
+    slot.classList.remove("show");
+    name.textContent = "감독 빈 자리";
+    meta.textContent = "OVR -";
+    tenure.textContent = "Tottenham -";
+  }
+}
+
+function updateFinalDraftUI(){
+  const complete = draftedCount() === 11 && !!selectedManager && managerPlaced;
+  const drawBtn = $("#drawBtn");
+  const managerBtn = $("#managerDrawBtn");
+  const rerollBtn = $("#rerollBtn");
+  const finalSimBtn = $("#finalSimBtn");
+
+  if(!drawBtn || !managerBtn || !rerollBtn || !finalSimBtn) return;
+
+  if(complete){
+    drawBtn.style.display = "none";
+    managerBtn.style.display = "none";
+    rerollBtn.style.display = "none";
+    finalSimBtn.style.display = "block";
+  }else{
+    drawBtn.style.display = "";
+    managerBtn.style.display = "";
+    rerollBtn.style.display = "";
+    finalSimBtn.style.display = "none";
+  }
+}
+
+function updateManagerUI(){
+  updateFinalDraftUI();
+  const complete = draftedCount() === 11;
+  const managerBtn = $("#managerDrawBtn");
+  const seasonBtn = $("#drawBtn");
+
+  if(!complete){
+    managerBtn.disabled = true;
+    refreshSeasonRouletteButton();
+    return;
+  }
+
+  // 11명 완성 이후에는 시즌 룰렛을 완전히 잠금
+  seasonBtn.disabled = true;
+
+  if(managerRolling || selectedManager){
+    managerBtn.disabled = true;
+  }else{
+    managerBtn.disabled = false;
+  }
+
+  $("#simBtn").disabled = !(complete && selectedManager && managerPlaced);
+}
+
+function startManagerRoulette(){
+  if(managerRolling || draftedCount() !== 11 || selectedManager) return;
+
+  managerRolling = true;
+  managerPlaced = false;
+  renderXIManagerCard();
+  $("#drawBtn").disabled = true;
+  $("#managerDrawBtn").disabled = true;
+  $("#rerollBtn").disabled = true;
+  $("#simBtn").disabled = true;
+
+  setRouletteMode("manager");
+
+  $("#seasonName").innerHTML = `<span class="live"><span class="dot"></span>감독 룰렛 회전 중...</span>`;
+  $("#seasonInfo").textContent = "감독을 결정하는 중입니다.";
+  $("#players").innerHTML = "";
+  $("#revealStage").className = "reveal-stage";
+  $("#revealStage").innerHTML = "";
+  const preview = $("#seasonPreview");
+
+  if(managerTimer) clearTimeout(managerTimer);
+
+  const list = $("#rouletteList");
+  const totalManagerWeight = managers.reduce((sum,m)=>sum+(m.weight ?? 1),0);
+  let managerRoll = Math.random()*totalManagerWeight;
+  let targetIndex = 0;
+  for(let i=0;i<managers.length;i++){
+    managerRoll -= (managers[i].weight ?? 1);
+    if(managerRoll <= 0){
+      targetIndex = i;
+      break;
+    }
+  }
+  const target = managers[targetIndex];
+
+  const currentModulo = ((managerIndex % managers.length)+managers.length)%managers.length;
+  let steps = managers.length*2 + ((targetIndex-currentModulo+managers.length)%managers.length);
+  if(steps < 14) steps += managers.length;
+
+  let step = 0;
+  function tick(){
+    managerIndex++;
+    step++;
+
+    const progress = step/steps;
+    let delay;
+    if(progress < .80){
+      delay = 11;
+    }else{
+      const eased = (progress-.80)/.20;
+      delay = 11 + Math.pow(eased,2.5)*180;
+    }
+
+    list.style.transition = `transform ${Math.min(delay,185)}ms cubic-bezier(.15,.82,.22,1)`;
+    list.style.transform = `translateY(-${managerIndex*80}px)`;
+
+    if(step < steps){
+      managerTimer = setTimeout(tick,delay);
+    }else{
+      selectedManager = target;
+      managerTimer = setTimeout(()=>{
+        managerRolling = false;
+        const managerBoostPreview = (selectedManager.name === "빌 니콜슨")
+          ? 3
+          : (selectedManager.ovr >= 90 ? 2 : (selectedManager.ovr >= 85 ? 1 : (selectedManager.ovr >= 80 ? 0 : -1)));
+        const managerBoostText = `${managerBoostPreview >= 0 ? "+" : ""}${managerBoostPreview}`;
+        $("#seasonName").textContent = selectedManager.name;
+        $("#seasonInfo").textContent = `MANAGER · Tottenham ${selectedManager.tenure} · OVR ${selectedManager.ovr} · 팀 보정 ${managerBoostText}`;
+
+        const reveal = $("#revealStage");
+        if(reveal){
+          reveal.className = "reveal-stage show";
+          reveal.innerHTML = `
+            <div id="pendingManagerCard" class="manager-reveal-card drag-ready" draggable="true">
+              <div class="reveal-head">
+                <div>
+                  <div class="reveal-nation">TOTTENHAM MANAGER</div>
+                  <div class="reveal-name">${selectedManager.name}</div>
+                  <div class="reveal-tenure">Tottenham ${selectedManager.tenure}</div>
+                </div>
+                <div class="reveal-ovr">
+                  <strong>${selectedManager.ovr}</strong>
+                  <span>OVR</span>
+                </div>
+              </div>
+              <div class="manager-card-label">팀 보정 ${managerBoostText} · MY SPURS XI의 감독 빈 자리로 드래그하세요</div>
+            </div>`;
+
+          const managerCard = $("#pendingManagerCard");
+          if(managerCard){
+            managerCard.addEventListener("dragstart", e=>{
+              e.dataTransfer.effectAllowed = "move";
+              e.dataTransfer.setData("text/plain","manager");
+              const managerSlot = $("#xiManagerSlot");
+              if(managerSlot) managerSlot.classList.add("drop-ready");
+            });
+            managerCard.addEventListener("dragend", ()=>{
+              const managerSlot = $("#xiManagerSlot");
+              if(managerSlot) managerSlot.classList.remove("drop-ready");
+            });
+          }
+        }
+
+        renderXIManagerCard();
+        updateManagerUI();
+        updateFinalDraftUI();
+      },90);
+    }
+  }
+  tick();
+}
+
+
+function placeManager(){
+  if(!selectedManager || managerPlaced) return;
+  managerPlaced = true;
+
+  const managerSlot = $("#xiManagerSlot");
+  if(managerSlot) managerSlot.classList.remove("drop-ready");
+
+  renderXIManagerCard();
+  updateStats();
+
+  // 감독 배치가 끝나면 왼쪽 패널을 시뮬레이션 준비 상태로 정리
+  const reveal = $("#revealStage");
+  if(reveal){
+    reveal.className = "reveal-stage";
+    reveal.innerHTML = "";
+  }
+
+  const players = $("#players");
+  if(players) players.innerHTML = "";
+
+  const preview = $("#seasonPreview");
+  if(preview){
+    preview.style.display = "none";
+    preview.innerHTML = "";
+  }
+
+  const seasonBox = document.querySelector(".season");
+  if(seasonBox) seasonBox.style.display = "none";
+
+  const rouletteBox = document.querySelector(".roulette-box");
+  if(rouletteBox) rouletteBox.style.display = "none";
+
+  $("#drawBtn").style.display = "none";
+  $("#managerDrawBtn").style.display = "none";
+  $("#rerollBtn").style.display = "none";
+
+  updateManagerUI();
+  updateFinalDraftUI();
+}
+
+function draftedCount(){ return drafted.filter(Boolean).length; }
+
+function canSpinSeasonRoulette(){
+  return formationChosen &&
+    draftedCount() < 11 &&
+    !isRolling &&
+    !managerRolling &&
+    !pendingPlayer &&
+    !currentSeason;
+}
+
+function refreshSeasonRouletteButton(){
+  const btn = $("#drawBtn");
+  if(!btn) return;
+  btn.disabled = !canSpinSeasonRoulette();
+}
+
+
+function renderSeasonPreview(){
+  const box = $("#seasonPreview");
+  if(!box) return;
+  if(!currentSeason){
+    box.className = "season-preview empty";
+    box.innerHTML = "룰렛 결과 시즌 포스터가 여기 표시됩니다.<br>룰렛이 멈추면 시즌 이미지와 함께 선수 선택 목록이 열립니다.";
+    return;
+  }
+  if(isLegendSeason(currentSeason)){
+    box.className = "season-preview";
+    box.innerHTML = `
+      <div class="season-preview-top">
+        <div>
+          <strong>THE LEGENDS</strong>
+          <span>${currentSeason.info}</span>
+        </div>
+        <div style="font-size:12px;color:#f8e3a7">SPECIAL</div>
+      </div>
+      <div style="margin-top:14px;padding:24px 18px;border-radius:18px;border:1px solid rgba(255,238,184,.24);background:linear-gradient(145deg, rgba(255,252,240,.08), rgba(227,186,101,.14));text-align:center">
+        <div style="font-size:13px;font-weight:900;letter-spacing:2px;color:#fff0bc;margin-bottom:8px">THE LEGENDS</div>
+        <div style="font-size:22px;font-weight:1000;color:#fff8df;letter-spacing:.5px">THE LEGENDS SPECIAL</div>
+        <div style="margin-top:10px;font-size:12px;color:#e8d7a2;line-height:1.55">지미 그리브스 · 글렌 호들 · 가스코인 · 팻 제닝스 등<br>스퍼스 레전드 카드가 등장합니다.</div>
+      </div>
+    `;
+  } else if(currentSeason.poster){
+    box.className = "season-preview";
+    box.innerHTML = `
+      <div class="season-preview-top">
+        <div>
+          <strong>${currentSeason.name} BEST 11</strong>
+          <span>${currentSeason.info}</span>
+        </div>
+        <div style="font-size:12px;color:#dfe8ff">시즌 포스터</div>
+      </div>
+      <img src="${currentSeason.poster}" alt="${currentSeason.name} 시즌 포스터">
+
+    `;
+  } else {
+    box.className = "season-preview empty";
+    box.innerHTML = `<strong style="display:block;margin-bottom:6px">${currentSeason.name}</strong>${currentSeason.info}<br>아직 연결된 시즌 포스터가 없습니다. 2026/27은 포스터를 나중에 추가할 수 있습니다.`;
+  }
+}
+
+
+function buildRoulette(){
+  const list = $("#rouletteList");
+  list.innerHTML = "";
+  const loop = [];
+  for(let r=0; r<ROULETTE_REPEAT; r++) loop.push(...seasons);
+  loop.forEach(season=>{
+    const item = document.createElement('div');
+    item.className = 'roulette-item' + (isLegendSeason(season) ? ' legend-season-item' : '');
+    item.innerHTML = `<strong>${season.name}</strong><span>${season.info}</span>`;
+    list.appendChild(item);
+  });
+  rouletteIndex = seasons.length * Math.floor(ROULETTE_REPEAT / 3);
+  list.style.transition = 'none';
+  list.style.transform = `translateY(-${rouletteIndex * 80}px)`;
+}
+
+
+function getSeasonWeight(seasonName){
+  if(isLegendSeasonByName(seasonName)) return 0;
+  const year = parseInt(seasonName.slice(0,4),10);
+  if(year >= 1990 && year <= 1999) return 0.65;
+  if(year >= 2000 && year <= 2009) return 0.80;
+  if(year >= 2010 && year <= 2019) return 1.10;
+  if(year >= 2020) return 1.10;
+  return 1;
+}
+
+function updateRerollUI(){
+  const btn = $("#rerollBtn");
+  if(!btn) return;
+  btn.textContent = `리롤 ${rerollRemaining}회`;
+  const canReroll =
+    rerollRemaining > 0 &&
+    draftedCount() < 11 &&
+    !!currentSeason &&
+    !isRolling &&
+    !pendingPlayer &&
+    !managerRolling;
+  btn.disabled = !canReroll;
+}
+
+function pickWeightedSeasonIndex(excludeSeasonName=null){
+  const legendIndex = seasons.findIndex(s=>isLegendSeason(s));
+  if(legendIndex >= 0 && excludeSeasonName !== LEGEND_SEASON_NAME && Math.random() < LEGEND_TEST_PROBABILITY){
+    return legendIndex;
+  }
+
+  const weights = seasons.map(s=>{
+    if(s.name === excludeSeasonName) return 0;
+    if(isLegendSeason(s)) return 0;
+    return getSeasonWeight(s.name);
+  });
+
+  const total = weights.reduce((a,b)=>a+b,0);
+  let r = Math.random()*total;
+  for(let i=0;i<weights.length;i++){
+    r -= weights[i];
+    if(r <= 0) return i;
+  }
+  return seasons.findIndex(s=>!isLegendSeason(s));
+}
+
+function startRoulette(excludeSeasonName=null){
+  if(isRolling || pendingPlayer || draftedCount() >= 11) return;
+  if(currentSeason && excludeSeasonName === null) return;
+  setRouletteMode("season");
+  isRolling = true;
+  currentSeason = null;
+  $("#drawBtn").disabled = true;
+  $("#rerollBtn").disabled = true;
+  $("#players").innerHTML = "";
+  $("#revealStage").className = "reveal-stage";
+  $("#revealStage").innerHTML = "";
+  const previewBox = $("#seasonPreview");
+  if(previewBox){ previewBox.className = "season-preview empty"; previewBox.innerHTML = "룰렛 결과를 불러오는 중입니다..."; }
+  $("#seasonName").innerHTML = `<span class="live"><span class="dot"></span>룰렛 회전 중...</span>`;
+  $("#seasonInfo").textContent = "시즌을 결정하는 중입니다.";
+
+  if(rouletteTimer) clearTimeout(rouletteTimer);
+  const list = $("#rouletteList");
+  list.style.transition = 'none';
+
+  const targetIndexInSeason = pickWeightedSeasonIndex(excludeSeasonName);
+  const targetSeason = seasons[targetIndexInSeason];
+  const minTurns = isLegendSeason(targetSeason) ? 3 : 2; // 레전드는 조금 더 극적이게
+  const currentModulo = ((rouletteIndex % seasons.length) + seasons.length) % seasons.length;
+  let stepsToTarget = minTurns * seasons.length + ((targetIndexInSeason - currentModulo + seasons.length) % seasons.length);
+  if(stepsToTarget < 10) stepsToTarget += seasons.length;
+
+  let step = 0;
+  function tick(){
+    rouletteIndex++;
+    step++;
+    const progress = step / stepsToTarget;
+
+    // 대부분 빠르게 지나가고 마지막 약 22%에서만 강하게 감속
+    let delay;
+    if(progress < .78){
+      delay = 12;
+    } else {
+      const eased = (progress - .78) / .22;
+      delay = 12 + Math.pow(eased, 2.55) * 165;
+    }
+
+    list.style.transition = `transform ${Math.min(delay,170)}ms cubic-bezier(.15,.82,.22,1)`;
+    list.style.transform = `translateY(-${rouletteIndex * 80}px)`;
+
+    if(step < stepsToTarget){
+      rouletteTimer = setTimeout(tick, delay);
+    } else {
+      currentSeason = targetSeason;
+      rouletteTimer = setTimeout(()=>{
+        isRolling = false;
+        $("#drawBtn").disabled = true;
+        $("#seasonName").textContent = currentSeason.name;
+        $("#seasonInfo").textContent = currentSeason.info;
+        if(isLegendSeason(currentSeason)) triggerLegendRevealAnimation("THE LEGENDS");
+        renderSeasonPreview();
+        renderPlayers();
+        updateRerollUI();
+      }, 80);
+    }
+  }
+  tick();
+}
+
+function rerollSeason(){
+  if(rerollRemaining <= 0 || draftedCount() >= 11 || !currentSeason || isRolling || pendingPlayer) return;
+  const previousSeason = currentSeason.name;
+  rerollRemaining--;
+  updateRerollUI();
+  startRoulette(previousSeason);
+}
+
+function renderPlayers(){
+  const wrap = $("#players");
+  const reveal = $("#revealStage");
+  wrap.innerHTML = "";
+  reveal.className = "reveal-stage";
+  reveal.innerHTML = "";
+  renderSeasonPreview();
+
+  currentSeason.players.forEach(p=>{
+    const [name,pos,ovr] = p;
+    const player = buildPlayerObject(name, pos, ovr, currentSeason.name);
+    const alreadyPicked = drafted.some(x=>x && x.name===name);
+    const noOpenPosition = !alreadyPicked && !hasOpenCompatibleSlot(player);
+    const disabled = alreadyPicked || noOpenPosition;
+    const el = document.createElement("div");
+    let candidateClass = "";
+    if(isLegendCard(player)) candidateClass = " prepick-legend";
+    el.className = "prepick-row" + (disabled ? " disabled" : "") + candidateClass;
+    const positions = possiblePositions(player);
+    const statusBadge = alreadyPicked
+      ? '<div class="picked-badge">선택 완료</div>'
+      : noOpenPosition
+        ? '<div class="picked-badge">포지션 마감</div>'
+        : '<div class="picked-badge" style="visibility:hidden">선택 완료</div>';
+
+    el.innerHTML = `
+      <div class="prepick-nationality">${player.nation}</div>
+      <div>
+        <div class="prepick-name">${getPlayerDisplayName(name)}</div>
+        <div class="prepick-positions">가능 포지션 · ${positions.join(" / ")}</div>
+      </div>
+      <div class="prepick-status">
+        <div class="prepick-tenure">토트넘 ${player.tenure}</div>
+        ${statusBadge}
+      </div>
+    `;
+    if(!disabled){
+      el.onclick = ()=>revealAndPick(player);
+    }
+    wrap.appendChild(el);
+  });
+}
+
+function getTierClass(ovr, prime=false, wonder=false, legend=false, toty=false, goldenBoot=false, hero=false, winner=false, sol=false){
+  if(sol) return "tier-sol";
+  if(legend) return "tier-legend";
+  if(goldenBoot) return "tier-goldenboot";
+  if(winner) return "tier-winner";
+  if(hero) return "tier-hero";
+  if(toty) return "tier-toty";
+  if(wonder) return "tier-wonder";
+  if(prime) return "tier-prime";
+  if(ovr >= 90) return "tier-platinum";
+  if(ovr >= 85) return "tier-gold";
+  if(ovr >= 80) return "tier-silver";
+  return "tier-base";
+}
+
+function playerTierClass(player){
+  return getTierClass(
+    player?.ovr ?? 0,
+    isPrimeTime(player),
+    isWonderBoy(player) && !isTotyCard(player) && !isGoldenBootCard(player),
+    isLegendCard(player),
+    isTotyCard(player),
+    isGoldenBootCard(player),
+    isHeroCard(player),
+    isWorldCupWinnerCard(player),
+    isSolCard(player)
+  );
+}
+
+function playerRevealAnimClass(player){
+  if(isLegendCard(player)) return " legend-reveal-enter";
+  if(isWorldCupWinnerCard(player)) return " winner-reveal-enter";
+  if(isHeroCard(player)) return " hero-reveal-enter";
+  if(isGoldenBootCard(player)) return " goldenboot-reveal-enter";
+  if(isTotyCard(player)) return " toty-reveal-enter";
+  if(isWonderBoy(player) && !isTotyCard(player) && !isGoldenBootCard(player)) return " wonder-reveal-enter";
+  if(isPrimeTime(player)) return " prime-reveal-enter";
+  return "";
+}
+
+function playerChipHtml(player){
+  if(isLegendCard(player)) return '<div class="legend-chip-small">LEGEND</div>';
+  if(isWorldCupWinnerCard(player)) return '<div class="winner-chip-small">WINNER</div>';
+  if(isHeroCard(player)) return '<div class="hero-chip-small">HERO</div>';
+  if(isGoldenBootCard(player)) return '<div class="goldenboot-chip-small">GOLDEN</div>';
+  if(isTotyCard(player)) return '<div class="toty-chip-small">TOTY</div>';
+  if(isWonderBoy(player) && !isTotyCard(player) && !isGoldenBootCard(player)) return '<div class="wonder-chip-small">WONDER</div>';
+  if(isPrimeTime(player)) return '<div class="prime-chip-small">PRIME</div>';
+  return '';
+}
+
+function playerOvrLabelHtml(player){
+  if(isLegendCard(player)) return '<div class="ovr-legend-label">THE LEGENDS</div>';
+  if(isWorldCupWinnerCard(player)) return '<div class="ovr-winner-label">WORLD CUP<br>WINNER</div>';
+  if(isHeroCard(player)) return '<div class="ovr-hero-label">HERO</div>';
+  if(isGoldenBootCard(player)) return '<div class="ovr-goldenboot-label">GOLDEN BOOT</div>';
+  if(isTotyCard(player)) return '<div class="ovr-toty-label">TOTY</div>';
+  if(isWonderBoy(player) && !isTotyCard(player) && !isGoldenBootCard(player)) return '<div class="ovr-wonder-label">WONDER BOY</div>';
+  if(isPrimeTime(player)) return '<div class="ovr-prime-label">PRIME TIME</div>';
+  return '';
+}
+
+function triggerPlayerRevealAnimation(player){
+  if(isLegendCard(player)) return triggerLegendRevealAnimation(getPlayerDisplayName(player.name));
+  if(isWorldCupWinnerCard(player)) return triggerWinnerRevealAnimation();
+  if(isHeroCard(player)) return triggerHeroRevealAnimation();
+  if(isGoldenBootCard(player)) return triggerGoldenBootRevealAnimation();
+  if(isTotyCard(player)) return triggerTotyRevealAnimation();
+  if(isWonderBoy(player) && !isTotyCard(player) && !isGoldenBootCard(player)) return triggerWonderRevealAnimation();
+  if(isPrimeTime(player)) return triggerPrimeRevealAnimation();
+}
+
+function shortSeasonLabel(season){
+  if(!season) return "";
+  if(String(season) === "THE LEGENDS") return "LEGENDS";
+  const match = String(season).match(/^(\d{4})\/(\d{2})$/);
+  if(match) return `${match[1].slice(-2)}/${match[2]}`;
+  return String(season).replace(/^\d{2}/, m=>m).slice(-5);
+}
+
+
+function triggerWonderRevealAnimation(){
+  const flash = document.createElement("div");
+  flash.className = "wonder-reveal-flash";
+  document.body.appendChild(flash);
+
+  const rings = document.createElement("div");
+  rings.className = "wonder-reveal-rings";
+  document.body.appendChild(rings);
+
+  const title = document.createElement("div");
+  title.className = "wonder-reveal-title";
+  title.textContent = "WONDER BOY";
+  document.body.appendChild(title);
+
+  setTimeout(()=>flash.remove(), 1100);
+  setTimeout(()=>rings.remove(), 1400);
+  setTimeout(()=>title.remove(), 1550);
+}
+
+function triggerPrimeRevealAnimation(){
+  const flash = document.createElement("div");
+  flash.className = "prime-reveal-flash";
+  document.body.appendChild(flash);
+
+  const rays = document.createElement("div");
+  rays.className = "prime-reveal-rays";
+  document.body.appendChild(rays);
+
+  const title = document.createElement("div");
+  title.className = "prime-reveal-title";
+  title.textContent = "PRIME TIME";
+  document.body.appendChild(title);
+
+  setTimeout(()=>flash.remove(), 1100);
+  setTimeout(()=>rays.remove(), 1400);
+  setTimeout(()=>title.remove(), 1550);
+}
+
+function triggerHeroRevealAnimation(){
+  const flash = document.createElement("div");
+  flash.className = "hero-reveal-flash";
+  document.body.appendChild(flash);
+
+  const burst = document.createElement("div");
+  burst.className = "hero-reveal-burst";
+  document.body.appendChild(burst);
+
+  const title = document.createElement("div");
+  title.className = "hero-reveal-title";
+  title.textContent = "HERO";
+  document.body.appendChild(title);
+
+  setTimeout(()=>flash.remove(), 1050);
+  setTimeout(()=>burst.remove(), 1450);
+  setTimeout(()=>title.remove(), 1600);
+}
+
+function triggerWinnerRevealAnimation(){
+  const flash = document.createElement("div");
+  flash.className = "winner-reveal-flash";
+  document.body.appendChild(flash);
+
+  const crown = document.createElement("div");
+  crown.className = "winner-reveal-crown";
+  document.body.appendChild(crown);
+
+  const title = document.createElement("div");
+  title.className = "winner-reveal-title";
+  title.textContent = "WORLD CUP WINNER";
+  document.body.appendChild(title);
+
+  setTimeout(()=>flash.remove(), 1050);
+  setTimeout(()=>crown.remove(), 1450);
+  setTimeout(()=>title.remove(), 1650);
+}
+
+function triggerLegendRevealAnimation(titleText="THE LEGENDS"){
+  const flash = document.createElement("div");
+  flash.className = "legend-reveal-flash";
+  document.body.appendChild(flash);
+
+  const rays = document.createElement("div");
+  rays.className = "legend-reveal-rays";
+  document.body.appendChild(rays);
+
+  const title = document.createElement("div");
+  title.className = "legend-reveal-title";
+  title.textContent = titleText;
+  document.body.appendChild(title);
+
+  setTimeout(()=>flash.remove(), 1000);
+  setTimeout(()=>rays.remove(), 1450);
+  setTimeout(()=>title.remove(), 1600);
+}
+
+function triggerTotyRevealAnimation(){
+  const flash = document.createElement("div");
+  flash.className = "toty-reveal-flash";
+  document.body.appendChild(flash);
+
+  const rays = document.createElement("div");
+  rays.className = "toty-reveal-rays";
+  document.body.appendChild(rays);
+
+  const title = document.createElement("div");
+  title.className = "toty-reveal-title";
+  title.textContent = "TOTY";
+  document.body.appendChild(title);
+
+  setTimeout(()=>flash.remove(), 1050);
+  setTimeout(()=>rays.remove(), 1450);
+  setTimeout(()=>title.remove(), 1600);
+}
+
+function triggerGoldenBootRevealAnimation(){
+  const flash = document.createElement("div");
+  flash.className = "goldenboot-reveal-flash";
+  document.body.appendChild(flash);
+
+  const shatter = document.createElement("div");
+  shatter.className = "goldenboot-shatter";
+  document.body.appendChild(shatter);
+
+  const title = document.createElement("div");
+  title.className = "goldenboot-reveal-title";
+  title.textContent = "GOLDEN BOOT";
+  document.body.appendChild(title);
+
+  setTimeout(()=>flash.remove(), 1050);
+  setTimeout(()=>shatter.remove(), 1400);
+  setTimeout(()=>title.remove(), 1600);
+}
+
+function revealAndPick(player){
+  if(isRolling || pendingPlayer) return;
+  if(drafted.some(x=>x && x.name===player.name)) return alert("이미 뽑은 선수입니다.");
+  if(!hasOpenCompatibleSlot(player)) return alert(`가능한 포지션에 빈 자리가 없습니다.`);
+
+  pendingPlayer = player;
+  $("#drawBtn").disabled = true;
+  $("#rerollBtn").disabled = true;
+
+  const wrap = $("#players");
+  const reveal = $("#revealStage");
+  const positions = possiblePositions(player);
+  wrap.innerHTML = "";
+  reveal.className = "reveal-stage show";
+  reveal.innerHTML = `
+    <div id="pendingCard" draggable="true" class="reveal-card drag-ready ${playerTierClass(player)}${playerRevealAnimClass(player)}">
+      <div class="reveal-head">
+        <div>
+          <div class="reveal-nation">${player.nation} · ${player.pos}</div>
+          <div class="reveal-name">${getPlayerDisplayName(player.name)}</div>
+          <div class="reveal-tenure">Tottenham ${player.tenure} · ${shortSeasonLabel(player.season)}</div>
+          ${isSolCard(player) ? '<div class="sol-warning">⚠ SPECIAL CARD</div>' : ''}
+        </div>
+        <div class="reveal-ovr"><strong>${player.ovr}</strong><span>OVR</span>${playerOvrLabelHtml(player)}</div>
+      </div>
+      <div class="position-row">
+        ${positions.map(pos=>`<span class="position-chip">${pos}</span>`).join("")}
+      </div>
+      <div class="drag-instruction">카드를 오른쪽의 초록색으로 표시되는 원하는 포지션에 드래그하세요</div>
+    </div>`;
+
+  const card = $("#pendingCard");
+  triggerPlayerRevealAnimation(player);
+  card.addEventListener("dragstart", e=>{
+    dragSource = {type:"pending"};
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", player.name);
+    showDropHints(player, null);
+  });
+  card.addEventListener("dragend", ()=>{
+    dragSource = null;
+    clearDropHints();
+  });
+
+  showDropHints(player, null);
+}
+
+function compatible(slot,pos){
+  // 엑셀의 '가능 포지션'에 직접 적어둔 위치만 배치 가능
+  return slot === pos;
+}
+
+function normalizePlayerPositions(playerOrPos){
+  if(playerOrPos == null) return [];
+  if(Array.isArray(playerOrPos)) return [...new Set(playerOrPos.filter(Boolean))];
+  if(typeof playerOrPos === "string") return [playerOrPos];
+  if(Array.isArray(playerOrPos.possiblePositions) && playerOrPos.possiblePositions.length) return [...new Set(playerOrPos.possiblePositions.filter(Boolean))];
+  if(playerOrPos.name) return getPlayerPositions(playerOrPos.name, playerOrPos.pos);
+  if(playerOrPos.pos) return [playerOrPos.pos];
+  return [];
+}
+
+function isPlayerCompatibleWithSlot(playerOrPos, slot){
+  return normalizePlayerPositions(playerOrPos).some(pos=>compatible(slot,pos));
+}
+
+function possiblePositions(playerOrPos){
+  return [...new Set(slots.filter(slot=>isPlayerCompatibleWithSlot(playerOrPos, slot)))];
+}
+
+function hasOpenCompatibleSlot(player){
+  return slots.some((slot,i)=>!drafted[i] && isPlayerCompatibleWithSlot(player, slot));
+}
+
+function clearDropHints(){
+  document.querySelectorAll(".player-node").forEach(n=>{
+    n.classList.remove("drop-valid","drop-invalid","dragging");
+  });
+}
+
+function showDropHints(player, sourceIndex=null){
+  document.querySelectorAll(".player-node").forEach((node,i)=>{
+    const occupied = !!drafted[i];
+    const isSource = sourceIndex === i;
+    if(isSource){
+      node.classList.add("dragging");
+      return;
+    }
+    if(!isPlayerCompatibleWithSlot(player, slots[i])){
+      node.classList.add("drop-invalid");
+      return;
+    }
+    if(!occupied){
+      node.classList.add("drop-valid");
+      return;
+    }
+    if(sourceIndex !== null){
+      const other = drafted[i];
+      if(other && isPlayerCompatibleWithSlot(other, slots[sourceIndex])){
+        node.classList.add("drop-valid");
+      } else {
+        node.classList.add("drop-invalid");
+      }
+    } else {
+      node.classList.add("drop-invalid");
+    }
+  });
+}
+
+function finishPendingPlacement(index){
+  drafted[index] = pendingPlayer;
+  pendingPlayer = null;
+  dragSource = null;
+  clearDropHints();
+  renderSquad();
+  renderPitch();
+  $("#revealStage").className = "reveal-stage";
+  $("#revealStage").innerHTML = "";
+  renderSeasonPreview();
+  $("#seasonName").textContent = "다음 시즌을 뽑아주세요";
+  $("#seasonInfo").textContent = "다시 룰렛을 돌려 다음 시즌을 뽑습니다.";
+  $("#pickCount").textContent = `${draftedCount()} / 11`;
+
+  // 해당 시즌에서 선수 1명을 확정해야만 다음 일반 룰렛이 다시 열림
+  currentSeason = null;
+  updateRerollUI();
+  refreshSeasonRouletteButton();
+
+  if(draftedCount() === 11){
+    $("#simBtn").disabled = true;
+    $("#drawBtn").disabled = true;
+    $("#rerollBtn").disabled = true;
+    setRouletteMode("manager");
+    $("#seasonName").textContent = "감독을 뽑아주세요";
+    $("#seasonInfo").textContent = "선수 11명이 완성되었습니다. 감독 룰렛을 돌려주세요.";
+    updateManagerUI();
+  }
+}
+
+
+function triggerSolCampbellGameOver(targetNode=null){
+  clearDropHints();
+
+  const wrap = document.querySelector(".wrap");
+  if(wrap){
+    wrap.classList.remove("easter-shake");
+    void wrap.offsetWidth;
+    wrap.classList.add("easter-shake");
+  }
+
+  const crack = document.createElement("div");
+  crack.className = "screen-crack";
+  document.body.appendChild(crack);
+  setTimeout(()=>crack.remove(), 520);
+
+  const rect = targetNode
+    ? targetNode.getBoundingClientRect()
+    : {left:window.innerWidth/2-50, top:window.innerHeight/2-30, width:100, height:60};
+
+  for(let i=0;i<22;i++){
+    const piece = document.createElement("div");
+    piece.className = "shatter-piece";
+    const px = rect.left + Math.random()*rect.width;
+    const py = rect.top + Math.random()*rect.height;
+    piece.style.left = px + "px";
+    piece.style.top = py + "px";
+    const angle = Math.random()*Math.PI*2;
+    const dist = 90 + Math.random()*240;
+    piece.style.setProperty("--dx", Math.cos(angle)*dist + "px");
+    piece.style.setProperty("--dy", Math.sin(angle)*dist + "px");
+    piece.style.setProperty("--rot", ((Math.random()*720)-360) + "deg");
+    document.body.appendChild(piece);
+    setTimeout(()=>piece.remove(), 950);
+  }
+
+  pendingPlayer = null;
+  dragSource = null;
+  isRolling = false;
+
+  setTimeout(()=>{
+    const overlay = $("#gameOverOverlay");
+    overlay.classList.add("show");
+  }, 320);
+}
+
+function handleDropOnSlot(targetIndex){
+  if(!dragSource) return;
+
+  if(dragSource.type === "pending"){
+    const p = pendingPlayer;
+    if(!p || drafted[targetIndex] || !isPlayerCompatibleWithSlot(p, slots[targetIndex])) return;
+
+    if(isSolCard(p)){
+      const targetNode = document.querySelector(`.player-node[data-slot-index="${targetIndex}"]`);
+      triggerSolCampbellGameOver(targetNode);
+      return;
+    }
+
+    finishPendingPlacement(targetIndex);
+    return;
+  }
+
+  if(dragSource.type === "existing"){
+    const sourceIndex = dragSource.index;
+    if(sourceIndex === targetIndex) return;
+    const moving = drafted[sourceIndex];
+    if(!moving || !isPlayerCompatibleWithSlot(moving, slots[targetIndex])) return;
+
+    const target = drafted[targetIndex];
+    if(!target){
+      drafted[targetIndex] = moving;
+      drafted[sourceIndex] = undefined;
+    } else {
+      if(!isPlayerCompatibleWithSlot(target, slots[sourceIndex])) return;
+      drafted[targetIndex] = moving;
+      drafted[sourceIndex] = target;
+    }
+    dragSource = null;
+    clearDropHints();
+    renderSquad();
+    renderPitch();
+  }
+}
+
+function idealScore(slot, pos){
+  if(slot === pos) return 100;
+  if(slot==="CM" && pos==="DM") return 95;
+  if(slot==="CM" && pos==="CAM") return 84;
+  if(slot==="CAM" && ["RW","LW"].includes(pos)) return 86;
+  if(["RW","LW"].includes(slot) && pos==="CAM") return 88;
+  if(slot==="LM" && pos==="LW") return 94;
+  if(slot==="RM" && pos==="RW") return 94;
+  if(slot==="LM" && ["CAM","CM","RW"].includes(pos)) return 80;
+  if(slot==="RM" && ["CAM","CM","LW"].includes(pos)) return 80;
+  if(["RB","LB"].includes(slot) && ["RB","LB"].includes(pos)) return 85;
+  if(["RW","LW"].includes(slot) && ["RW","LW"].includes(pos)) return 92;
+  return compatible(slot,pos) ? 70 : -1;
+}
+
+function bestSlotScore(player, slot){
+  return normalizePlayerPositions(player).reduce((best, pos)=>Math.max(best, idealScore(slot, pos)), -1);
+}
+
+function findBestSlot(player){
+  let best = -1;
+  let bestScore = -1;
+  slots.forEach((slot,i)=>{
+    if(drafted[i]) return;
+    const score = bestSlotScore(player, slot);
+    if(score > bestScore){
+      bestScore = score;
+      best = i;
+    }
+  });
+  return best;
+}
+
+function renderSquad(){
+  const wrap = $("#squad");
+  wrap.innerHTML = "";
+  slots.forEach((slot,i)=>{
+    const p = drafted[i];
+    const el = document.createElement("div");
+    el.className = "slot" + (p ? (" filled " + playerTierClass(p)) : "");
+    el.innerHTML = p
+      ? `<b>${slot}</b><span>${getPlayerDisplayName(p.name)}</span><div class="sub">${shortSeasonLabel(p.season)} · <strong>OVR ${p.ovr}</strong></div>`
+      : `<b>${slot}</b><span style="color:#63719a">빈 자리</span>`;
+    wrap.appendChild(el);
+  });
+  updateStats();
+  updateManagerUI();
+}
+
+
+function renderPitch(){
+  const pitch = $("#pitch");
+  pitch.querySelectorAll('.player-node').forEach(n=>n.remove());
+
+  slots.forEach((slot,i)=>{
+    const p = drafted[i];
+    const node = document.createElement('div');
+    node.className = 'player-node' + (p ? (' ' + playerTierClass(p)) : ' empty');
+    node.style.left = pitchLayout[i].x + '%';
+    node.style.top = pitchLayout[i].y + '%';
+    node.dataset.slotIndex = i;
+
+    if(p){
+      node.draggable = true;
+      node.classList.add("drag-ready");
+      node.innerHTML = `<div class="node-top"><div class="slot-label">${slot}</div>${playerChipHtml(p)}</div><div class="name">${getPlayerDisplayName(p.name)}</div><div class="meta"><strong>OVR ${p.ovr}</strong> · ${shortSeasonLabel(p.season)}</div>`;
+      node.addEventListener("dragstart", e=>{
+        dragSource = {type:"existing", index:i};
+        e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData("text/plain", p.name);
+        showDropHints(p, i);
+      });
+      node.addEventListener("dragend", ()=>{
+        dragSource = null;
+        clearDropHints();
+      });
+    } else {
+      node.innerHTML = `<div class="node-top"><div class="slot-label">${slot}</div></div><div class="name" style="color:#6d7fa8">빈 자리</div><div class="meta">드래그해서 배치</div>`;
+    }
+
+    node.addEventListener("dragover", e=>{
+      if(!dragSource) return;
+      let moving = dragSource.type === "pending" ? pendingPlayer : drafted[dragSource.index];
+      if(!moving) return;
+
+      const slotCompatible = isPlayerCompatibleWithSlot(moving, slot);
+      let canDrop = false;
+
+      if(slotCompatible){
+        if(!drafted[i]){
+          canDrop = true;
+        } else if(dragSource.type === "existing" && dragSource.index !== i){
+          const target = drafted[i];
+          canDrop = !!target && isPlayerCompatibleWithSlot(target, slots[dragSource.index]);
+        }
+      }
+
+      if(canDrop){
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+      }
+    });
+
+    node.addEventListener("drop", e=>{
+      e.preventDefault();
+      handleDropOnSlot(i);
+    });
+
+    node.addEventListener("click", ()=>{
+      if(pendingPlayer && !drafted[i] && isPlayerCompatibleWithSlot(pendingPlayer, slot)){
+        finishPendingPlacement(i);
+      }
+    });
+
+    pitch.appendChild(node);
+  });
+
+  if(pendingPlayer){
+    showDropHints(pendingPlayer, null);
+  }
+}
+
+function updateStats(){
+  const avgIndexes = indexes => {
+    const ps = indexes.map(i=>drafted[i]).filter(Boolean);
+    if(!ps.length) return 0;
+    return Math.round(ps.reduce((sum,p)=>sum+p.ovr,0)/ps.length);
+  };
+
+  const defIndexes = statGroups.def;
+  const midIndexes = statGroups.mid;
+  const attIndexes = statGroups.att;
+  const boost = getManagerBoost();
+
+  const attValue = avgIndexes(attIndexes);
+  const midValue = avgIndexes(midIndexes);
+  const defValue = avgIndexes(defIndexes);
+
+  $("#atk").textContent = attValue ? Math.round(applyManagerBoost(attValue)) : 0;
+  $("#mid").textContent = midValue ? Math.round(applyManagerBoost(midValue)) : 0;
+  $("#def").textContent = defValue ? Math.round(applyManagerBoost(defValue)) : 0;
+
+  const all = drafted.filter(Boolean);
+  const overall = all.length
+    ? Math.round(all.reduce((sum,p)=>sum+p.ovr,0)/all.length)
+    : 0;
+  $("#ovr").textContent = overall ? Math.round(applyManagerBoost(overall)) : 0;
+}
+
+
+const premierLeague2627Fixtures = [
+  {round:1, date:"2026-08-22", opponent:"Brentford", venue:"A"},
+  {round:2, date:"2026-08-29", opponent:"Newcastle United", venue:"H"},
+  {round:3, date:"2026-09-05", opponent:"Nottingham Forest", venue:"A"},
+  {round:4, date:"2026-09-12", opponent:"Everton", venue:"H"},
+  {round:5, date:"2026-09-19", opponent:"Aston Villa", venue:"H"},
+  {round:6, date:"2026-10-10", opponent:"Manchester United", venue:"A"},
+  {round:7, date:"2026-10-19", opponent:"Coventry City", venue:"H"},
+  {round:8, date:"2026-10-24", opponent:"Chelsea", venue:"A"},
+  {round:9, date:"2026-10-31", opponent:"Crystal Palace", venue:"H"},
+  {round:10, date:"2026-11-07", opponent:"Leeds United", venue:"A"},
+  {round:11, date:"2026-11-21", opponent:"Ipswich Town", venue:"H"},
+  {round:12, date:"2026-11-28", opponent:"Sunderland", venue:"A"},
+  {round:13, date:"2026-12-02", opponent:"Fulham", venue:"H"},
+  {round:14, date:"2026-12-05", opponent:"Arsenal", venue:"H"},
+  {round:15, date:"2026-12-12", opponent:"Hull City", venue:"A"},
+  {round:16, date:"2026-12-19", opponent:"Liverpool", venue:"A"},
+  {round:17, date:"2026-12-26", opponent:"AFC Bournemouth", venue:"H"},
+  {round:18, date:"2026-12-30", opponent:"Brighton & Hove Albion", venue:"H"},
+  {round:19, date:"2027-01-02", opponent:"Manchester City", venue:"A"},
+  {round:20, date:"2027-01-06", opponent:"Fulham", venue:"A"},
+  {round:21, date:"2027-01-16", opponent:"Leeds United", venue:"H"},
+  {round:22, date:"2027-01-23", opponent:"Crystal Palace", venue:"A"},
+  {round:23, date:"2027-01-30", opponent:"Sunderland", venue:"H"},
+  {round:24, date:"2027-02-06", opponent:"Ipswich Town", venue:"A"},
+  {round:25, date:"2027-02-10", opponent:"Manchester City", venue:"H"},
+  {round:26, date:"2027-02-20", opponent:"Brighton & Hove Albion", venue:"A"},
+  {round:27, date:"2027-02-27", opponent:"Liverpool", venue:"H"},
+  {round:28, date:"2027-03-03", opponent:"AFC Bournemouth", venue:"A"},
+  {round:29, date:"2027-03-13", opponent:"Nottingham Forest", venue:"H"},
+  {round:30, date:"2027-03-20", opponent:"Everton", venue:"A"},
+  {round:31, date:"2027-04-10", opponent:"Brentford", venue:"H"},
+  {round:32, date:"2027-04-17", opponent:"Newcastle United", venue:"A"},
+  {round:33, date:"2027-04-24", opponent:"Hull City", venue:"H"},
+  {round:34, date:"2027-05-01", opponent:"Arsenal", venue:"A"},
+  {round:35, date:"2027-05-08", opponent:"Chelsea", venue:"H"},
+  {round:36, date:"2027-05-15", opponent:"Coventry City", venue:"A"},
+  {round:37, date:"2027-05-23", opponent:"Manchester United", venue:"H"},
+  {round:38, date:"2027-05-30", opponent:"Aston Villa", venue:"A"}
+];
+
+const premierLeague2627TeamRatings = {
+  "Arsenal":                {att:93, mid:93, def:92},
+  "Manchester City":       {att:93, mid:94, def:91},
+  "Liverpool":             {att:93, mid:91, def:90},
+  "Chelsea":               {att:90, mid:89, def:88},
+  "Manchester United":     {att:88, mid:88, def:87},
+  "Newcastle United":      {att:88, mid:87, def:86},
+  "Aston Villa":           {att:88, mid:87, def:85},
+  "Brighton & Hove Albion":{att:85, mid:86, def:82},
+  "Crystal Palace":        {att:84, mid:84, def:84},
+  "AFC Bournemouth":       {att:84, mid:83, def:82},
+  "Nottingham Forest":     {att:82, mid:82, def:83},
+  "Brentford":             {att:83, mid:81, def:82},
+  "Fulham":                {att:82, mid:83, def:81},
+  "Everton":               {att:80, mid:81, def:83},
+  "Leeds United":          {att:80, mid:80, def:78},
+  "Sunderland":            {att:78, mid:79, def:78},
+  "Ipswich Town":          {att:78, mid:78, def:77},
+  "Hull City":             {att:76, mid:77, def:76},
+  "Coventry City":         {att:77, mid:77, def:76}
+};
+
+let seasonSimulationTimer = null;
+let seasonSimulationRunning = false;
+let seasonSimulationGoalTimers = [];
+
+function clamp(v,min,max){
+  return Math.max(min,Math.min(max,v));
+}
+
+function averageGroupOvr(indexes){
+  const players = indexes.map(i=>drafted[i]).filter(Boolean);
+  if(!players.length) return 0;
+  return players.reduce((sum,p)=>sum+p.ovr,0) / players.length;
+}
+
+function getMyTeamRatings(){
+  const all = drafted.filter(Boolean);
+  const overall = all.reduce((sum,p)=>sum+p.ovr,0) / Math.max(1,all.length);
+  return {
+    overall: applyManagerBoost(overall),
+    att: applyManagerBoost(averageGroupOvr(statGroups.att)),
+    mid: applyManagerBoost(averageGroupOvr(statGroups.mid)),
+    def: applyManagerBoost(averageGroupOvr(statGroups.def))
+  };
+}
+
+function getOpponentRatings(name){
+  const r = premierLeague2627TeamRatings[name] || {att:81,mid:81,def:81};
+  return {
+    ...r,
+    overall:(r.att+r.mid+r.def)/3
+  };
+}
+
+function poissonRandom(lambda){
+  // Knuth Poisson sampler. Match lambdas are kept small, so this stays cheap.
+  const L = Math.exp(-lambda);
+  let k = 0;
+  let p = 1;
+  do{
+    k++;
+    p *= Math.random();
+  }while(p > L && k < 12);
+  return Math.min(k - 1, 7);
+}
+
+function buildMatchModel(myRatings, opponentRatings, venue){
+  const homeBonus = venue === "H" ? 1.8 : -1.8;
+
+  // Overall + midfield determine who controls more of the match.
+  const myFlow = (myRatings.overall + myRatings.mid) / 2 + homeBonus;
+  const oppFlow = (opponentRatings.overall + opponentRatings.mid) / 2 - homeBonus;
+  const flowDiff = myFlow - oppFlow;
+
+  // A smooth share rather than a hard win/loss threshold.
+  const myFlowShare = 1 / (1 + Math.exp(-flowDiff / 7.5));
+  const oppFlowShare = 1 - myFlowShare;
+
+  // ATT vs opposing DEF determines how efficiently each side converts its share into goals.
+  const myAttackEdge = myRatings.att - opponentRatings.def;
+  const oppAttackEdge = opponentRatings.att - myRatings.def;
+
+  const myChanceMultiplier = 0.72 + myFlowShare * 0.68;
+  const oppChanceMultiplier = 0.72 + oppFlowShare * 0.68;
+
+  // 득점량을 조금 낮춘 버전:
+  // 기본 기대득점을 낮추고, ATT-DEF 차이가 득점에 미치는 폭도 완만하게 조정.
+  let myXg = 1.04 * myChanceMultiplier * Math.exp(myAttackEdge / 25);
+  let oppXg = 1.04 * oppChanceMultiplier * Math.exp(oppAttackEdge / 25);
+
+  // 홈/원정 득점 보정도 과도하지 않게 완화.
+  if(venue === "H"){
+    myXg *= 1.06;
+    oppXg *= 0.95;
+  }else{
+    myXg *= 0.95;
+    oppXg *= 1.06;
+  }
+
+  myXg = clamp(myXg, 0.15, 3.10);
+  oppXg = clamp(oppXg, 0.15, 3.10);
+
+  return {myXg, oppXg, myFlowShare, myAttackEdge, oppAttackEdge};
+}
+
+
+function scorerWeightForSlot(slot){
+  if(slot === "ST") return 6.2;
+  if(["LW","RW"].includes(slot)) return 4.6;
+  if(slot === "CAM") return 3.8;
+  if(["LM","RM"].includes(slot)) return 3.0;
+  if(slot === "CM") return 2.1;
+  if(slot === "DM") return 1.4;
+  if(["LB","RB"].includes(slot)) return 0.8;
+  if(slot === "CB") return 0.35;
+  if(slot === "GK") return 0.02;
+  return 1.0;
+}
+
+function initializeScorerState(){
+  const goalCounts = {};
+  const assistCounts = {};
+  const ratingTotals = {};
+  const ratingMatches = {};
+  const cbPlans = [];
+
+  drafted.forEach((player,index)=>{
+    if(!player) return;
+    goalCounts[player.name] = 0;
+    assistCounts[player.name] = 0;
+    ratingTotals[player.name] = 0;
+    ratingMatches[player.name] = 0;
+
+    if(slots[index] === "CB"){
+      const target = Math.random() < 0.38 ? 2 : 1;
+      const thresholds = target === 2
+        ? [
+            4 + Math.floor(Math.random()*12),   // 4R~15R 이후 첫 세트피스 골
+            20 + Math.floor(Math.random()*12)   // 20R~31R 이후 두 번째
+          ]
+        : [
+            7 + Math.floor(Math.random()*18)    // 7R~24R 이후
+          ];
+
+      cbPlans.push({
+        name:player.name,
+        target,
+        scored:0,
+        thresholds
+      });
+    }
+  });
+
+  return {goalCounts, assistCounts, ratingTotals, ratingMatches, cbPlans};
+}
+
+function pickWeightedScorer(){
+  const candidates = drafted
+    .map((player,index)=>({player,index,slot:slots[index]}))
+    .filter(x=>x.player);
+
+  let total = 0;
+  const weighted = candidates.map(item=>{
+    const weight = scorerWeightForSlot(item.slot);
+    total += weight;
+    return {...item,weight};
+  });
+
+  let roll = Math.random()*total;
+  for(const item of weighted){
+    roll -= item.weight;
+    if(roll <= 0) return {name:item.player.name,setPiece:false};
+  }
+
+  const fallback = weighted[weighted.length-1];
+  return {name:fallback?.player?.name || "Tottenham",setPiece:false};
+}
+
+function pickSpursScorer(scorerState, roundNumber){
+  // CB는 시즌마다 1~2골 정도가 나오도록, 정해진 라운드가 지난 뒤
+  // 다음 토트넘 득점 중 하나를 세트피스 골로 배정합니다.
+  const dueCB = scorerState.cbPlans
+    .filter(plan=>{
+      const nextThreshold = plan.thresholds[plan.scored];
+      return plan.scored < plan.target &&
+        nextThreshold !== undefined &&
+        roundNumber >= nextThreshold;
+    })
+    .sort((a,b)=>(a.thresholds[a.scored] ?? 99) - (b.thresholds[b.scored] ?? 99));
+
+  if(dueCB.length){
+    const plan = dueCB[0];
+    plan.scored++;
+    scorerState.goalCounts[plan.name] = (scorerState.goalCounts[plan.name] || 0) + 1;
+    return {name:plan.name,setPiece:true};
+  }
+
+  const scorer = pickWeightedScorer();
+  scorerState.goalCounts[scorer.name] = (scorerState.goalCounts[scorer.name] || 0) + 1;
+  return scorer;
+}
+
+
+function assistWeightForSlot(slot){
+  if(slot === "CAM") return 5.4;
+  if(["LW","RW"].includes(slot)) return 4.6;
+  if(["LM","RM"].includes(slot)) return 4.0;
+  if(slot === "CM") return 3.6;
+  if(slot === "ST") return 2.8;
+  if(slot === "DM") return 2.5;
+  if(["LB","RB"].includes(slot)) return 2.2;
+  if(slot === "CB") return 0.5;
+  if(slot === "GK") return 0.08;
+  return 1.0;
+}
+
+function pickSpursAssist(scorerName, setPiece=false){
+  // 모든 골에 어시스트가 붙지는 않도록 함.
+  // 세트피스는 직접 프리킥/세컨드볼 등을 고려해 어시스트 확률을 조금 낮춤.
+  const assistChance = setPiece ? 0.62 : 0.80;
+  if(Math.random() > assistChance) return null;
+
+  const candidates = drafted
+    .map((player,index)=>({player,index,slot:slots[index]}))
+    .filter(x=>x.player && x.player.name !== scorerName);
+
+  let total = 0;
+  const weighted = candidates.map(item=>{
+    const weight = assistWeightForSlot(item.slot);
+    total += weight;
+    return {...item,weight};
+  });
+
+  if(total <= 0) return null;
+
+  let roll = Math.random()*total;
+  for(const item of weighted){
+    roll -= item.weight;
+    if(roll <= 0) return item.player.name;
+  }
+
+  return weighted[weighted.length-1]?.player?.name || null;
+}
+
+function updateSeasonPlayerRatings(scorerState, match, result){
+  const goalByPlayer = {};
+  const assistByPlayer = {};
+
+  match.events.forEach(event=>{
+    if(event.side !== "spurs") return;
+    if(event.scorer) goalByPlayer[event.scorer] = (goalByPlayer[event.scorer] || 0) + 1;
+    if(event.assist) assistByPlayer[event.assist] = (assistByPlayer[event.assist] || 0) + 1;
+  });
+
+  drafted.forEach((player,index)=>{
+    if(!player) return;
+
+    const slot = slots[index];
+    const goals = goalByPlayer[player.name] || 0;
+    const assists = assistByPlayer[player.name] || 0;
+
+    let rating = 6.45;
+
+    // Team result
+    if(result === "W") rating += 0.32;
+    else if(result === "L") rating -= 0.24;
+
+    // Individual attacking contribution
+    rating += goals * 0.78;
+    rating += assists * 0.46;
+
+    // Defensive contribution / clean sheet
+    if(match.oppGoals === 0 && ["GK","RB","LB","CB"].includes(slot)){
+      rating += 0.30;
+    }
+    if(match.oppGoals >= 3 && ["GK","RB","LB","CB"].includes(slot)){
+      rating -= Math.min(0.45, (match.oppGoals-2) * 0.15);
+    }
+
+    // Strong scorelines give the whole team a small lift; heavy defeats do the opposite.
+    const margin = match.myGoals - match.oppGoals;
+    rating += clamp(margin * 0.07, -0.28, 0.28);
+
+    // Better cards are a little more consistent, without overpowering goals/assists.
+    const teamAverage = drafted.filter(Boolean).reduce((s,p)=>s+p.ovr,0) / 11;
+    rating += clamp((player.ovr - teamAverage) * 0.025, -0.18, 0.18);
+
+    // Match-to-match variation.
+    rating += (Math.random()+Math.random()-1) * 0.32;
+    rating = clamp(rating, 5.2, 10.0);
+
+    scorerState.ratingTotals[player.name] += rating;
+    scorerState.ratingMatches[player.name] += 1;
+  });
+}
+
+function renderSeasonPlayerReview(scorerState){
+  const rows = drafted
+    .map((player,index)=>{
+      if(!player) return null;
+      const matches = scorerState.ratingMatches[player.name] || 0;
+      const avgRating = matches
+        ? scorerState.ratingTotals[player.name] / matches
+        : 0;
+      return {
+        name:player.name,
+        displayName:getPlayerDisplayName(player.name),
+        pos:slots[index],
+        goals:scorerState.goalCounts[player.name] || 0,
+        assists:scorerState.assistCounts[player.name] || 0,
+        rating:avgRating
+      };
+    })
+    .filter(Boolean)
+    .sort((a,b)=>b.rating-a.rating || b.goals-a.goals || b.assists-a.assists);
+
+  return `
+    <div class="season-review">
+      <div class="season-review-head">
+        <span>선수 시즌 결산</span>
+        <span>평점</span>
+        <span>골</span>
+        <span>어시</span>
+      </div>
+      <div class="season-review-list">
+        ${rows.map(row=>`
+          <div class="season-review-row">
+            <div class="season-review-player">
+              <div class="season-review-name">${row.displayName}</div>
+              <div class="season-review-pos">${row.pos}</div>
+            </div>
+            <div class="season-review-rating">${row.rating.toFixed(2)}</div>
+            <div class="season-review-ga">${row.goals}</div>
+            <div class="season-review-ga">${row.assists}</div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function createScoreline(myRatings, opponentRatings, venue, scorerState, roundNumber){
+  const model = buildMatchModel(myRatings, opponentRatings, venue);
+  const myGoals = poissonRandom(model.myXg);
+  const oppGoals = poissonRandom(model.oppXg);
+
+  const events = [];
+  for(let i=0;i<myGoals;i++){
+    const scorer = pickSpursScorer(scorerState, roundNumber);
+    const assist = pickSpursAssist(scorer.name, scorer.setPiece);
+    if(assist){
+      scorerState.assistCounts[assist] = (scorerState.assistCounts[assist] || 0) + 1;
+    }
+    events.push({
+      minute:3+Math.floor(Math.random()*87),
+      side:"spurs",
+      scorer:scorer.name,
+      assist,
+      setPiece:scorer.setPiece
+    });
+  }
+  for(let i=0;i<oppGoals;i++){
+    events.push({
+      minute:3+Math.floor(Math.random()*87),
+      side:"opponent",
+      scorer:null,
+      assist:null,
+      setPiece:false
+    });
+  }
+  events.sort((a,b)=>a.minute-b.minute || Math.random()-.5);
+
+  return {myGoals, oppGoals, events, model};
+}
+
+function resultFromScore(myGoals, oppGoals){
+  if(myGoals > oppGoals) return "W";
+  if(myGoals === oppGoals) return "D";
+  return "L";
+}
+
+function resultLabel(result){
+  if(result === "W") return "승";
+  if(result === "D") return "무";
+  return "패";
+}
+
+function resultClass(result){
+  if(result === "W") return "win";
+  if(result === "D") return "draw";
+  return "loss";
+}
+
+function formatFixtureDate(iso){
+  const [y,m,d] = iso.split("-");
+  return `${y}.${m}.${d}`;
+}
+
+function renderCurrentSimulationRound(fixture){
+  const home = fixture.venue === "H";
+  const current = $("#simCurrent");
+  if(!current) return;
+
+  const leftName = home ? "Tottenham" : fixture.opponent;
+  const rightName = home ? fixture.opponent : "Tottenham";
+
+  current.style.display = "";
+  current.innerHTML = `
+    <div class="sim-round-line">
+      <div class="sim-round-badge">ROUND ${fixture.round}</div>
+      <div class="sim-date">${formatFixtureDate(fixture.date)} · ${home ? "HOME" : "AWAY"}</div>
+    </div>
+    <div class="sim-scoreboard">
+      <div class="sim-score-team">${leftName}</div>
+      <div id="simLiveScore" class="sim-score">0 - 0</div>
+      <div class="sim-score-team">${rightName}</div>
+    </div>
+    <div class="sim-clock-row"><span id="simClock" class="sim-clock">0'</span></div>
+    <div id="simEvent" class="sim-event"></div>
+    <div id="simLiveResult" class="sim-live-result wait">경기 진행 중...</div>
+  `;
+}
+
+function updateLiveScore(fixture, spursGoals, opponentGoals, event=null){
+  const home = fixture.venue === "H";
+  const leftGoals = home ? spursGoals : opponentGoals;
+  const rightGoals = home ? opponentGoals : spursGoals;
+  const score = $("#simLiveScore");
+  if(score){
+    score.textContent = `${leftGoals} - ${rightGoals}`;
+    score.classList.remove("sim-score-pulse");
+    void score.offsetWidth;
+    score.classList.add("sim-score-pulse");
+  }
+  if(event){
+    const eventEl = $("#simEvent");
+    if(eventEl){
+      if(event.side === "spurs"){
+        const assistText = event.assist ? ` · 도움 ${getPlayerDisplayName(event.assist)}` : "";
+        eventEl.textContent = `${event.minute}' GOAL · ${getPlayerDisplayName(event.scorer)}${assistText}${event.setPiece ? " · SET PIECE" : ""}`;
+      }else{
+        eventEl.textContent = `${event.minute}' GOAL · ${fixture.opponent}`;
+      }
+      setTimeout(()=>{
+        if(eventEl.textContent.includes(`${event.minute}'`)) eventEl.textContent = "";
+      }, 900);
+    }
+  }
+}
+
+function renderCompletedRound(fixture, result, spursGoals, opponentGoals, events=[]){
+  const history = $("#simHistory");
+  if(!history) return;
+  const home = fixture.venue === "H";
+  const leftGoals = home ? spursGoals : opponentGoals;
+  const rightGoals = home ? opponentGoals : spursGoals;
+
+  const spursScorers = events
+    .filter(e=>e.side==="spurs" && e.scorer)
+    .map(e=>{
+      const assistText = e.assist ? ` (도움 ${getPlayerDisplayName(e.assist)})` : "";
+      return `${getPlayerDisplayName(e.scorer)}${assistText}${e.setPiece ? " (SP)" : ""}`;
+    });
+
+  const scorerLine = spursScorers.length
+    ? `<small>Tottenham 득점 · ${spursScorers.join(", ")}</small>`
+    : "";
+
+  const row = document.createElement("div");
+  row.className = "sim-history-row";
+  row.innerHTML = `
+    <div class="sim-history-round">${fixture.round}R</div>
+    <div class="sim-history-match">
+      ${home ? "Tottenham" : fixture.opponent} ${leftGoals} - ${rightGoals} ${home ? fixture.opponent : "Tottenham"}
+      <small>${formatFixtureDate(fixture.date)} · ${home ? "HOME" : "AWAY"}</small>
+      ${scorerLine}
+    </div>
+    <div class="sim-history-result ${resultClass(result)}">${resultLabel(result)}</div>
+  `;
+  history.prepend(row);
+}
+
+function simulateOtherTeamPoints(teamName, ratings){
+  const overall = (ratings.att + ratings.mid + ratings.def) / 3;
+  const baseline = 50 + (overall - 82) * 2.5;
+  const noise = (Math.random() + Math.random() - 1) * 9;
+  return Math.round(clamp(baseline + noise, 23, 95));
+}
+
+function calculateFinalRank(spursPoints){
+  const otherTeams = Object.entries(premierLeague2627TeamRatings).map(([name,ratings])=>({
+    name,
+    pts: simulateOtherTeamPoints(name,ratings),
+    tie: Math.random()
+  }));
+  const table = [
+    ...otherTeams,
+    {name:"Tottenham", pts:spursPoints, tie:Math.random()}
+  ].sort((a,b)=>b.pts-a.pts || b.tie-a.tie);
+
+  return table.findIndex(t=>t.name==="Tottenham")+1;
+}
+
+function clearSeasonGoalTimers(){
+  seasonSimulationGoalTimers.forEach(id=>clearTimeout(id));
+  seasonSimulationGoalTimers = [];
+}
+
+function finishSeasonSimulation(state, teamRatings, scorerState){
+  seasonSimulationRunning = false;
+  seasonSimulationTimer = null;
+  clearSeasonGoalTimers();
+
+  const place = calculateFinalRank(state.points);
+  const summary = $("#simSummary");
+  if(summary){
+    summary.innerHTML = `
+      <div class="season-summary">
+        <div class="season-summary-kicker">2026/27 PREMIER LEAGUE · 38 MATCHES COMPLETE</div>
+        <div class="season-summary-rank">${place}위</div>
+        <div class="season-summary-points">${state.points} pts</div>
+        <div class="season-summary-record">${state.w}승 ${state.d}무 ${state.l}패 · ${state.gf}득점 ${state.ga}실점 · 팀 OVR ${teamRatings.overall.toFixed(1)}</div>
+      </div>
+      ${renderSeasonPlayerReview(scorerState)}
+    `;
+  }
+
+  const btn = $("#finalSimBtn");
+  if(btn){
+    btn.disabled = false;
+    btn.textContent = "시즌 다시 시뮬레이션하기";
+  }
+}
+
+function simulate(){
+  const ps = drafted.filter(Boolean);
+  if(ps.length < 11 || !selectedManager || !managerPlaced || seasonSimulationRunning) return;
+
+  if(seasonSimulationTimer){
+    clearTimeout(seasonSimulationTimer);
+    seasonSimulationTimer = null;
+  }
+  clearSeasonGoalTimers();
+
+  const teamRatings = getMyTeamRatings();
+  const scorerState = initializeScorerState();
+  const state = {index:0, points:0, w:0, d:0, l:0, gf:0, ga:0};
+
+  seasonSimulationRunning = true;
+  const btn = $("#finalSimBtn");
+  if(btn){
+    btn.disabled = true;
+    btn.textContent = "시즌 시뮬레이션 진행 중...";
+  }
+
+  const r = $("#result");
+  r.style.display = "block";
+  r.innerHTML = `
+    <div class="season-sim-shell">
+      <div class="season-sim-head">
+        <div>
+          <div class="season-sim-title">2026/27 PREMIER LEAGUE</div>
+          <div class="season-sim-sub">ATT / MID / DEF 기반 경기 시뮬레이션 · 경기당 약 5초</div>
+        </div>
+      </div>
+      <div id="simSummary"></div>
+      <div id="simCurrent" class="sim-current"></div>
+      <div class="sim-history-title">완료된 경기 · 최신 라운드가 위에 표시됩니다</div>
+      <div id="simHistory" class="sim-history"></div>
+    </div>
+  `;
+
+  const playRound = ()=>{
+    if(!seasonSimulationRunning) return;
+
+    const fixture = premierLeague2627Fixtures[state.index];
+    if(!fixture){
+      finishSeasonSimulation(state, teamRatings, scorerState);
+      return;
+    }
+
+    clearSeasonGoalTimers();
+    renderCurrentSimulationRound(fixture);
+
+    const opponentRatings = getOpponentRatings(fixture.opponent);
+    const match = createScoreline(
+      teamRatings,
+      opponentRatings,
+      fixture.venue,
+      scorerState,
+      fixture.round
+    );
+    const result = resultFromScore(match.myGoals, match.oppGoals);
+
+    let liveSpurs = 0;
+    let liveOpponent = 0;
+
+    // 90분을 약 4.25초에 압축. 득점은 실제 경기 시간 순서대로 스코어에 반영.
+    match.events.forEach(event=>{
+      const delay = 350 + (event.minute / 90) * 3900;
+      const id = setTimeout(()=>{
+        if(!seasonSimulationRunning) return;
+        if(event.side === "spurs") liveSpurs++;
+        else liveOpponent++;
+        const clock = $("#simClock");
+        if(clock) clock.textContent = `${event.minute}'`;
+        updateLiveScore(fixture, liveSpurs, liveOpponent, event);
+      }, delay);
+      seasonSimulationGoalTimers.push(id);
+    });
+
+    // Match clock progresses even when there are no goals.
+    [15,30,45,60,75,90].forEach(minute=>{
+      const delay = 250 + (minute / 90) * 4050;
+      const id = setTimeout(()=>{
+        if(!seasonSimulationRunning) return;
+        const clock = $("#simClock");
+        if(clock) clock.textContent = `${minute}'`;
+      }, delay);
+      seasonSimulationGoalTimers.push(id);
+    });
+
+    // Final whistle: lock the score and show W/D/L.
+    seasonSimulationTimer = setTimeout(()=>{
+      if(!seasonSimulationRunning) return;
+
+      liveSpurs = match.myGoals;
+      liveOpponent = match.oppGoals;
+      updateLiveScore(fixture, liveSpurs, liveOpponent);
+
+      const clock = $("#simClock");
+      if(clock) clock.textContent = "FT";
+      const live = $("#simLiveResult");
+      if(live){
+        live.className = `sim-live-result ${resultClass(result)}`;
+        live.textContent = `${match.myGoals} - ${match.oppGoals} · ${resultLabel(result)}`;
+      }
+
+      seasonSimulationTimer = setTimeout(()=>{
+        if(!seasonSimulationRunning) return;
+
+        state.gf += match.myGoals;
+        state.ga += match.oppGoals;
+        updateSeasonPlayerRatings(scorerState, match, result);
+
+        if(result === "W"){
+          state.w++;
+          state.points += 3;
+        }else if(result === "D"){
+          state.d++;
+          state.points += 1;
+        }else{
+          state.l++;
+        }
+
+        renderCompletedRound(
+          fixture,
+          result,
+          match.myGoals,
+          match.oppGoals,
+          match.events
+        );
+        state.index++;
+
+        if(state.index >= premierLeague2627Fixtures.length){
+          const current = $("#simCurrent");
+          if(current) current.style.display = "none";
+          finishSeasonSimulation(state, teamRatings, scorerState);
+          return;
+        }
+
+        playRound();
+      }, 600);
+    }, 4400);
+  };
+
+  playRound();
+}
+
+function reset(){
+  if(seasonSimulationTimer){
+    clearTimeout(seasonSimulationTimer);
+    seasonSimulationTimer = null;
+  }
+  clearSeasonGoalTimers();
+  seasonSimulationRunning = false;
+
+  $("#gameOverOverlay")?.classList.remove("show");
+  const finalBtn = $("#finalSimBtn");
+  if(finalBtn){
+    finalBtn.disabled = false;
+    finalBtn.textContent = "시즌 시뮬레이션 시작하기";
+  }
+  const resultBox = $("#result");
+  if(resultBox){
+    resultBox.style.display = "none";
+    resultBox.innerHTML = "";
+  }
+  if(rouletteTimer) clearTimeout(rouletteTimer);
+  isRolling = false;
+  if(managerTimer) clearTimeout(managerTimer);
+  managerRolling = false;
+  selectedManager = null;
+  managerPlaced = false;
+  renderXIManagerCard();
+  formationChosen = false;
+  rerollRemaining = 2;
+  drafted = [];
+  currentSeason = null;
+  pendingPlayer = null;
+  dragSource = null;
+  $("#drawBtn").disabled = false;
+  $("#drawBtn").style.display = "";
+  $("#managerDrawBtn").disabled = true;
+  $("#managerDrawBtn").style.display = "";
+  $("#rerollBtn").disabled = true;
+  $("#rerollBtn").style.display = "";
+  $("#rerollBtn").textContent = "리롤 2회";
+  $("#finalSimBtn").style.display = "none";
+  const seasonBox = document.querySelector(".season");
+  if(seasonBox) seasonBox.style.display = "";
+  const rouletteBox = document.querySelector(".roulette-box");
+  if(rouletteBox) rouletteBox.style.display = "";
+  const preview = $("#seasonPreview");
+  if(preview) preview.style.display = "";
+
+  $("#players").innerHTML = "";
+  $("#revealStage").className = "reveal-stage";
+  $("#revealStage").innerHTML = "";
+  $("#seasonName").textContent = "시즌을 뽑아주세요";
+  $("#seasonInfo").textContent = "룰렛을 돌려 시즌을 정한 뒤, 그 시즌 선수 1명을 선택합니다.";
+  $("#pickCount").textContent = "0 / 11";
+  $("#simBtn").disabled = true;
+  $("#result").style.display = "none";
+  updateManagerUI();
+  renderSeasonPreview();
+  currentFormationKey = "4231";
+  applyFormation(currentFormationKey, {silent:true});
+  document.querySelectorAll(".formation-btn").forEach(btn=>btn.classList.remove("active"));
+  const formationModal = $("#formationModal");
+  if(formationModal){
+    formationModal.style.display = "";
+    formationModal.classList.add("show");
+  }
+  $("#drawBtn").disabled = true;
+  buildRoulette();
+}
+
+$("#drawBtn").onclick = ()=>startRoulette();
+$("#rerollBtn").onclick = rerollSeason;
+$("#resetBtn").onclick = reset;
+$("#gameOverRestart").onclick = ()=>{
+  $("#gameOverOverlay").classList.remove("show");
+  reset();
+};
+$("#managerDrawBtn").onclick = startManagerRoulette;
+$("#simBtn").onclick = simulate;
+$("#finalSimBtn").onclick = simulate;
+const xiManagerDropSlot = document.getElementById("xiManagerSlot");
+if(xiManagerDropSlot){
+  xiManagerDropSlot.addEventListener("dragover", e=>{
+    if(selectedManager && !managerPlaced){
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      xiManagerDropSlot.classList.add("drop-ready");
+    }
+  });
+  xiManagerDropSlot.addEventListener("dragleave", ()=>{
+    xiManagerDropSlot.classList.remove("drop-ready");
+  });
+  xiManagerDropSlot.addEventListener("drop", e=>{
+    if(!selectedManager || managerPlaced) return;
+    e.preventDefault();
+    xiManagerDropSlot.classList.remove("drop-ready");
+    placeManager();
+  });
+}
+
+document.querySelectorAll(".formation-btn").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    applyFormation(btn.dataset.formation,{fromPopup:true});
+    formationChosen = true;
+    const modal = document.getElementById("formationModal");
+    if(modal){
+      modal.classList.remove("show");
+      modal.style.display = "none";
+    }
+    refreshSeasonRouletteButton();
+  });
+});
+buildRoulette();
+renderSeasonPreview();
+applyFormation(currentFormationKey, {silent:true});
+document.querySelectorAll(".formation-btn").forEach(btn=>btn.classList.remove("active"));
+const formationModal = $("#formationModal");
+if(formationModal) formationModal.classList.add("show");
+$("#drawBtn").disabled = true;
+renderXIManagerCard();
+updateManagerUI();
+updateRerollUI();
+</script>
+</body>
+</html>
