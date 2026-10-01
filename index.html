@@ -2160,7 +2160,270 @@
     cursor:not-allowed;
     pointer-events:none;
   }
-  .winter-result{
+  
+  .winter-change-stage{
+    padding:4px 0 2px;
+    text-align:center;
+  }
+  .winter-change-label{
+    color:#8fa8d6;
+    font-size:10px;
+    font-weight:1000;
+    letter-spacing:1.5px;
+    margin-bottom:12px;
+  }
+  .winter-change-cards{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 36px minmax(0,1fr);
+    gap:10px;
+    align-items:center;
+  }
+  .winter-change-arrow{
+    color:#fff;
+    font-size:25px;
+    font-weight:1000;
+    animation:winterChangeArrow 1s ease-in-out infinite alternate;
+  }
+  .winter-change-card{
+    position:relative;
+    min-height:178px;
+    border-radius:19px;
+    padding:14px;
+    border:1px solid #4d6590;
+    background:
+      radial-gradient(circle at 86% 9%,rgba(255,255,255,.16),transparent 28%),
+      linear-gradient(145deg,#18325b,#0e1b34);
+    box-shadow:0 14px 30px rgba(0,0,0,.28);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .winter-change-card.out{
+    filter:saturate(.62) brightness(.82);
+    animation:winterOldCard 2.05s ease both;
+  }
+  .winter-change-card.in{
+    animation:winterNewCard 2.05s cubic-bezier(.2,.78,.2,1) both;
+  }
+  .winter-change-tag{
+    align-self:flex-start;
+    padding:3px 7px;
+    border-radius:999px;
+    font-size:9px;
+    font-weight:1000;
+    letter-spacing:1px;
+    background:rgba(0,0,0,.24);
+    border:1px solid rgba(255,255,255,.18);
+  }
+  .winter-change-card.out .winter-change-tag{color:#ffb1b1}
+  .winter-change-card.in .winter-change-tag{color:#aef0c9}
+  .winter-change-main{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    align-items:flex-start;
+    margin-top:8px;
+  }
+  .winter-change-name{
+    color:inherit;
+    font-size:15px;
+    font-weight:1000;
+    line-height:1.2;
+  }
+  .winter-change-season{
+    margin-top:5px;
+    color:inherit;
+    opacity:.72;
+    font-size:10px;
+    font-weight:850;
+  }
+  .winter-change-ovr{
+    flex:0 0 auto;
+    min-width:48px;
+    height:48px;
+    border-radius:13px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background:rgba(255,255,255,.92);
+    color:#152648;
+    box-shadow:0 8px 20px rgba(0,0,0,.18);
+  }
+  .winter-change-ovr strong{font-size:21px;line-height:1}
+  .winter-change-ovr span{font-size:7px;font-weight:1000;letter-spacing:.8px;margin-top:2px}
+  .winter-change-pos{
+    margin-top:12px;
+    font-size:10px;
+    font-weight:950;
+    opacity:.82;
+    letter-spacing:.6px;
+  }
+  .winter-change-hold{
+    margin-top:12px;
+    color:#6f86af;
+    font-size:9px;
+    font-weight:850;
+  }
+  @keyframes winterOldCard{
+    0%,62%{transform:translateX(0) scale(1);opacity:1}
+    100%{transform:translateX(-14px) scale(.96);opacity:.48}
+  }
+  @keyframes winterNewCard{
+    0%{transform:translateX(18px) scale(.92);opacity:0}
+    22%,100%{transform:translateX(0) scale(1);opacity:1}
+  }
+  @keyframes winterChangeArrow{
+    from{transform:translateX(-2px);opacity:.55}
+    to{transform:translateX(3px);opacity:1}
+  }
+
+  /* 겨울 이적 확정 화면에서는 기존 선수 reveal-card 디자인을 그대로 사용 */
+  .winter-card-wrap{
+    min-width:0;
+    position:relative;
+  }
+  .winter-card-wrap.out{animation:winterOldCard 2.05s ease both}
+  .winter-card-wrap.in{animation:winterNewCard 2.05s cubic-bezier(.2,.78,.2,1) both}
+  .winter-card-status{
+    display:inline-flex;
+    margin-bottom:7px;
+    padding:3px 8px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.16);
+    background:rgba(0,0,0,.22);
+    font-size:9px;
+    font-weight:1000;
+    letter-spacing:1px;
+  }
+  .winter-card-wrap.out .winter-card-status{color:#ffb1b1}
+  .winter-card-wrap.in .winter-card-status{color:#aef0c9}
+  .winter-change-cards .reveal-card{
+    width:100%;
+    max-width:none;
+    min-width:0;
+    margin:0;
+    box-sizing:border-box;
+    text-align:left;
+    animation:none;
+  }
+  .winter-change-cards .drag-instruction{display:none}
+  @media(max-width:540px){
+    .winter-change-cards{
+      grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr);
+      gap:6px;
+    }
+    .winter-change-card{min-height:154px;padding:11px;border-radius:16px}
+    .winter-change-name{font-size:12px}
+    .winter-change-ovr{min-width:42px;height:42px}
+    .winter-change-ovr strong{font-size:18px}
+    .winter-change-arrow{font-size:20px}
+    .winter-change-cards .reveal-card{
+      padding:10px;
+      border-radius:16px;
+    }
+    .winter-change-cards .reveal-name{font-size:13px}
+    .winter-change-cards .reveal-nation,
+    .winter-change-cards .reveal-tenure{font-size:9px}
+    .winter-change-cards .reveal-ovr{min-width:44px}
+    .winter-change-cards .reveal-ovr strong{font-size:19px}
+    .winter-change-cards .position-chip{font-size:8px;padding:3px 5px}
+  }
+
+
+  .winter-half-summary{
+    margin:14px 0 6px;
+    padding:14px;
+    border:1px solid #31486f;
+    border-radius:16px;
+    background:
+      radial-gradient(circle at 100% 0,rgba(95,139,220,.12),transparent 34%),
+      linear-gradient(145deg,#0e1b33,#0a1426);
+  }
+  .winter-half-summary-head{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:10px;
+  }
+  .winter-half-summary-kicker{
+    color:#7f9ed5;
+    font-size:9px;
+    font-weight:1000;
+    letter-spacing:1.35px;
+  }
+  .winter-half-summary-rank{
+    color:#fff;
+    font-size:24px;
+    font-weight:1000;
+    line-height:1;
+  }
+  .winter-half-summary-rank span{
+    margin-left:5px;
+    color:#8da4cc;
+    font-size:10px;
+    font-weight:900;
+  }
+  .winter-half-summary-points{
+    color:#f2d58d;
+    font-size:18px;
+    font-weight:1000;
+    white-space:nowrap;
+  }
+  .winter-half-summary-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:6px;
+  }
+  .winter-half-stat{
+    padding:8px 6px;
+    border-radius:11px;
+    border:1px solid rgba(96,126,177,.18);
+    background:rgba(6,13,26,.46);
+    text-align:center;
+  }
+  .winter-half-stat strong{
+    display:block;
+    color:#eef4ff;
+    font-size:12px;
+    font-weight:1000;
+  }
+  .winter-half-stat span{
+    display:block;
+    margin-top:3px;
+    color:#7187ae;
+    font-size:8px;
+    font-weight:900;
+    letter-spacing:.4px;
+  }
+  .winter-half-scorer{
+    margin-top:9px;
+    padding-top:9px;
+    border-top:1px solid rgba(101,128,177,.18);
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    color:#8398bd;
+    font-size:9px;
+    font-weight:850;
+  }
+  .winter-half-scorer strong{
+    color:#dce7fb;
+    text-align:right;
+  }
+  @media(max-width:540px){
+    .winter-half-summary{padding:12px}
+    .winter-half-summary-rank{font-size:21px}
+    .winter-half-summary-points{font-size:16px}
+    .winter-half-summary-grid{gap:4px}
+    .winter-half-stat{padding:7px 3px}
+    .winter-half-stat strong{font-size:11px}
+    .winter-half-scorer{font-size:8px}
+  }
+
+.winter-result{
     margin-top:16px;
     padding:15px;
     border:1px solid rgba(116,226,165,.25);
@@ -6848,24 +7111,24 @@ function getTeamDisplayName(name){
 
 // DATA SOURCE: the_lilywhites_38_team_ratings_config(1).xlsx · first sheet "팀 능력치"
 const premierLeague2627TeamRatings = {
-  "Arsenal":{att:89,mid:93,def:92,homeWeight:1.07,matchupWeight:1.00},
+  "Arsenal":{att:89,mid:93,def:92,homeWeight:1.08,matchupWeight:1.00},
   "Manchester City":{att:93,mid:92,def:89,homeWeight:1.05,matchupWeight:0.95},
   "Liverpool":{att:91,mid:90,def:89,homeWeight:1.07,matchupWeight:1.00},
-  "Chelsea":{att:90,mid:88,def:87,homeWeight:1.07,matchupWeight:1.02},
-  "Manchester United":{att:88,mid:89,def:86,homeWeight:1.06,matchupWeight:1.00},
-  "Newcastle United":{att:86,mid:85,def:86,homeWeight:1.06,matchupWeight:1.05},
+  "Chelsea":{att:90,mid:88,def:87,homeWeight:1.07,matchupWeight:1.04},
+  "Manchester United":{att:88,mid:89,def:86,homeWeight:1.07,matchupWeight:1.00},
+  "Newcastle United":{att:86,mid:85,def:86,homeWeight:1.06,matchupWeight:1.03},
   "Aston Villa":{att:86,mid:86,def:85,homeWeight:1.06,matchupWeight:0.99},
   "Brighton & Hove Albion":{att:84,mid:86,def:82,homeWeight:1.06,matchupWeight:1.00},
   "Crystal Palace":{att:84,mid:84,def:83,homeWeight:1.06,matchupWeight:0.95},
   "AFC Bournemouth":{att:86,mid:83,def:83,homeWeight:1.06,matchupWeight:1.00},
   "Nottingham Forest":{att:81,mid:84,def:83,homeWeight:1.06,matchupWeight:1.01},
   "Brentford":{att:84,mid:82,def:82,homeWeight:1.06,matchupWeight:1.00},
-  "Fulham":{att:82,mid:83,def:81,homeWeight:1.06,matchupWeight:1.00},
-  "Everton":{att:80,mid:81,def:83,homeWeight:1.06,matchupWeight:1.00},
-  "Leeds United":{att:80,mid:80,def:78,homeWeight:1.06,matchupWeight:1.01},
+  "Fulham":{att:82,mid:81,def:81,homeWeight:1.06,matchupWeight:1.00},
+  "Everton":{att:81,mid:81,def:83,homeWeight:1.06,matchupWeight:1.00},
+  "Leeds United":{att:80,mid:80,def:79,homeWeight:1.06,matchupWeight:1.01},
   "Sunderland":{att:81,mid:83,def:83,homeWeight:1.06,matchupWeight:0.95},
   "Ipswich Town":{att:78,mid:78,def:77,homeWeight:1.05,matchupWeight:1.00},
-  "Hull City":{att:82,mid:82,def:82,homeWeight:1.06,matchupWeight:0.98},
+  "Hull City":{att:82,mid:84,def:82,homeWeight:1.06,matchupWeight:0.98},
   "Coventry City":{att:77,mid:77,def:76,homeWeight:1.05,matchupWeight:1.00}
 };
 
@@ -6952,20 +7215,28 @@ function buildMatchModel(myRatings, opponentRatings, venue){
   let myXg = 1.15 * myChanceMultiplier * Math.exp(myAttackEdge / 22);
   let oppXg = 1.15 * oppChanceMultiplier * Math.exp(oppAttackEdge / 22);
 
-  // 팀별 홈 가중치 / 토트넘 상대 상성 가중치.
-  // 값이 높을수록 상대팀이 토트넘에게 더 까다롭게 작동한다.
+  // 홈 가중치는 양방향으로 적용.
+  // 홈팀 xG는 가중치만큼 상승하고, 원정팀 xG는 같은 비율의 역수만큼 감소한다.
   if(venue === "H"){
-    // 토트넘 홈: 기존 토트넘 홈 이점을 유지.
-    myXg *= 1.06;
-    oppXg *= 0.95;
+    const spursHomeWeight = 1.06;
+    myXg *= spursHomeWeight;
+    oppXg *= 1 / spursHomeWeight;
   }else{
-    // 토트넘 원정: 상대팀별 홈 가중치를 사용.
-    myXg *= 0.95;
-    oppXg *= opponentRatings.homeWeight;
+    const opponentHomeWeight = Number.isFinite(opponentRatings.homeWeight)
+      ? opponentRatings.homeWeight
+      : 1.00;
+    oppXg *= opponentHomeWeight;
+    myXg *= 1 / opponentHomeWeight;
   }
 
-  // 상성 가중치는 홈/원정과 무관하게 상대 득점 기대값에 적용.
-  oppXg *= opponentRatings.matchupWeight;
+  // 상성 가중치는 홈/원정과 무관하게 양 팀 xG에 양방향으로 적용.
+  // 1.00 미만: 토트넘 상성 우위 → 상대 xG 감소 + 토트넘 xG 증가
+  // 1.00 초과: 토트넘 상성 열세 → 상대 xG 증가 + 토트넘 xG 감소
+  const matchupWeight = Number.isFinite(opponentRatings.matchupWeight)
+    ? opponentRatings.matchupWeight
+    : 1.00;
+  oppXg *= matchupWeight;
+  myXg *= 1 / matchupWeight;
 
   // xG는 소수점을 유지하되 높은 구간은 소프트 캡으로 압축한다.
   // 약팀 상대에서도 우세는 유지하지만 4~6골 경기가 과도하게 반복되지 않게 한다.
@@ -8042,6 +8313,55 @@ function winterReplacePlayer(slotIndex, replacement, scorerState){
   return true;
 }
 
+function winterChangeCardHtml(player, tag, type){
+  if(!player) return "";
+  const positions = possiblePositions(player);
+  return `
+    <div class="winter-card-wrap ${type}">
+      <div class="winter-card-status">${tag}</div>
+      <div class="reveal-card ${playerTierClass(player)}">
+        <div class="reveal-head">
+          <div>
+            <div class="reveal-nation">${player.nation} · ${player.pos}</div>
+            <div class="reveal-name">${getPlayerDisplayName(player.name)}</div>
+            <div class="reveal-tenure">Tottenham ${player.tenure} · ${shortSeasonLabel(player.season)}</div>
+            ${isSolCard(player) ? '<div class="sol-warning">⚠ SPECIAL CARD</div>' : ''}
+          </div>
+          <div class="reveal-ovr">
+            <strong>${player.ovr}</strong>
+            <span>OVR</span>
+            ${playerOvrLabelHtml(player)}
+          </div>
+        </div>
+        <div class="position-row">
+          ${positions.map(pos=>`<span class="position-chip">${pos}</span>`).join("")}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function showWinterPlayerChange(before, after, label, onDone){
+  showWinterOverlay(`
+    <div class="winter-kicker">WINTER TRANSFER WINDOW</div>
+    <div class="winter-title">${label || "선수단 변화"}</div>
+    <div class="winter-change-stage">
+      <div class="winter-change-label">SQUAD UPDATE</div>
+      <div class="winter-change-cards">
+        ${winterChangeCardHtml(before,"OUT","out")}
+        <div class="winter-change-arrow">→</div>
+        ${winterChangeCardHtml(after,"IN","in")}
+      </div>
+      <div class="winter-change-hold">선수단 변화를 반영하는 중...</div>
+    </div>
+  `);
+
+  setTimeout(()=>{
+    if(typeof onDone === "function") onDone();
+  },2050);
+}
+
+
 function winterCardButton(card, index, onClickName="chooseWinterReplacement"){
   return `
     <button class="winter-choice" type="button" onclick="${onClickName}(${index})">
@@ -8076,14 +8396,61 @@ let winterStarExitQueue = [];
 let winterStarExitResults = [];
 let winterLockerRoomChoices = [];
 
-function openWinterTransferPrompt(scorerState, onContinue){
+function openWinterTransferPrompt(scorerState, state, onContinue){
   winterPendingContinue = onContinue;
   winterPendingScorerState = scorerState;
+
+  const rows = sortedLeagueTable(state.leagueTable);
+  const rank = rows.findIndex(row=>row.name==="Tottenham") + 1;
+  const spurs = state.leagueTable["Tottenham"] || {
+    p:18,w:state.w,d:state.d,l:state.l,gf:state.gf,ga:state.ga,gd:state.gf-state.ga,pts:state.points
+  };
+  const top = getSeasonTopScorers(scorerState);
+  const teamRatings = getMyTeamRatings();
 
   showWinterOverlay(`
     <div class="winter-kicker">JANUARY 2027</div>
     <div class="winter-title">겨울 이적시장에 참여하시겠습니까?</div>
-    <div class="winter-sub">참여하면 무작위 이적 이벤트 1개가 발생합니다.<br>이벤트 결과에 따라 선수 또는 감독이 교체될 수 있습니다.</div>
+
+    <div class="winter-half-summary">
+      <div class="winter-half-summary-head">
+        <div>
+          <div class="winter-half-summary-kicker">FIRST HALF · 18 MATCHES</div>
+          <div class="winter-half-summary-rank">${rank}위 <span>PREMIER LEAGUE</span></div>
+        </div>
+        <div class="winter-half-summary-points">${spurs.pts} PTS</div>
+      </div>
+
+      <div class="winter-half-summary-grid">
+        <div class="winter-half-stat">
+          <strong>${spurs.w}승 ${spurs.d}무 ${spurs.l}패</strong>
+          <span>RECORD</span>
+        </div>
+        <div class="winter-half-stat">
+          <strong>${spurs.gf}</strong>
+          <span>GF</span>
+        </div>
+        <div class="winter-half-stat">
+          <strong>${spurs.ga}</strong>
+          <span>GA</span>
+        </div>
+        <div class="winter-half-stat">
+          <strong>${spurs.gd>0?"+":""}${spurs.gd}</strong>
+          <span>GD</span>
+        </div>
+      </div>
+
+      <div class="winter-half-scorer">
+        <span>전반기 최다 득점</span>
+        <strong>${top.names} · ${top.goals}골</strong>
+      </div>
+      <div class="winter-half-scorer">
+        <span>현재 팀 OVR</span>
+        <strong>${teamRatings.overall.toFixed(1)}</strong>
+      </div>
+    </div>
+
+    <div class="winter-sub">현재 전반기 성적을 참고해 이적시장 참여 여부를 결정하세요.<br>참여하면 무작위 이적 이벤트 1개가 발생합니다.</div>
     <div class="winter-actions">
       <button type="button" onclick="participateWinterTransfer()">참여</button>
       <button type="button" class="winter-decline" onclick="declineWinterTransfer()">참여하지 않음</button>
@@ -8324,10 +8691,12 @@ function resolveWinterTransferEvent(event){
     const target = eligible[Math.floor(Math.random()*eligible.length)];
     const before = target.player;
     winterReplacePlayer(target.index,target.best,scorerState);
-    showWinterResult(event.name,[
-      `${getPlayerDisplayName(before.name)}이(가) 스탭업했습니다.`,
-      `${before.season} → ${target.best.season}`
-    ]);
+    showWinterPlayerChange(before,target.best,event.name,()=>{
+      showWinterResult(event.name,[
+        `${getPlayerDisplayName(before.name)}이(가) 스탭업했습니다.`,
+        `${before.season} → ${target.best.season}`
+      ]);
+    });
     return;
   }
 
@@ -8482,7 +8851,10 @@ function chooseStarExitReplacement(index){
   winterStarExitQueue.shift();
   winterPendingCandidates = [];
   winterPendingSlotIndex = -1;
-  showNextStarExitChoice();
+
+  showWinterPlayerChange(current,replacement,task.label,()=>{
+    showNextStarExitChoice();
+  });
 }
 
 function chooseLockerRoomDeparture(index){
@@ -8525,10 +8897,12 @@ function chooseLockerRoomReplacement(index){
 
   winterReplacePlayer(slotIndex,replacement,winterPendingScorerState);
 
-  showWinterResult("라커룸 불화",[
-    `방출 · ${getPlayerDisplayName(current.name)} (${current.season})`,
-    `영입 · ${getPlayerDisplayName(replacement.name)} (${replacement.season})`
-  ],true);
+  showWinterPlayerChange(current,replacement,"라커룸 불화",()=>{
+    showWinterResult("라커룸 불화",[
+      `방출 · ${getPlayerDisplayName(current.name)} (${current.season})`,
+      `영입 · ${getPlayerDisplayName(replacement.name)} (${replacement.season})`
+    ],true);
+  });
 }
 
 function chooseWinterReplacement(index){
@@ -8538,10 +8912,15 @@ function chooseWinterReplacement(index){
   if(!replacement || !current) return;
 
   winterReplacePlayer(slotIndex,replacement,winterPendingScorerState);
-  showWinterResult(winterPendingEvent?.name || "겨울 이적시장",[
-    `${getPlayerDisplayName(current.name)} (${current.season})`,
-    `→ ${getPlayerDisplayName(replacement.name)} (${replacement.season})`
-  ], winterPendingEvent?.id === "season_out");
+  const eventName = winterPendingEvent?.name || "겨울 이적시장";
+  const isBad = winterPendingEvent?.id === "season_out";
+
+  showWinterPlayerChange(current,replacement,eventName,()=>{
+    showWinterResult(eventName,[
+      `${getPlayerDisplayName(current.name)} (${current.season})`,
+      `→ ${getPlayerDisplayName(replacement.name)} (${replacement.season})`
+    ], isBad);
+  });
 }
 
 function chooseConcertTarget(index){
@@ -8767,7 +9146,7 @@ function simulate(){
         // 12월 30일 18R 종료 후, 1월 첫 경기를 시작하기 전에 겨울 이적시장 이벤트.
         if(state.index === 18 && !state.winterTransferHandled){
           state.winterTransferHandled = true;
-          openWinterTransferPrompt(scorerState, ()=>{
+          openWinterTransferPrompt(scorerState, state, ()=>{
             teamRatings = getMyTeamRatings();
             playRound();
           });
