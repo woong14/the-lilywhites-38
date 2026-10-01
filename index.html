@@ -3126,6 +3126,27 @@
     color:#b8f5d0;
   }
   .achievement-item small{display:block;margin-top:3px;font-size:8px;font-weight:700;opacity:.68}
+  .achievement-progress-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}
+  .achievement-progress-count{font-size:10px;font-weight:1000;color:#93a9cf;white-space:nowrap}
+  .achievement-item.done .achievement-progress-count{color:#b8f5d0}
+  .achievement-progress{
+    height:7px;
+    margin-top:5px;
+    overflow:hidden;
+    border-radius:999px;
+    background:#07101f;
+    border:1px solid rgba(99,124,166,.22);
+  }
+  .achievement-progress > span{
+    display:block;
+    height:100%;
+    border-radius:inherit;
+    background:linear-gradient(90deg,#7d9fd8,#d8e7ff);
+    transition:width .35s ease;
+  }
+  .achievement-item.done .achievement-progress > span{
+    background:linear-gradient(90deg,#5cc88a,#b9f3cf);
+  }
   .profile-empty{padding:20px;text-align:center;color:#7187ad;font-size:10px}
   @media(max-width:650px){
     .profile-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -8312,6 +8333,7 @@ let lilyProfileData = null;
 let lilyProfileSyncTimer = null;
 let sessionChemistryHistory = new Set();
 let sessionSpecialHistory = new Set();
+let sessionSpecialItemHistory = new Set();
 let sessionDraftPicks = [];
 
 const LILY_ACHIEVEMENTS = [
@@ -8322,15 +8344,35 @@ const LILY_ACHIEVEMENTS = [
   ["first_chemistry","첫 번째 연결","팀캐미 1종 발동"],
   ["chemistry_5","케미스트리스트","서로 다른 팀캐미 5종 발동"],
   ["all_chemistries","완벽한 조합","팀캐미 15종 모두 발동"],
-  ["first_special","특별한 한 장","특수카드 1종 획득"],
-  ["prime_time","PRIME TIME","PRIME TIME 카드 획득"],
-  ["the_legends","THE LEGENDS","THE LEGENDS 카드 획득"],
-  ["toty","TOTY","TOTY 카드 획득"],
-  ["golden_boot","GOLDEN BOOT","GOLDEN BOOT 카드 획득"],
-  ["hero","HERO","HERO 카드 획득"],
-  ["world_cup_winner","WORLD CUP WINNER","WORLD CUP WINNER 카드 획득"],
-  ["wonder_boy","WONDER BOY","WONDER BOY 카드 획득"]
+  ["first_special","특별한 한 장","특수카드 1장 획득"],
+  ["prime_time","PRIME TIME 컬렉터","PRIME TIME 카드 모두 수집"],
+  ["the_legends","THE LEGENDS 컬렉터","THE LEGENDS 카드 모두 수집"],
+  ["toty","TOTY 컬렉터","TOTY 카드 모두 수집"],
+  ["golden_boot","GOLDEN BOOT 컬렉터","GOLDEN BOOT 카드 모두 수집"],
+  ["hero","HERO 컬렉터","HERO 카드 모두 수집"],
+  ["world_cup_winner","WORLD CUP WINNER 컬렉터","WORLD CUP WINNER 카드 모두 수집"],
+  ["wonder_boy","WONDER BOY 컬렉터","WONDER BOY 카드 모두 수집"]
 ];
+
+const LILY_SPECIAL_COLLECTIONS = [
+  ["prime_time","PRIME TIME",primeTimeSeasonCards.size],
+  ["the_legends","THE LEGENDS",(seasons.find(s=>s.name === LEGEND_SEASON_NAME)?.players?.length || 12)],
+  ["toty","TOTY",totySeasonCards.size],
+  ["golden_boot","GOLDEN BOOT",goldenBootSeasonCards.size],
+  ["hero","HERO",heroSeasonCards.size],
+  ["world_cup_winner","WORLD CUP WINNER",worldCupWinnerSeasonCards.size],
+  ["wonder_boy","WONDER BOY",wonderBoySeasons.size]
+];
+
+function getSpecialCollectionProgress(profile,type,total){
+  const items = new Set(Array.isArray(profile?.special_card_items) ? profile.special_card_items : []);
+  const count = [...items].filter(key=>String(key).startsWith(type + "::")).length;
+  return {
+    count:Math.min(count,total),
+    total,
+    percent:total > 0 ? Math.min(100,Math.round((count / total) * 100)) : 0
+  };
+}
 
 function escapeProfileHtml(value){
   return String(value ?? "")
@@ -8351,6 +8393,12 @@ function getSpecialCardCollectionType(player){
   if(isWonderBoy(player) && !isTotyCard(player) && !isGoldenBootCard(player)) return "WONDER BOY";
   if(isPrimeTime(player)) return "PRIME TIME";
   return null;
+}
+
+function getSpecialCardCollectionItem(player){
+  const type = getSpecialCardCollectionType(player);
+  if(!type || !player?.name || !player?.season) return null;
+  return `${type}::${pairKey(player.name,player.season)}`;
 }
 
 async function profileRequest(action, payload={}){
@@ -8463,6 +8511,8 @@ function renderProfile(){
   }
 
   const achievements = new Set(p.achievements || []);
+  const totalSpecialCards = LILY_SPECIAL_COLLECTIONS.reduce((sum,[,,total])=>sum + total,0);
+  const collectedSpecialItems = new Set(Array.isArray(p.special_card_items) ? p.special_card_items : []);
   const chemistryNames = {
     duo:"환상의 듀오", belgian_wall:"벨기에의 벽", leadership:"리더십", desk:"DESK 라인",
     heroes:"히어로즈", golden_generation:"황금세대", legend_class:"레전드의 품격",
@@ -8507,21 +8557,43 @@ function renderProfile(){
     </div>
 
     <div class="profile-section">
-      <div class="profile-section-title">SPECIAL CARD COLLECTION · ${(p.special_cards || []).length}/7</div>
+      <div class="profile-section-title">SPECIAL CARD COLLECTION · ${collectedSpecialItems.size}/${totalSpecialCards}</div>
       <div class="profile-chip-list">
-        ${(p.special_cards || []).length ? p.special_cards.map(name=>`<span class="profile-chip">${escapeProfileHtml(name)}</span>`).join("") : '<span class="profile-empty">아직 기록된 특수카드가 없습니다.</span>'}
+        ${LILY_SPECIAL_COLLECTIONS.map(([,type,total])=>{
+          const progress = getSpecialCollectionProgress(p,type,total);
+          return `<span class="profile-chip">${escapeProfileHtml(type)} · ${progress.count}/${progress.total}</span>`;
+        }).join("")}
       </div>
     </div>
 
     <div class="profile-section">
       <div class="profile-section-title">ACHIEVEMENTS · ${LILY_ACHIEVEMENTS.filter(([id])=>achievements.has(id)).length}/${LILY_ACHIEVEMENTS.length}</div>
       <div class="achievement-grid">
-        ${LILY_ACHIEVEMENTS.map(([id,name,desc])=>`
-          <div class="achievement-item ${achievements.has(id) ? "done" : ""}">
-            ${achievements.has(id) ? "✓ " : "□ "}${escapeProfileHtml(name)}
-            <small>${escapeProfileHtml(desc)}</small>
-          </div>
-        `).join("")}
+        ${LILY_ACHIEVEMENTS.map(([id,name,desc])=>{
+          const collection = LILY_SPECIAL_COLLECTIONS.find(([achievementId])=>achievementId === id);
+          if(collection){
+            const [,type,total] = collection;
+            const progress = getSpecialCollectionProgress(p,type,total);
+            const complete = progress.count >= progress.total;
+            return `
+              <div class="achievement-item ${complete ? "done" : ""}">
+                ${complete ? "✓ " : "□ "}${escapeProfileHtml(name)}
+                <small>${escapeProfileHtml(desc)}</small>
+                <div class="achievement-progress-head">
+                  <span>COLLECTION PROGRESS</span>
+                  <span class="achievement-progress-count">${progress.count}/${progress.total}</span>
+                </div>
+                <div class="achievement-progress"><span style="width:${progress.percent}%"></span></div>
+              </div>
+            `;
+          }
+          return `
+            <div class="achievement-item ${achievements.has(id) ? "done" : ""}">
+              ${achievements.has(id) ? "✓ " : "□ "}${escapeProfileHtml(name)}
+              <small>${escapeProfileHtml(desc)}</small>
+            </div>
+          `;
+        }).join("")}
       </div>
     </div>
   `;
@@ -8565,7 +8637,8 @@ function queueProfileProgressSync(){
     try{
       await profileRequest("sync_progress",{
         chemistries:[...sessionChemistryHistory],
-        special_cards:[...sessionSpecialHistory]
+        special_cards:[...sessionSpecialHistory],
+        special_card_items:[...sessionSpecialItemHistory]
       });
     }catch(error){
       console.warn("PROFILE sync failed",error);
@@ -8575,9 +8648,19 @@ function queueProfileProgressSync(){
 
 function rememberSpecialCardForProfile(player){
   const type = getSpecialCardCollectionType(player);
-  if(!type || sessionSpecialHistory.has(type)) return;
-  sessionSpecialHistory.add(type);
-  queueProfileProgressSync();
+  const item = getSpecialCardCollectionItem(player);
+  if(!type || !item) return;
+
+  let changed = false;
+  if(!sessionSpecialHistory.has(type)){
+    sessionSpecialHistory.add(type);
+    changed = true;
+  }
+  if(!sessionSpecialItemHistory.has(item)){
+    sessionSpecialItemHistory.add(item);
+    changed = true;
+  }
+  if(changed) queueProfileProgressSync();
 }
 
 function rememberChemistriesForProfile(activeChems){
@@ -8600,7 +8683,8 @@ async function recordCompletedSeasonToProfile(place,state,teamRatings){
         team_ovr:Number(teamRatings.overall.toFixed(2)),
         players:[...sessionDraftPicks],
         chemistries:[...sessionChemistryHistory],
-        special_cards:[...sessionSpecialHistory]
+        special_cards:[...sessionSpecialHistory],
+        special_card_items:[...sessionSpecialItemHistory]
       }
     });
     lilyProfileData = data.profile;
@@ -9965,6 +10049,7 @@ function reset(){
   sessionDraftPicks = [];
   sessionChemistryHistory = new Set();
   sessionSpecialHistory = new Set();
+  sessionSpecialItemHistory = new Set();
   activeChemistryIds = new Set();
   clearChemistryActivationQueue();
   renderTeamChemistryPanel([]);
