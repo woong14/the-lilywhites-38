@@ -1465,20 +1465,107 @@
     border-radius:16px;
     background:linear-gradient(145deg,rgba(15,27,52,.94),rgba(8,18,36,.94));
   }
-  .team-chemistry-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
-  .team-chemistry-title{color:#edf4ff;font-size:11px;font-weight:1000;letter-spacing:1.2px}
-  .team-chemistry-count{color:#7089b6;font-size:9px;font-weight:900}
-  .team-chemistry-list{display:flex;flex-wrap:wrap;gap:7px}
-  .team-chemistry-empty{width:100%;color:#61779f;font-size:10px;font-weight:800;padding:2px 1px}
-  .chem-chip{display:flex;align-items:center;gap:7px;min-width:0;padding:8px 10px;border-radius:12px;border:1px solid #36558b;background:linear-gradient(145deg,#142846,#10203a);animation:chemChipIn .42s cubic-bezier(.2,.82,.2,1)}
-  .chem-chip-name{color:#f5f8ff;font-size:10px;font-weight:1000;white-space:nowrap}
-  .chem-chip-effect{color:#9dbbff;font-size:9px;font-weight:1000;white-space:nowrap}
-  @keyframes chemChipIn{0%{opacity:0;transform:translateY(5px) scale(.94)}100%{opacity:1;transform:translateY(0) scale(1)}}
-  .chem-activation{position:fixed;left:50%;top:28%;z-index:12000;transform:translate(-50%,-50%) scale(.78);min-width:240px;max-width:min(86vw,520px);padding:18px 22px;border-radius:20px;border:1px solid rgba(169,201,255,.62);background:linear-gradient(145deg,rgba(19,40,75,.98),rgba(8,22,45,.98));box-shadow:0 24px 70px rgba(0,0,0,.48),0 0 36px rgba(100,153,255,.24);text-align:center;pointer-events:none;opacity:0;animation:chemActivation 1.55s cubic-bezier(.2,.8,.2,1) forwards}
-  .chem-activation-kicker{color:#8eaded;font-size:10px;font-weight:1000;letter-spacing:2px}
-  .chem-activation-name{margin-top:6px;color:#fff;font-size:23px;font-weight:1000;letter-spacing:.3px}
-  .chem-activation-effect{margin-top:5px;color:#b9ceff;font-size:12px;font-weight:1000}
-  @keyframes chemActivation{0%{opacity:0;transform:translate(-50%,-50%) scale(.72)}14%{opacity:1;transform:translate(-50%,-50%) scale(1.04)}28%{transform:translate(-50%,-50%) scale(1)}75%{opacity:1}100%{opacity:0;transform:translate(-50%,-58%) scale(.96)}}
+  .team-chemistry-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:9px;
+  }
+  .team-chemistry-title{
+    color:#edf4ff;
+    font-size:11px;
+    font-weight:1000;
+    letter-spacing:1.2px;
+  }
+  .team-chemistry-count{
+    color:#7089b6;
+    font-size:9px;
+    font-weight:900;
+  }
+  .team-chemistry-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+  }
+  .team-chemistry-empty{
+    width:100%;
+    color:#61779f;
+    font-size:10px;
+    font-weight:800;
+    padding:2px 1px;
+  }
+  .chem-chip{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    min-width:0;
+    padding:8px 10px;
+    border-radius:12px;
+    border:1px solid #36558b;
+    background:linear-gradient(145deg,#142846,#10203a);
+    animation:chemChipIn .42s cubic-bezier(.2,.82,.2,1);
+  }
+  .chem-chip-name{
+    color:#f5f8ff;
+    font-size:10px;
+    font-weight:1000;
+    white-space:nowrap;
+  }
+  .chem-chip-effect{
+    color:#9dbbff;
+    font-size:9px;
+    font-weight:1000;
+    white-space:nowrap;
+  }
+  @keyframes chemChipIn{
+    0%{opacity:0;transform:translateY(5px) scale(.94)}
+    100%{opacity:1;transform:translateY(0) scale(1)}
+  }
+  .chem-activation{
+    position:fixed;
+    left:50%;
+    top:28%;
+    z-index:12000;
+    transform:translate(-50%,-50%) scale(.78);
+    min-width:240px;
+    max-width:min(86vw,520px);
+    padding:18px 22px;
+    border-radius:20px;
+    border:1px solid rgba(169,201,255,.62);
+    background:linear-gradient(145deg,rgba(19,40,75,.98),rgba(8,22,45,.98));
+    box-shadow:0 24px 70px rgba(0,0,0,.48),0 0 36px rgba(100,153,255,.24);
+    text-align:center;
+    pointer-events:none;
+    opacity:0;
+    animation:chemActivation 1.55s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  .chem-activation-kicker{
+    color:#8eaded;
+    font-size:10px;
+    font-weight:1000;
+    letter-spacing:2px;
+  }
+  .chem-activation-name{
+    margin-top:6px;
+    color:#fff;
+    font-size:23px;
+    font-weight:1000;
+    letter-spacing:.3px;
+  }
+  .chem-activation-effect{
+    margin-top:5px;
+    color:#b9ceff;
+    font-size:12px;
+    font-weight:1000;
+  }
+  @keyframes chemActivation{
+    0%{opacity:0;transform:translate(-50%,-50%) scale(.72)}
+    14%{opacity:1;transform:translate(-50%,-50%) scale(1.04)}
+    28%{transform:translate(-50%,-50%) scale(1)}
+    75%{opacity:1}
+    100%{opacity:0;transform:translate(-50%,-58%) scale(.96)}
+  }
 
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
   .stat{background:#0b1326;border:1px solid var(--line);border-radius:14px;padding:11px;text-align:center}
@@ -2181,46 +2268,1175 @@ function makeSeason(name, info, lineup, poster=null){
 
 const seasons = [
   makeSeason("1992/93", "더그 리버모어·레이 클레멘스 · 리그 8위 · FA컵 4강", [["Erik Thorstvedt","GK",84],["Dean Austin","RB",76],["Gary Mabbutt","CB",82],["Neil Ruddock","CB",80],["Justin Edinburgh","LB",79],["Paul Allen","LW",77],["Gary Samways","CM",79],["Steve Sedgley","CM",78],["Nick Barmby","RW",80],["Darren Anderton","CAM",82],["Teddy Sheringham","ST",90]], seasonPosterMap["1992/93"]),
-  makeSeason("1993/94", "오시 아르딜레스 · 리그 15위 · 리그컵 8강", [["Erik Thorstvedt","GK",83],["Dean Austin","RB",76],["Sol Campbell","CB",79],["Colin Calderwood","CB",77],["Justin Edinburgh","LB",79],["Nick Barmby","LW",81],["Gary Samways","CM",79],["Jason Dozzell","CM",78],["Darren Anderton","RW",83],["Steve Sedgley","CAM",78],["Teddy Sheringham","ST",87]], seasonPosterMap["1993/94"]),
-  makeSeason("1994/95", "아르딜레스→게리 프랜시스 · 리그 7위 · FA컵 4강", [["Ian Walker","GK",82],["Dean Austin","RB",77],["Gary Mabbutt","CB",81],["Sol Campbell","CB",82],["Justin Edinburgh","LB",79],["Nick Barmby","LW",81],["Colin Calderwood","CM",77],["David Howells","CM",79],["Darren Anderton","RW",84],["Jurgen Klinsmann","CAM",90],["Teddy Sheringham","ST",88]], seasonPosterMap["1994/95"]),
-  makeSeason("1995/96", "게리 프랜시스 · 리그 8위 · 인터토토컵 조별리그", [["Ian Walker","GK",83],["Dean Austin","RB",77],["Gary Mabbutt","CB",80],["Sol Campbell","CB",83],["Chris Wilson","LB",74],["Ronny Rosenthal","LW",78],["Jason Dozzell","CM",77],["David Howells","CM",79],["Ruel Fox","RW",81],["Chris Armstrong","CAM",83],["Teddy Sheringham","ST",87]], seasonPosterMap["1995/96"]),
-  makeSeason("1996/97", "게리 프랜시스 · 리그 10위 · FA컵 32강", [["Ian Walker","GK",83],["Stephen Carr","RB",77],["Sol Campbell","CB",84],["Colin Calderwood","CB",76],["Justin Edinburgh","LB",78],["Chris Wilson","LW",74],["Allan Nielsen","CM",81],["David Howells","CM",78],["Andy Sinton","RW",77],["Steffen Iversen","CAM",79],["Teddy Sheringham","ST",86]], seasonPosterMap["1996/97"]),
+  makeSeason("1993/94", "오시 아르딜레스 · 리그 15위 · 리그컵 8강", [["Erik Thorstvedt","GK",83],["Dean Austin","RB",76],["Sol Campbell","CB",79],["Colin Calderwood","CB",77],["Justin Edinburgh","LB",79],["Nick Barmby","LW",81],["Gary Samways","CM",79],["Jason Dozzell","CM",78],["Darren Anderton","RW",83],["Steve Sedgley","CAM",78],["Teddy Sheringham","ST",86]], seasonPosterMap["1993/94"]),
+  makeSeason("1994/95", "아르딜레스→게리 프랜시스 · 리그 7위 · FA컵 4강", [["Ian Walker","GK",82],["Dean Austin","RB",77],["Gary Mabbutt","CB",81],["Sol Campbell","CB",82],["Justin Edinburgh","LB",79],["Nick Barmby","LW",81],["Colin Calderwood","CM",77],["David Howells","CM",79],["Darren Anderton","RW",84],["Jurgen Klinsmann","CAM",90],["Teddy Sheringham","ST",87]], seasonPosterMap["1994/95"]),
+  makeSeason("1995/96", "게리 프랜시스 · 리그 8위 · 인터토토컵 조별리그", [["Ian Walker","GK",83],["Dean Austin","RB",77],["Gary Mabbutt","CB",80],["Sol Campbell","CB",83],["Chris Wilson","LB",74],["Ronny Rosenthal","LW",78],["Jason Dozzell","CM",77],["David Howells","CM",79],["Ruel Fox","RW",81],["Chris Armstrong","CAM",83],["Teddy Sheringham","ST",86]], seasonPosterMap["1995/96"]),
+  makeSeason("1996/97", "게리 프랜시스 · 리그 10위 · FA컵 32강", [["Ian Walker","GK",83],["Stephen Carr","RB",76],["Sol Campbell","CB",84],["Colin Calderwood","CB",76],["Justin Edinburgh","LB",78],["Chris Wilson","LW",74],["Allan Nielsen","CM",81],["David Howells","CM",78],["Andy Sinton","RW",77],["Steffen Iversen","CAM",79],["Teddy Sheringham","ST",85]], seasonPosterMap["1996/97"]),
   makeSeason("1997/98", "게리 프랜시스→크리스천 그로스 · 리그 14위 · FA컵 16강", [["Ian Walker","GK",82],["Stephen Carr","RB",78],["Sol Campbell","CB",85],["Ramon Vega","CB",80],["Chris Wilson","LB",74],["David Ginola","LW",86],["Steffen Freund","CM",80],["Allan Nielsen","CM",81],["Ruel Fox","RW",79],["Jurgen Klinsmann","CAM",86],["Les Ferdinand","ST",84]], seasonPosterMap["1997/98"]),
-  makeSeason("1998/99", "조지 그레이엄 · 리그 11위 · 리그컵 우승", [["Ian Walker","GK",84],["Stephen Carr","RB",79],["Sol Campbell","CB",86],["Ramon Vega","CB",79],["Justin Edinburgh","LB",80],["David Ginola","LW",89],["Steffen Freund","CM",81],["Allan Nielsen","CM",82],["Darren Anderton","RW",85],["Chris Armstrong","CAM",80],["Steffen Iversen","ST",82]], seasonPosterMap["1998/99"]),
-  makeSeason("1999/00", "조지 그레이엄 · 리그 10위 · UEFA컵 2라운드", [["Ian Walker","GK",83],["Stephen Carr","RB",82],["Sol Campbell","CB",87],["Chris Perry","CB",78],["Mauricio Taricco","LB",78],["David Ginola","LW",87],["Steffen Freund","CM",80],["Tim Sherwood","CM",80],["Øyvind Leonhardsen","RW",79],["Steffen Iversen","CAM",84],["Les Ferdinand","ST",83]], seasonPosterMap["1999/00"]),
+  makeSeason("1998/99", "조지 그레이엄 · 리그 11위 · 리그컵 우승", [["Ian Walker","GK",83],["Stephen Carr","RB",79],["Sol Campbell","CB",86],["Ramon Vega","CB",79],["Justin Edinburgh","LB",80],["David Ginola","LW",89],["Steffen Freund","CM",81],["Allan Nielsen","CM",82],["Darren Anderton","RW",85],["Chris Armstrong","CAM",80],["Steffen Iversen","ST",82]], seasonPosterMap["1998/99"]),
+  makeSeason("1999/00", "조지 그레이엄 · 리그 10위 · UEFA컵 2라운드", [["Ian Walker","GK",83],["Stephen Carr","RB",82],["Sol Campbell","CB",87],["Chris Perry","CB",78],["Mauricio Taricco","LB",78],["David Ginola","LW",86],["Steffen Freund","CM",80],["Tim Sherwood","CM",80],["Øyvind Leonhardsen","RW",79],["Steffen Iversen","CAM",84],["Les Ferdinand","ST",83]], seasonPosterMap["1999/00"]),
   makeSeason("2000/01", "조지 그레이엄→글렌 호들 · 리그 12위 · FA컵 4강", [["Neil Sullivan","GK",80],["Stephen Carr","RB",84],["Sol Campbell","CB",88],["Chris Perry","CB",78],["Gary Doherty","LB",76],["Øyvind Leonhardsen","LW",79],["Stephen Clemence","CM",76],["Tim Sherwood","CM",79],["Darren Anderton","RW",81],["Sergiy Rebrov","CAM",81],["Les Ferdinand","ST",83]], seasonPosterMap["2000/01"]),
-  makeSeason("2001/02", "글렌 호들 · 리그 9위 · 리그컵 준우승", [["Neil Sullivan","GK",81],["Chris Perry","RB",78],["Dean Richards","CB",82],["Ledley King","CB",85],["Mauricio Taricco","LB",80],["Christian Ziege","LW",82],["Gus Poyet","CM",83],["Tim Sherwood","CM",79],["Darren Anderton","RW",81],["Teddy Sheringham","CAM",85],["Les Ferdinand","ST",82]], seasonPosterMap["2001/02"]),
-  makeSeason("2002/03", "글렌 호들 · 리그 10위 · 리그컵 16강", [["Kasey Keller","GK",82],["Stephen Carr","RB",84],["Dean Richards","CB",81],["Ledley King","CB",83],["Mauricio Taricco","LB",78],["Gus Poyet","LW",82],["Goran Bunjevcevic","CM",77],["Darren Anderton","CM",80],["Simon Davies","RW",80],["Teddy Sheringham","CAM",86],["Robbie Keane","ST",83]], seasonPosterMap["2002/03"]),
+  makeSeason("2001/02", "글렌 호들 · 리그 9위 · 리그컵 준우승", [["Neil Sullivan","GK",81],["Chris Perry","RB",78],["Dean Richards","CB",82],["Ledley King","CB",85],["Mauricio Taricco","LB",79],["Christian Ziege","LW",82],["Gus Poyet","CM",83],["Tim Sherwood","CM",79],["Darren Anderton","RW",81],["Teddy Sheringham","CAM",84],["Les Ferdinand","ST",82]], seasonPosterMap["2001/02"]),
+  makeSeason("2002/03", "글렌 호들 · 리그 10위 · 리그컵 16강", [["Kasey Keller","GK",82],["Stephen Carr","RB",84],["Dean Richards","CB",81],["Ledley King","CB",82],["Mauricio Taricco","LB",78],["Gus Poyet","LW",82],["Goran Bunjevcevic","CM",77],["Darren Anderton","CM",80],["Simon Davies","RW",80],["Teddy Sheringham","CAM",86],["Robbie Keane","ST",83]], seasonPosterMap["2002/03"]),
   makeSeason("2003/04", "글렌 호들→데이비드 플리트 · 리그 14위 · 리그컵 8강", [["Kasey Keller","GK",82],["Stephen Carr","RB",82],["Dean Richards","CB",80],["Anthony Gardner","CB",77],["Mauricio Taricco","LB",77],["Rohan Ricketts","LW",78],["Ledley King","CM",84],["Stéphane Dalmat","CM",79],["Darren Anderton","RW",80],["Frederic Kanouté","CAM",84],["Robbie Keane","ST",83]], seasonPosterMap["2003/04"]),
-  makeSeason("2004/05", "자크 상티니→마르틴 욜 · 리그 9위 · FA컵 8강", [["Paul Robinson","GK",82],["Noé Pamarot","RB",77],["Noureddine Naybet","CB",79],["Ledley King","CB",86],["Erik Edman","LB",79],["Andy Reid","LW",78],["Michael Carrick","CM",84],["Pedro Mendes","CM",80],["Sean Davies","RW",77],["Robbie Keane","CAM",84],["Jermain Defoe","ST",83]], seasonPosterMap["2004/05"]),
-  makeSeason("2005/06", "마르틴 욜 · 리그 5위 · FA컵 32강", [["Paul Robinson","GK",83],["Paul Stalteri","RB",78],["Michael Dawson","CB",80],["Ledley King","CB",84],["Young-Pyo Lee","LB",79],["Edgar Davids","LW",84],["Michael Carrick","CM",85],["Jermaine Jenas","CM",80],["Aaron Lennon","RW",79],["Mido","CAM",83],["Robbie Keane","ST",84]], seasonPosterMap["2005/06"]),
-  makeSeason("2006/07", "마르틴 욜 · 리그 5위 · UEFA컵 8강", [["Paul Robinson","GK",82],["Pascal Chimbonda","RB",80],["Michael Dawson","CB",83],["Ledley King","CB",84],["Young-Pyo Lee","LB",79],["Steed Malbranque","LW",80],["Didier Zokora","CM",80],["Jermaine Jenas","CM",81],["Aaron Lennon","RW",81],["Dimitar Berbatov","CAM",88],["Robbie Keane","ST",83]], seasonPosterMap["2006/07"]),
-  makeSeason("2007/08", "마르틴 욜→후안데 라모스 · 리그 11위 · 리그컵 우승", [["Paul Robinson","GK",81],["Pascal Chimbonda","RB",79],["Michael Dawson","CB",83],["Younès Kaboul","CB",80],["Young-Pyo Lee","LB",81],["Steed Malbranque","LW",80],["Didier Zokora","CM",79],["Jermaine Jenas","CM",82],["Aaron Lennon","RW",82],["Dimitar Berbatov","CAM",87],["Robbie Keane","ST",85]], seasonPosterMap["2007/08"]),
-  makeSeason("2008/09", "후안데 라모스→해리 레드냅 · 리그 8위 · 리그컵 준우승", [["Heurelho Gomes","GK",80],["Vedran Ćorluka","RB",81],["Jonathan Woodgate","CB",83],["Ledley King","CB",84],["Benoît Assou-Ekotto","LB",80],["Luka Modrić","LW",85],["Didier Zokora","CM",78],["Jermaine Jenas","CM",80],["Aaron Lennon","RW",83],["Roman Pavlyuchenko","CAM",82],["Darren Bent","ST",81]], seasonPosterMap["2008/09"]),
-  makeSeason("2009/10", "해리 레드냅 · 리그 4위 · FA컵 4강", [["Heurelho Gomes","GK",82],["Vedran Ćorluka","RB",81],["Michael Dawson","CB",85],["Sébastien Bassong","CB",80],["Benoît Assou-Ekotto","LB",81],["Gareth Bale","LW",85],["Wilson Palacios","CM",80],["Tom Huddlestone","CM",81],["Aaron Lennon","RW",84],["Peter Crouch","CAM",84],["Jermain Defoe","ST",86]], seasonPosterMap["2009/10"]),
-  makeSeason("2010/11", "해리 레드냅 · 리그 5위 · 챔피언스리그 8강", [["Heurelho Gomes","GK",81],["Alan Hutton","RB",79],["Michael Dawson","CB",84],["William Gallas","CB",83],["Benoît Assou-Ekotto","LB",81],["Gareth Bale","LW",89],["Wilson Palacios","CM",79],["Luka Modrić","CM",86],["Aaron Lennon","RW",84],["Rafael van der Vaart","CAM",87],["Peter Crouch","ST",84]], seasonPosterMap["2010/11"]),
-  makeSeason("2011/12", "해리 레드냅 · 리그 4위 · FA컵 4강", [["Brad Friedel","GK",82],["Kyle Walker","RB",85],["Younès Kaboul","CB",81],["Ledley King","CB",83],["Benoît Assou-Ekotto","LB",82],["Gareth Bale","LW",90],["Scott Parker","CM",86],["Luka Modrić","CM",87],["Aaron Lennon","RW",85],["Rafael van der Vaart","CAM",86],["Emmanuel Adebayor","ST",84]], seasonPosterMap["2011/12"]),
-  makeSeason("2012/13", "안드레 빌라스보아스 · 리그 5위 · 유로파리그 8강", [["Hugo Lloris","GK",85],["Kyle Walker","RB",84],["Michael Dawson","CB",82],["Jan Vertonghen","CB",88],["Benoît Assou-Ekotto","LB",80],["Sandro","CM",82],["Mousa Dembélé","CM",85],["Aaron Lennon","RW",82],["Clint Dempsey","CAM",83],["Gareth Bale","LW",93],["Jermain Defoe","ST",84]], seasonPosterMap["2012/13"]),
+  makeSeason("2004/05", "자크 상티니→마르틴 욜 · 리그 9위 · FA컵 8강", [["Paul Robinson","GK",82],["Noé Pamarot","RB",77],["Noureddine Naybet","CB",79],["Ledley King","CB",85],["Erik Edman","LB",79],["Andy Reid","LW",78],["Michael Carrick","CM",83],["Pedro Mendes","CM",80],["Sean Davies","RW",77],["Robbie Keane","CAM",84],["Jermain Defoe","ST",84]], seasonPosterMap["2004/05"]),
+  makeSeason("2005/06", "마르틴 욜 · 리그 5위 · FA컵 32강", [["Paul Robinson","GK",83],["Paul Stalteri","RB",78],["Michael Dawson","CB",80],["Ledley King","CB",87],["Young-Pyo Lee","LB",79],["Edgar Davids","LW",84],["Michael Carrick","CM",84],["Jermaine Jenas","CM",80],["Aaron Lennon","RW",79],["Mido","CAM",83],["Robbie Keane","ST",84]], seasonPosterMap["2005/06"]),
+  makeSeason("2006/07", "마르틴 욜 · 리그 5위 · UEFA컵 8강", [["Paul Robinson","GK",82],["Pascal Chimbonda","RB",80],["Michael Dawson","CB",81],["Ledley King","CB",85],["Young-Pyo Lee","LB",79],["Steed Malbranque","LW",80],["Didier Zokora","CM",80],["Jermaine Jenas","CM",81],["Aaron Lennon","RW",81],["Dimitar Berbatov","CAM",88],["Robbie Keane","ST",83]], seasonPosterMap["2006/07"]),
+  makeSeason("2007/08", "마르틴 욜→후안데 라모스 · 리그 11위 · 리그컵 우승", [["Paul Robinson","GK",81],["Pascal Chimbonda","RB",79],["Michael Dawson","CB",82],["Younès Kaboul","CB",80],["Young-Pyo Lee","LB",81],["Steed Malbranque","LW",80],["Didier Zokora","CM",79],["Jermaine Jenas","CM",81],["Aaron Lennon","RW",82],["Dimitar Berbatov","CAM",87],["Robbie Keane","ST",85]], seasonPosterMap["2007/08"]),
+  makeSeason("2008/09", "후안데 라모스→해리 레드냅 · 리그 8위 · 리그컵 준우승", [["Heurelho Gomes","GK",80],["Vedran Ćorluka","RB",81],["Jonathan Woodgate","CB",83],["Ledley King","CB",84],["Benoît Assou-Ekotto","LB",80],["Luka Modrić","LW",84],["Didier Zokora","CM",78],["Jermaine Jenas","CM",80],["Aaron Lennon","RW",83],["Roman Pavlyuchenko","CAM",82],["Darren Bent","ST",81]], seasonPosterMap["2008/09"]),
+  makeSeason("2009/10", "해리 레드냅 · 리그 4위 · FA컵 4강", [["Heurelho Gomes","GK",82],["Vedran Ćorluka","RB",81],["Michael Dawson","CB",84],["Sébastien Bassong","CB",80],["Benoît Assou-Ekotto","LB",81],["Gareth Bale","LW",84],["Wilson Palacios","CM",80],["Tom Huddlestone","CM",81],["Aaron Lennon","RW",84],["Peter Crouch","CAM",84],["Jermain Defoe","ST",86]], seasonPosterMap["2009/10"]),
+  makeSeason("2010/11", "해리 레드냅 · 리그 5위 · 챔피언스리그 8강", [["Heurelho Gomes","GK",81],["Alan Hutton","RB",79],["Michael Dawson","CB",84],["William Gallas","CB",83],["Benoît Assou-Ekotto","LB",81],["Gareth Bale","LW",89],["Wilson Palacios","CM",79],["Luka Modrić","CM",86],["Aaron Lennon","RW",84],["Rafael van der Vaart","CAM",86],["Peter Crouch","ST",84]], seasonPosterMap["2010/11"]),
+  makeSeason("2011/12", "해리 레드냅 · 리그 4위 · FA컵 4강", [["Brad Friedel","GK",82],["Kyle Walker","RB",85],["Younès Kaboul","CB",81],["Ledley King","CB",83],["Benoît Assou-Ekotto","LB",82],["Gareth Bale","LW",90],["Scott Parker","CM",85],["Luka Modrić","CM",87],["Aaron Lennon","RW",85],["Rafael van der Vaart","CAM",85],["Emmanuel Adebayor","ST",84]], seasonPosterMap["2011/12"]),
+  makeSeason("2012/13", "안드레 빌라스보아스 · 리그 5위 · 유로파리그 8강", [["Hugo Lloris","GK",85],["Kyle Walker","RB",84],["Michael Dawson","CB",82],["Jan Vertonghen","CB",87],["Benoît Assou-Ekotto","LB",80],["Sandro","CM",82],["Mousa Dembélé","CM",85],["Aaron Lennon","RW",82],["Clint Dempsey","CAM",82],["Gareth Bale","LW",93],["Jermain Defoe","ST",85]], seasonPosterMap["2012/13"]),
   makeSeason("2013/14", "빌라스보아스→팀 셔우드 · 리그 6위 · 유로파리그 16강", [["Hugo Lloris","GK",86],["Kyle Walker","RB",84],["Michael Dawson","CB",81],["Jan Vertonghen","CB",85],["Danny Rose","LB",81],["Paulinho","CM",81],["Mousa Dembélé","CM",84],["Aaron Lennon","RW",81],["Christian Eriksen","CAM",86],["Gylfi Sigurdsson","LW",81],["Roberto Soldado","ST",79]], seasonPosterMap["2013/14"]),
-  makeSeason("2014/15", "마우리시오 포체티노 · 리그 5위 · 리그컵 준우승", [["Hugo Lloris","GK",87],["Kyle Walker","RB",83],["Eric Dier","CB",80],["Jan Vertonghen","CB",85],["Danny Rose","LB",83],["Ryan Mason","CM",80],["Nabil Bentaleb","CM",79],["Erik Lamela","RW",82],["Christian Eriksen","CAM",87],["Nacer Chadli","LW",82],["Harry Kane","ST",89]], seasonPosterMap["2014/15"]),
-  makeSeason("2015/16", "마우리시오 포체티노 · 리그 3위 · 유로파리그 16강", [["Hugo Lloris","GK",87],["Kyle Walker","RB",85],["Toby Alderweireld","CB",89],["Jan Vertonghen","CB",87],["Danny Rose","LB",86],["Eric Dier","CM",83],["Mousa Dembélé","CM",87],["Erik Lamela","RW",84],["Dele Alli","CAM",89],["Christian Eriksen","LW",87],["Harry Kane","ST",91]], seasonPosterMap["2015/16"]),
-  makeSeason("2016/17", "마우리시오 포체티노 · 리그 2위 · FA컵 4강", [["Hugo Lloris","GK",88],["Kyle Walker","RB",87],["Toby Alderweireld","CB",89],["Jan Vertonghen","CB",89],["Ben Davies","LB",83],["Victor Wanyama","CM",84],["Eric Dier","CM",86],["Christian Eriksen","RW",89],["Dele Alli","CAM",90],["Heung-min Son","LW",90],["Harry Kane","ST",93]], seasonPosterMap["2016/17"]),
-  makeSeason("2017/18", "마우리시오 포체티노 · 리그 3위 · FA컵 4강", [["Hugo Lloris","GK",87],["Kieran Trippier","RB",84],["Davinson Sánchez","CB",83],["Jan Vertonghen","CB",90],["Ben Davies","LB",85],["Mousa Dembélé","CM",85],["Eric Dier","CM",83],["Christian Eriksen","RW",89],["Dele Alli","CAM",87],["Heung-min Son","LW",89],["Harry Kane","ST",93]], seasonPosterMap["2017/18"]),
-  makeSeason("2018/19", "마우리시오 포체티노 · 리그 4위 · 챔피언스리그 준우승", [["Hugo Lloris","GK",89],["Kieran Trippier","RB",83],["Toby Alderweireld","CB",88],["Jan Vertonghen","CB",87],["Ben Davies","LB",82],["Harry Winks","CM",81],["Moussa Sissoko","CM",85],["Lucas Moura","RW",86],["Christian Eriksen","CAM",87],["Heung-min Son","LW",92],["Harry Kane","ST",89]], seasonPosterMap["2018/19"]),
-  makeSeason("2019/20", "포체티노→주제 무리뉴 · 리그 6위 · 챔피언스리그 16강", [["Hugo Lloris","GK",87],["Serge Aurier","RB",81],["Toby Alderweireld","CB",86],["Davinson Sánchez","CB",82],["Ben Davies","LB",81],["Harry Winks","CM",80],["Moussa Sissoko","CM",82],["Lucas Moura","RW",84],["Dele Alli","CAM",84],["Heung-min Son","LW",90],["Harry Kane","ST",92]], seasonPosterMap["2019/20"]),
-  makeSeason("2020/21", "주제 무리뉴→라이언 메이슨 · 리그 7위 · 리그컵 준우승", [["Hugo Lloris","GK",87],["Matt Doherty","RB",80],["Toby Alderweireld","CB",85],["Eric Dier","CB",81],["Ben Davies","LB",80],["Pierre-Emile Højbjerg","CM",83],["Moussa Sissoko","CM",81],["Lucas Moura","RW",84],["Tanguy Ndombele","CAM",83],["Heung-min Son","LW",91],["Harry Kane","ST",95]], seasonPosterMap["2020/21"]),
-  makeSeason("2021/22", "누누→안토니오 콘테 · 리그 4위 · 리그컵 4강", [["Hugo Lloris","GK",86],["Emerson Royal","RB",80],["Cristian Romero","CB",87],["Eric Dier","CB",82],["Ben Davies","LB",82],["Pierre-Emile Højbjerg","CM",83],["Rodrigo Bentancur","CM",83],["Lucas Moura","RW",83],["Sergio Reguilón","LW",81],["Heung-min Son","CAM",93],["Harry Kane","ST",94]], seasonPosterMap["2021/22"]),
-  makeSeason("2022/23", "콘테→스텔리니→라이언 메이슨 · 리그 8위 · 챔피언스리그 16강", [["Hugo Lloris","GK",84],["Emerson Royal","RB",81],["Cristian Romero","CB",88],["Eric Dier","CB",78],["Ben Davies","LB",80],["Pierre-Emile Højbjerg","CM",83],["Rodrigo Bentancur","CM",84],["Dejan Kulusevski","RW",84],["Ivan Perišić","LW",84],["Heung-min Son","CAM",89],["Harry Kane","ST",95]], seasonPosterMap["2022/23"]),
-  makeSeason("2023/24", "엔지 포스테코글루 · 리그 5위 · FA컵 32강", [["Guglielmo Vicario","GK",85],["Pedro Porro","RB",85],["Cristian Romero","CB",86],["Micky van de Ven","CB",86],["Destiny Udogie","LB",85],["Yves Bissouma","CM",82],["Pape Matar Sarr","CM",82],["Dejan Kulusevski","RW",85],["James Maddison","CAM",86],["Brennan Johnson","LW",83],["Heung-min Son","ST",90]], seasonPosterMap["2023/24"]),
-  makeSeason("2024/25", "엔지 포스테코글루 · 리그 17위 · 유로파리그 우승", [["Guglielmo Vicario","GK",85],["Pedro Porro","RB",86],["Cristian Romero","CB",87],["Micky van de Ven","CB",88],["Destiny Udogie","LB",84],["Pape Matar Sarr","CM",83],["Rodrigo Bentancur","CM",86],["Brennan Johnson","RW",85],["Dejan Kulusevski","CAM",86],["Heung-min Son","LW",88],["Dominic Solanke","ST",83]], seasonPosterMap["2024/25"]),
-  makeSeason("2025/26", "토마스 프랭크→이고르 투도르→데 제르비 · 리그 17위 · 슈퍼컵 준우승", [["Guglielmo Vicario","GK",84],["Pedro Porro","RB",86],["Cristian Romero","CB",86],["Micky van de Ven","CB",85],["Djed Spence","LB",82],["João Palhinha","CM",85],["Rodrigo Bentancur","CM",84],["Mohammed Kudus","RW",85],["Xavi Simons","CAM",85],["Mathys Tel","LW",81],["Richarlison","ST",84]], seasonPosterMap["2025/26"]),
-  makeSeason("2026/27", "로베르토 데 제르비 · 리그 진행 중 · 시즌 진행 중", [["Antonín Kinský","GK",83],["Pedro Porro","RB",88],["Jan Paul van Hecke","CB",84],["Micky van de Ven","CB",85],["Destiny Udogie","LB",83],["Sandro Tonali","CM",86],["Rodrigo Bentancur","CM",84],["Lucas Bergvall","CM",83],["Matheus Fernandes","CM",84],["Mohammed Kudus","RW",84],["James Maddison","CAM",85],["Mathys Tel","LW",82],["Omar Marmoush","ST",84],["Dominic Solanke","ST",83],["Sávio","RW",84],["Andrew Robertson","LB",85]], null),
-  makeSeason("THE LEGENDS", "비공식 스퍼스 레전드 스페셜 · 모든 카드 OVR 90+", [["Pat Jennings","GK",93],["Steve Perryman","RB",90],["Ledley King","CB",90],["Gary Mabbutt","CB",91],["Chris Hughton","LB",90],["Danny Blanchflower","CM",93],["Dave Mackay","CM",91],["Glenn Hoddle","CAM",94],["Paul Gascoigne","CAM",93],["Ossie Ardiles","CM",91],["Cliff Jones","LW",90],["Jimmy Greaves","ST",96]], null)
+  makeSeason("2014/15", "마우리시오 포체티노 · 리그 5위 · 리그컵 준우승", [["Hugo Lloris","GK",87],["Kyle Walker","RB",83],["Eric Dier","CB",80],["Jan Vertonghen","CB",85],["Danny Rose","LB",83],["Ryan Mason","CM",80],["Nabil Bentaleb","CM",79],["Erik Lamela","RW",82],["Christian Eriksen","CAM",87],["Nacer Chadli","LW",80],["Harry Kane","ST",90]], seasonPosterMap["2014/15"]),
+  makeSeason("2015/16", "마우리시오 포체티노 · 리그 3위 · 유로파리그 16강", [["Hugo Lloris","GK",87],["Kyle Walker","RB",85],["Toby Alderweireld","CB",90],["Jan Vertonghen","CB",87],["Danny Rose","LB",86],["Eric Dier","CM",83],["Mousa Dembélé","CM",87],["Erik Lamela","RW",84],["Dele Alli","CAM",89],["Christian Eriksen","LW",88],["Harry Kane","ST",91]], seasonPosterMap["2015/16"]),
+  makeSeason("2016/17", "마우리시오 포체티노 · 리그 2위 · FA컵 4강", [["Hugo Lloris","GK",88],["Kyle Walker","RB",87],["Toby Alderweireld","CB",90],["Jan Vertonghen","CB",89],["Ben Davies","LB",83],["Victor Wanyama","CM",84],["Eric Dier","CM",86],["Christian Eriksen","RW",90],["Dele Alli","CAM",90],["Heung-min Son","LW",90],["Harry Kane","ST",93]], seasonPosterMap["2016/17"]),
+  makeSeason("2017/18", "마우리시오 포체티노 · 리그 3위 · FA컵 4강", [["Hugo Lloris","GK",87],["Kieran Trippier","RB",84],["Davinson Sánchez","CB",83],["Jan Vertonghen","CB",90],["Ben Davies","LB",85],["Mousa Dembélé","CM",85],["Eric Dier","CM",83],["Christian Eriksen","RW",90],["Dele Alli","CAM",87],["Heung-min Son","LW",89],["Harry Kane","ST",93]], seasonPosterMap["2017/18"]),
+  makeSeason("2018/19", "마우리시오 포체티노 · 리그 4위 · 챔피언스리그 준우승", [["Hugo Lloris","GK",89],["Kieran Trippier","RB",83],["Toby Alderweireld","CB",88],["Jan Vertonghen","CB",87],["Ben Davies","LB",82],["Harry Winks","CM",80],["Moussa Sissoko","CM",84],["Lucas Moura","RW",86],["Christian Eriksen","CAM",88],["Heung-min Son","LW",92],["Harry Kane","ST",89]], seasonPosterMap["2018/19"]),
+  makeSeason("2019/20", "포체티노→주제 무리뉴 · 리그 6위 · 챔피언스리그 16강", [["Hugo Lloris","GK",87],["Serge Aurier","RB",81],["Toby Alderweireld","CB",86],["Davinson Sánchez","CB",82],["Ben Davies","LB",81],["Harry Winks","CM",79],["Moussa Sissoko","CM",81],["Lucas Moura","RW",84],["Dele Alli","CAM",84],["Heung-min Son","LW",90],["Harry Kane","ST",92]], seasonPosterMap["2019/20"]),
+  makeSeason("2020/21", "주제 무리뉴→라이언 메이슨 · 리그 7위 · 리그컵 준우승", [["Hugo Lloris","GK",87],["Matt Doherty","RB",79],["Toby Alderweireld","CB",85],["Eric Dier","CB",81],["Ben Davies","LB",80],["Pierre-Emile Højbjerg","CM",83],["Moussa Sissoko","CM",80],["Lucas Moura","RW",84],["Tanguy Ndombele","CAM",83],["Heung-min Son","LW",91],["Harry Kane","ST",95]], seasonPosterMap["2020/21"]),
+  makeSeason("2021/22", "누누→안토니오 콘테 · 리그 4위 · 리그컵 4강", [["Hugo Lloris","GK",86],["Emerson Royal","RB",80],["Cristian Romero","CB",87],["Eric Dier","CB",82],["Ben Davies","LB",82],["Pierre-Emile Højbjerg","CM",82],["Rodrigo Bentancur","CM",83],["Lucas Moura","RW",83],["Sergio Reguilón","LW",80],["Heung-min Son","CAM",93],["Harry Kane","ST",94]], seasonPosterMap["2021/22"]),
+  makeSeason("2022/23", "콘테→스텔리니→라이언 메이슨 · 리그 8위 · 챔피언스리그 16강", [["Hugo Lloris","GK",82],["Emerson Royal","RB",81],["Cristian Romero","CB",89],["Eric Dier","CB",78],["Ben Davies","LB",80],["Pierre-Emile Højbjerg","CM",82],["Rodrigo Bentancur","CM",84],["Dejan Kulusevski","RW",84],["Ivan Perišić","LW",84],["Heung-min Son","CAM",89],["Harry Kane","ST",95]], seasonPosterMap["2022/23"]),
+  makeSeason("2023/24", "엔지 포스테코글루 · 리그 5위 · FA컵 32강", [["Guglielmo Vicario","GK",85],["Pedro Porro","RB",85],["Cristian Romero","CB",87],["Micky van de Ven","CB",86],["Destiny Udogie","LB",85],["Yves Bissouma","CM",82],["Pape Matar Sarr","CM",82],["Dejan Kulusevski","RW",85],["James Maddison","CAM",87],["Brennan Johnson","LW",83],["Heung-min Son","ST",90]], seasonPosterMap["2023/24"]),
+  makeSeason("2024/25", "엔지 포스테코글루 · 리그 17위 · 유로파리그 우승", [["Guglielmo Vicario","GK",85],["Pedro Porro","RB",86],["Cristian Romero","CB",88],["Micky van de Ven","CB",88],["Destiny Udogie","LB",84],["Pape Matar Sarr","CM",83],["Rodrigo Bentancur","CM",85],["Brennan Johnson","RW",84],["Dejan Kulusevski","CAM",86],["Heung-min Son","LW",89],["Dominic Solanke","ST",83]], seasonPosterMap["2024/25"]),
+  makeSeason("2025/26", "토마스 프랭크→이고르 투도르→데 제르비 · 리그 17위 · 슈퍼컵 준우승", [["Guglielmo Vicario","GK",84],["Pedro Porro","RB",86],["Cristian Romero","CB",86],["Micky van de Ven","CB",85],["Djed Spence","LB",82],["João Palhinha","CM",86],["Rodrigo Bentancur","CM",84],["Mohammed Kudus","RW",85],["Xavi Simons","CAM",85],["Mathys Tel","LW",81],["Richarlison","ST",84]], seasonPosterMap["2025/26"]),
+  makeSeason("2026/27", "로베르토 데 제르비 · 리그 진행 중 · 시즌 진행 중", [["Antonín Kinský","GK",84],["Pedro Porro","RB",88],["Jan Paul van Hecke","CB",87],["Micky van de Ven","CB",85],["Destiny Udogie","LB",83],["Sandro Tonali","CM",86],["Rodrigo Bentancur","CM",84],["Lucas Bergvall","CM",83],["Matheus Fernandes","CM",84],["Mohammed Kudus","RW",84],["James Maddison","CAM",86],["Mathys Tel","LW",82],["Omar Marmoush","ST",84],["Dominic Solanke","ST",83],["Sávio","RW",84],["Andrew Robertson","LB",85]], null),
+  makeSeason("THE LEGENDS", "비공식 스퍼스 레전드 스페셜 · 모든 카드 OVR 90+", [["Pat Jennings","GK",93],["Steve Perryman","RB",90],["Ledley King","CB",90],["Gary Mabbutt","CB",91],["Chris Hughton","LB",90],["Danny Blanchflower","CM",93],["Dave Mackay","CM",92],["Glenn Hoddle","CAM",94],["Paul Gascoigne","CAM",92],["Ossie Ardiles","CM",91],["Cliff Jones","LW",90],["Jimmy Greaves","ST",96]], null)
 ];
 
 
+// DATA SOURCE: the_lilywhites_38_player_data(2).xlsx · first sheet "선수별 편집"
+const excelPlayerNationOverrides = {
+  "Aaron Lennon": "잉글랜드",
+  "Alan Hutton": "스코틀랜드",
+  "Allan Nielsen": "덴마크",
+  "Andrew Robertson": "스코틀랜드",
+  "Andy Reid": "아일랜드",
+  "Andy Sinton": "잉글랜드",
+  "Anthony Gardner": "잉글랜드",
+  "Antonín Kinský": "체코",
+  "Ben Davies": "웨일스",
+  "Benoît Assou-Ekotto": "카메룬",
+  "Brad Friedel": "미국",
+  "Brennan Johnson": "웨일스",
+  "Chris Armstrong": "잉글랜드",
+  "Chris Hughton": "아일랜드",
+  "Chris Perry": "잉글랜드",
+  "Chris Wilson": "잉글랜드",
+  "Christian Eriksen": "덴마크",
+  "Christian Ziege": "독일",
+  "Cliff Jones": "웨일스",
+  "Clint Dempsey": "미국",
+  "Colin Calderwood": "스코틀랜드",
+  "Cristian Romero": "아르헨티나",
+  "Danny Blanchflower": "북아일랜드",
+  "Danny Rose": "잉글랜드",
+  "Darren Anderton": "잉글랜드",
+  "Darren Bent": "잉글랜드",
+  "Dave Mackay": "스코틀랜드",
+  "David Ginola": "프랑스",
+  "David Howells": "잉글랜드",
+  "Davinson Sánchez": "콜롬비아",
+  "Dean Austin": "잉글랜드",
+  "Dean Richards": "잉글랜드",
+  "Dejan Kulusevski": "스웨덴",
+  "Dele Alli": "잉글랜드",
+  "Destiny Udogie": "이탈리아",
+  "Didier Zokora": "코트디부아르",
+  "Dimitar Berbatov": "불가리아",
+  "Djed Spence": "잉글랜드",
+  "Dominic Solanke": "잉글랜드",
+  "Edgar Davids": "네덜란드",
+  "Emerson Royal": "브라질",
+  "Emmanuel Adebayor": "토고",
+  "Eric Dier": "잉글랜드",
+  "Erik Edman": "스웨덴",
+  "Erik Lamela": "아르헨티나",
+  "Erik Thorstvedt": "노르웨이",
+  "Frederic Kanouté": "말리",
+  "Gareth Bale": "웨일스",
+  "Gary Doherty": "북아일랜드",
+  "Gary Mabbutt": "잉글랜드",
+  "Gary Samways": "잉글랜드",
+  "Glenn Hoddle": "잉글랜드",
+  "Goran Bunjevcevic": "세르비아",
+  "Guglielmo Vicario": "이탈리아",
+  "Gus Poyet": "우루과이",
+  "Gylfi Sigurdsson": "아이슬란드",
+  "Harry Kane": "잉글랜드",
+  "Harry Winks": "잉글랜드",
+  "Heung-min Son": "대한민국",
+  "Heurelho Gomes": "브라질",
+  "Hugo Lloris": "프랑스",
+  "Ian Walker": "잉글랜드",
+  "Ivan Perišić": "크로아티아",
+  "James Maddison": "잉글랜드",
+  "Jan Paul van Hecke": "네덜란드",
+  "Jan Vertonghen": "벨기에",
+  "Jason Dozzell": "잉글랜드",
+  "Jermain Defoe": "잉글랜드",
+  "Jermaine Jenas": "잉글랜드",
+  "Jimmy Greaves": "잉글랜드",
+  "Jonathan Woodgate": "잉글랜드",
+  "João Palhinha": "포르투갈",
+  "Jurgen Klinsmann": "독일",
+  "Justin Edinburgh": "잉글랜드",
+  "Kasey Keller": "미국",
+  "Kieran Trippier": "잉글랜드",
+  "Kyle Walker": "잉글랜드",
+  "Ledley King": "잉글랜드",
+  "Les Ferdinand": "잉글랜드",
+  "Lucas Bergvall": "스웨덴",
+  "Lucas Moura": "브라질",
+  "Luka Modrić": "크로아티아",
+  "Matheus Fernandes": "브라질",
+  "Mathys Tel": "프랑스",
+  "Matt Doherty": "아일랜드",
+  "Mauricio Taricco": "아르헨티나",
+  "Michael Carrick": "잉글랜드",
+  "Michael Dawson": "잉글랜드",
+  "Micky van de Ven": "네덜란드",
+  "Mido": "이집트",
+  "Mohammed Kudus": "가나",
+  "Mousa Dembélé": "벨기에",
+  "Moussa Sissoko": "프랑스",
+  "Nabil Bentaleb": "알제리",
+  "Nacer Chadli": "벨기에",
+  "Neil Ruddock": "잉글랜드",
+  "Neil Sullivan": "스코틀랜드",
+  "Nick Barmby": "잉글랜드",
+  "Noureddine Naybet": "모로코",
+  "Noé Pamarot": "프랑스",
+  "Omar Marmoush": "이집트",
+  "Ossie Ardiles": "아르헨티나",
+  "Pape Matar Sarr": "세네갈",
+  "Pascal Chimbonda": "프랑스",
+  "Pat Jennings": "북아일랜드",
+  "Paul Allen": "잉글랜드",
+  "Paul Gascoigne": "잉글랜드",
+  "Paul Robinson": "잉글랜드",
+  "Paul Stalteri": "캐나다",
+  "Paulinho": "브라질",
+  "Pedro Mendes": "포르투갈",
+  "Pedro Porro": "스페인",
+  "Peter Crouch": "잉글랜드",
+  "Pierre-Emile Højbjerg": "덴마크",
+  "Rafael van der Vaart": "네덜란드",
+  "Ramon Vega": "스위스",
+  "Richarlison": "브라질",
+  "Robbie Keane": "아일랜드",
+  "Roberto Soldado": "스페인",
+  "Rodrigo Bentancur": "우루과이",
+  "Rohan Ricketts": "잉글랜드",
+  "Roman Pavlyuchenko": "러시아",
+  "Ronny Rosenthal": "이스라엘",
+  "Ruel Fox": "잉글랜드",
+  "Ryan Mason": "잉글랜드",
+  "Sandro": "브라질",
+  "Sandro Tonali": "이탈리아",
+  "Scott Parker": "잉글랜드",
+  "Sean Davies": "잉글랜드",
+  "Serge Aurier": "코트디부아르",
+  "Sergio Reguilón": "스페인",
+  "Sergiy Rebrov": "우크라이나",
+  "Simon Davies": "웨일스",
+  "Sol Campbell": "잉글랜드",
+  "Steed Malbranque": "프랑스",
+  "Steffen Freund": "독일",
+  "Steffen Iversen": "노르웨이",
+  "Stephen Carr": "아일랜드",
+  "Stephen Clemence": "잉글랜드",
+  "Steve Perryman": "잉글랜드",
+  "Steve Sedgley": "잉글랜드",
+  "Stéphane Dalmat": "프랑스",
+  "Sávio": "브라질",
+  "Sébastien Bassong": "카메룬",
+  "Tanguy Ndombele": "프랑스",
+  "Teddy Sheringham": "잉글랜드",
+  "Tim Sherwood": "잉글랜드",
+  "Toby Alderweireld": "벨기에",
+  "Tom Huddlestone": "잉글랜드",
+  "Vedran Ćorluka": "크로아티아",
+  "Victor Wanyama": "케냐",
+  "William Gallas": "프랑스",
+  "Wilson Palacios": "온두라스",
+  "Xavi Simons": "네덜란드",
+  "Young-Pyo Lee": "대한민국",
+  "Younès Kaboul": "프랑스",
+  "Yves Bissouma": "말리",
+  "Øyvind Leonhardsen": "노르웨이"
+};
+const excelPlayerPositionOverrides = {
+  "Aaron Lennon": [
+    "RW",
+    "RM"
+  ],
+  "Alan Hutton": [
+    "RB"
+  ],
+  "Allan Nielsen": [
+    "CM"
+  ],
+  "Andrew Robertson": [
+    "LB"
+  ],
+  "Andy Reid": [
+    "LW",
+    "LM"
+  ],
+  "Andy Sinton": [
+    "RW",
+    "RM"
+  ],
+  "Anthony Gardner": [
+    "CB"
+  ],
+  "Antonín Kinský": [
+    "GK"
+  ],
+  "Ben Davies": [
+    "LB",
+    "CB"
+  ],
+  "Benoît Assou-Ekotto": [
+    "LB"
+  ],
+  "Brad Friedel": [
+    "GK"
+  ],
+  "Brennan Johnson": [
+    "RW",
+    "LW",
+    "RM"
+  ],
+  "Chris Armstrong": [
+    "ST"
+  ],
+  "Chris Hughton": [
+    "LB"
+  ],
+  "Chris Perry": [
+    "RB",
+    "CB"
+  ],
+  "Chris Wilson": [
+    "LB",
+    "LW"
+  ],
+  "Christian Eriksen": [
+    "CAM",
+    "RW",
+    "LW",
+    "CM"
+  ],
+  "Christian Ziege": [
+    "LW",
+    "LM"
+  ],
+  "Cliff Jones": [
+    "LW",
+    "LM"
+  ],
+  "Clint Dempsey": [
+    "CAM",
+    "ST"
+  ],
+  "Colin Calderwood": [
+    "CB",
+    "CM"
+  ],
+  "Cristian Romero": [
+    "CB"
+  ],
+  "Danny Blanchflower": [
+    "CM",
+    "RM"
+  ],
+  "Danny Rose": [
+    "LB",
+    "LM"
+  ],
+  "Darren Anderton": [
+    "CAM",
+    "RW",
+    "RM"
+  ],
+  "Darren Bent": [
+    "ST"
+  ],
+  "Dave Mackay": [
+    "CM",
+    "LM",
+    "CB"
+  ],
+  "David Ginola": [
+    "LW",
+    "LM",
+    "CAM"
+  ],
+  "David Howells": [
+    "CM"
+  ],
+  "Davinson Sánchez": [
+    "CB"
+  ],
+  "Dean Austin": [
+    "RB"
+  ],
+  "Dean Richards": [
+    "CB"
+  ],
+  "Dejan Kulusevski": [
+    "CAM",
+    "RW"
+  ],
+  "Dele Alli": [
+    "CAM",
+    "CM"
+  ],
+  "Destiny Udogie": [
+    "LB"
+  ],
+  "Didier Zokora": [
+    "CM"
+  ],
+  "Dimitar Berbatov": [
+    "ST"
+  ],
+  "Djed Spence": [
+    "RB",
+    "LB"
+  ],
+  "Dominic Solanke": [
+    "ST"
+  ],
+  "Edgar Davids": [
+    "LM",
+    "LW",
+    "CM"
+  ],
+  "Emerson Royal": [
+    "RB"
+  ],
+  "Emmanuel Adebayor": [
+    "ST"
+  ],
+  "Eric Dier": [
+    "CB",
+    "CM"
+  ],
+  "Erik Edman": [
+    "LB"
+  ],
+  "Erik Lamela": [
+    "LM",
+    "RM",
+    "RW",
+    "LW"
+  ],
+  "Erik Thorstvedt": [
+    "GK"
+  ],
+  "Frederic Kanouté": [
+    "ST",
+    "CAM"
+  ],
+  "Gareth Bale": [
+    "LM",
+    "LW",
+    "RW",
+    "ST"
+  ],
+  "Gary Doherty": [
+    "LB",
+    "CB"
+  ],
+  "Gary Mabbutt": [
+    "CB"
+  ],
+  "Gary Samways": [
+    "CM"
+  ],
+  "Glenn Hoddle": [
+    "CAM",
+    "CM"
+  ],
+  "Goran Bunjevcevic": [
+    "CM"
+  ],
+  "Guglielmo Vicario": [
+    "GK"
+  ],
+  "Gus Poyet": [
+    "CM",
+    "CAM",
+    "LW",
+    "LM"
+  ],
+  "Gylfi Sigurdsson": [
+    "LW",
+    "CAM",
+    "CM"
+  ],
+  "Harry Kane": [
+    "ST"
+  ],
+  "Harry Winks": [
+    "CM"
+  ],
+  "Heung-min Son": [
+    "LW",
+    "ST",
+    "RW"
+  ],
+  "Heurelho Gomes": [
+    "GK"
+  ],
+  "Hugo Lloris": [
+    "GK"
+  ],
+  "Ian Walker": [
+    "GK"
+  ],
+  "Ivan Perišić": [
+    "LW",
+    "RW",
+    "LM",
+    "LB"
+  ],
+  "James Maddison": [
+    "CAM",
+    "CM"
+  ],
+  "Jan Paul van Hecke": [
+    "CB"
+  ],
+  "Jan Vertonghen": [
+    "CB",
+    "LB"
+  ],
+  "Jason Dozzell": [
+    "CM"
+  ],
+  "Jermain Defoe": [
+    "ST"
+  ],
+  "Jermaine Jenas": [
+    "CM"
+  ],
+  "Jimmy Greaves": [
+    "ST"
+  ],
+  "Jonathan Woodgate": [
+    "CB"
+  ],
+  "João Palhinha": [
+    "CM"
+  ],
+  "Jurgen Klinsmann": [
+    "ST"
+  ],
+  "Justin Edinburgh": [
+    "LB"
+  ],
+  "Kasey Keller": [
+    "GK"
+  ],
+  "Kieran Trippier": [
+    "RB"
+  ],
+  "Kyle Walker": [
+    "RB"
+  ],
+  "Ledley King": [
+    "CB"
+  ],
+  "Les Ferdinand": [
+    "ST"
+  ],
+  "Lucas Bergvall": [
+    "CM",
+    "CAM"
+  ],
+  "Lucas Moura": [
+    "RW",
+    "LW"
+  ],
+  "Luka Modrić": [
+    "CM",
+    "CAM"
+  ],
+  "Matheus Fernandes": [
+    "CM",
+    "CAM"
+  ],
+  "Mathys Tel": [
+    "LW"
+  ],
+  "Matt Doherty": [
+    "RB",
+    "CB"
+  ],
+  "Mauricio Taricco": [
+    "LB"
+  ],
+  "Michael Carrick": [
+    "CM"
+  ],
+  "Michael Dawson": [
+    "CB"
+  ],
+  "Micky van de Ven": [
+    "CB",
+    "LB"
+  ],
+  "Mido": [
+    "CAM"
+  ],
+  "Mohammed Kudus": [
+    "RW"
+  ],
+  "Mousa Dembélé": [
+    "CM",
+    "CAM"
+  ],
+  "Moussa Sissoko": [
+    "CM",
+    "RM"
+  ],
+  "Nabil Bentaleb": [
+    "CM"
+  ],
+  "Nacer Chadli": [
+    "LW",
+    "RW",
+    "RM",
+    "LM"
+  ],
+  "Neil Ruddock": [
+    "CB"
+  ],
+  "Neil Sullivan": [
+    "GK"
+  ],
+  "Nick Barmby": [
+    "RW",
+    "LW",
+    "LM",
+    "RM"
+  ],
+  "Noureddine Naybet": [
+    "CB"
+  ],
+  "Noé Pamarot": [
+    "RB"
+  ],
+  "Omar Marmoush": [
+    "ST",
+    "CAM",
+    "LW"
+  ],
+  "Ossie Ardiles": [
+    "CM",
+    "CAM"
+  ],
+  "Pape Matar Sarr": [
+    "CM"
+  ],
+  "Pascal Chimbonda": [
+    "RB"
+  ],
+  "Pat Jennings": [
+    "GK"
+  ],
+  "Paul Allen": [
+    "LW"
+  ],
+  "Paul Gascoigne": [
+    "CAM"
+  ],
+  "Paul Robinson": [
+    "GK"
+  ],
+  "Paul Stalteri": [
+    "RB"
+  ],
+  "Paulinho": [
+    "CM"
+  ],
+  "Pedro Mendes": [
+    "CM"
+  ],
+  "Pedro Porro": [
+    "RB"
+  ],
+  "Peter Crouch": [
+    "ST"
+  ],
+  "Pierre-Emile Højbjerg": [
+    "CM"
+  ],
+  "Rafael van der Vaart": [
+    "CAM"
+  ],
+  "Ramon Vega": [
+    "CB"
+  ],
+  "Richarlison": [
+    "ST",
+    "LW"
+  ],
+  "Robbie Keane": [
+    "ST"
+  ],
+  "Roberto Soldado": [
+    "ST"
+  ],
+  "Rodrigo Bentancur": [
+    "CM"
+  ],
+  "Rohan Ricketts": [
+    "LW",
+    "LM"
+  ],
+  "Roman Pavlyuchenko": [
+    "ST"
+  ],
+  "Ronny Rosenthal": [
+    "LW",
+    "LM"
+  ],
+  "Ruel Fox": [
+    "RW",
+    "RM"
+  ],
+  "Ryan Mason": [
+    "CM"
+  ],
+  "Sandro": [
+    "CM"
+  ],
+  "Sandro Tonali": [
+    "CM"
+  ],
+  "Scott Parker": [
+    "CM"
+  ],
+  "Sean Davies": [
+    "RW",
+    "RM"
+  ],
+  "Serge Aurier": [
+    "RB"
+  ],
+  "Sergio Reguilón": [
+    "LB"
+  ],
+  "Sergiy Rebrov": [
+    "CAM"
+  ],
+  "Simon Davies": [
+    "RW",
+    "RM"
+  ],
+  "Sol Campbell": [
+    "CB"
+  ],
+  "Steed Malbranque": [
+    "LW",
+    "LM"
+  ],
+  "Steffen Freund": [
+    "CM"
+  ],
+  "Steffen Iversen": [
+    "CAM",
+    "ST"
+  ],
+  "Stephen Carr": [
+    "RB"
+  ],
+  "Stephen Clemence": [
+    "CM"
+  ],
+  "Steve Perryman": [
+    "RB",
+    "CM"
+  ],
+  "Steve Sedgley": [
+    "CM",
+    "CAM"
+  ],
+  "Stéphane Dalmat": [
+    "CM"
+  ],
+  "Sávio": [
+    "RW",
+    "LW"
+  ],
+  "Sébastien Bassong": [
+    "CB",
+    "LB"
+  ],
+  "Tanguy Ndombele": [
+    "CAM",
+    "CM"
+  ],
+  "Teddy Sheringham": [
+    "ST"
+  ],
+  "Tim Sherwood": [
+    "CM"
+  ],
+  "Toby Alderweireld": [
+    "CB"
+  ],
+  "Tom Huddlestone": [
+    "CM"
+  ],
+  "Vedran Ćorluka": [
+    "RB"
+  ],
+  "Victor Wanyama": [
+    "CM"
+  ],
+  "William Gallas": [
+    "CB"
+  ],
+  "Wilson Palacios": [
+    "CM"
+  ],
+  "Xavi Simons": [
+    "CAM",
+    "LW",
+    "RW"
+  ],
+  "Young-Pyo Lee": [
+    "LB"
+  ],
+  "Younès Kaboul": [
+    "CB"
+  ],
+  "Yves Bissouma": [
+    "CM"
+  ],
+  "Øyvind Leonhardsen": [
+    "RW",
+    "LW",
+    "LM",
+    "RM"
+  ]
+};
+const excelSeasonOvrOverrides = {
+  "Aaron Lennon|2005/06": 79,
+  "Aaron Lennon|2006/07": 81,
+  "Aaron Lennon|2007/08": 82,
+  "Aaron Lennon|2008/09": 83,
+  "Aaron Lennon|2009/10": 84,
+  "Aaron Lennon|2010/11": 84,
+  "Aaron Lennon|2011/12": 85,
+  "Aaron Lennon|2012/13": 82,
+  "Aaron Lennon|2013/14": 81,
+  "Alan Hutton|2010/11": 79,
+  "Allan Nielsen|1996/97": 81,
+  "Allan Nielsen|1997/98": 81,
+  "Allan Nielsen|1998/99": 82,
+  "Andrew Robertson|2026/27": 85,
+  "Andy Reid|2004/05": 78,
+  "Andy Sinton|1996/97": 77,
+  "Anthony Gardner|2003/04": 77,
+  "Antonín Kinský|2026/27": 83,
+  "Ben Davies|2016/17": 83,
+  "Ben Davies|2017/18": 85,
+  "Ben Davies|2018/19": 82,
+  "Ben Davies|2019/20": 81,
+  "Ben Davies|2020/21": 80,
+  "Ben Davies|2021/22": 82,
+  "Ben Davies|2022/23": 80,
+  "Benoît Assou-Ekotto|2008/09": 80,
+  "Benoît Assou-Ekotto|2009/10": 81,
+  "Benoît Assou-Ekotto|2010/11": 81,
+  "Benoît Assou-Ekotto|2011/12": 82,
+  "Benoît Assou-Ekotto|2012/13": 80,
+  "Brad Friedel|2011/12": 82,
+  "Brennan Johnson|2023/24": 83,
+  "Brennan Johnson|2024/25": 85,
+  "Chris Armstrong|1995/96": 83,
+  "Chris Armstrong|1998/99": 80,
+  "Chris Hughton|THE LEGENDS": 90,
+  "Chris Perry|1999/00": 78,
+  "Chris Perry|2000/01": 78,
+  "Chris Perry|2001/02": 78,
+  "Chris Wilson|1995/96": 74,
+  "Chris Wilson|1996/97": 74,
+  "Chris Wilson|1997/98": 74,
+  "Christian Eriksen|2013/14": 86,
+  "Christian Eriksen|2014/15": 87,
+  "Christian Eriksen|2015/16": 87,
+  "Christian Eriksen|2016/17": 89,
+  "Christian Eriksen|2017/18": 89,
+  "Christian Eriksen|2018/19": 87,
+  "Christian Ziege|2001/02": 82,
+  "Cliff Jones|THE LEGENDS": 90,
+  "Clint Dempsey|2012/13": 83,
+  "Colin Calderwood|1993/94": 77,
+  "Colin Calderwood|1994/95": 77,
+  "Colin Calderwood|1996/97": 76,
+  "Cristian Romero|2021/22": 87,
+  "Cristian Romero|2022/23": 88,
+  "Cristian Romero|2023/24": 86,
+  "Cristian Romero|2024/25": 87,
+  "Cristian Romero|2025/26": 86,
+  "Danny Blanchflower|THE LEGENDS": 93,
+  "Danny Rose|2013/14": 81,
+  "Danny Rose|2014/15": 83,
+  "Danny Rose|2015/16": 86,
+  "Darren Anderton|1992/93": 82,
+  "Darren Anderton|1993/94": 83,
+  "Darren Anderton|1994/95": 84,
+  "Darren Anderton|1998/99": 85,
+  "Darren Anderton|2000/01": 81,
+  "Darren Anderton|2001/02": 81,
+  "Darren Anderton|2002/03": 80,
+  "Darren Anderton|2003/04": 80,
+  "Darren Bent|2008/09": 81,
+  "Dave Mackay|THE LEGENDS": 91,
+  "David Ginola|1997/98": 86,
+  "David Ginola|1998/99": 89,
+  "David Ginola|1999/00": 87,
+  "David Howells|1994/95": 79,
+  "David Howells|1995/96": 79,
+  "David Howells|1996/97": 78,
+  "Davinson Sánchez|2017/18": 83,
+  "Davinson Sánchez|2019/20": 82,
+  "Dean Austin|1992/93": 76,
+  "Dean Austin|1993/94": 76,
+  "Dean Austin|1994/95": 77,
+  "Dean Austin|1995/96": 77,
+  "Dean Richards|2001/02": 82,
+  "Dean Richards|2002/03": 81,
+  "Dean Richards|2003/04": 80,
+  "Dejan Kulusevski|2022/23": 84,
+  "Dejan Kulusevski|2023/24": 85,
+  "Dejan Kulusevski|2024/25": 86,
+  "Dele Alli|2015/16": 89,
+  "Dele Alli|2016/17": 90,
+  "Dele Alli|2017/18": 87,
+  "Dele Alli|2019/20": 84,
+  "Destiny Udogie|2023/24": 85,
+  "Destiny Udogie|2024/25": 84,
+  "Destiny Udogie|2026/27": 83,
+  "Didier Zokora|2006/07": 80,
+  "Didier Zokora|2007/08": 79,
+  "Didier Zokora|2008/09": 78,
+  "Dimitar Berbatov|2006/07": 88,
+  "Dimitar Berbatov|2007/08": 87,
+  "Djed Spence|2025/26": 82,
+  "Dominic Solanke|2024/25": 83,
+  "Dominic Solanke|2026/27": 83,
+  "Edgar Davids|2005/06": 84,
+  "Emerson Royal|2021/22": 80,
+  "Emerson Royal|2022/23": 81,
+  "Emmanuel Adebayor|2011/12": 84,
+  "Eric Dier|2014/15": 80,
+  "Eric Dier|2015/16": 83,
+  "Eric Dier|2016/17": 86,
+  "Eric Dier|2017/18": 83,
+  "Eric Dier|2020/21": 81,
+  "Eric Dier|2021/22": 82,
+  "Eric Dier|2022/23": 78,
+  "Erik Edman|2004/05": 79,
+  "Erik Lamela|2014/15": 82,
+  "Erik Lamela|2015/16": 84,
+  "Erik Thorstvedt|1992/93": 84,
+  "Erik Thorstvedt|1993/94": 83,
+  "Frederic Kanouté|2003/04": 84,
+  "Gareth Bale|2009/10": 85,
+  "Gareth Bale|2010/11": 89,
+  "Gareth Bale|2011/12": 90,
+  "Gareth Bale|2012/13": 93,
+  "Gary Doherty|2000/01": 76,
+  "Gary Mabbutt|1992/93": 82,
+  "Gary Mabbutt|1994/95": 81,
+  "Gary Mabbutt|1995/96": 80,
+  "Gary Mabbutt|THE LEGENDS": 91,
+  "Gary Samways|1992/93": 79,
+  "Gary Samways|1993/94": 79,
+  "Glenn Hoddle|THE LEGENDS": 94,
+  "Goran Bunjevcevic|2002/03": 77,
+  "Guglielmo Vicario|2023/24": 85,
+  "Guglielmo Vicario|2024/25": 85,
+  "Guglielmo Vicario|2025/26": 84,
+  "Gus Poyet|2001/02": 83,
+  "Gus Poyet|2002/03": 82,
+  "Gylfi Sigurdsson|2013/14": 81,
+  "Harry Kane|2014/15": 89,
+  "Harry Kane|2015/16": 91,
+  "Harry Kane|2016/17": 93,
+  "Harry Kane|2017/18": 93,
+  "Harry Kane|2018/19": 89,
+  "Harry Kane|2019/20": 92,
+  "Harry Kane|2020/21": 95,
+  "Harry Kane|2021/22": 94,
+  "Harry Kane|2022/23": 95,
+  "Harry Winks|2018/19": 81,
+  "Harry Winks|2019/20": 80,
+  "Heung-min Son|2016/17": 90,
+  "Heung-min Son|2017/18": 89,
+  "Heung-min Son|2018/19": 92,
+  "Heung-min Son|2019/20": 90,
+  "Heung-min Son|2020/21": 91,
+  "Heung-min Son|2021/22": 93,
+  "Heung-min Son|2022/23": 89,
+  "Heung-min Son|2023/24": 90,
+  "Heung-min Son|2024/25": 88,
+  "Heurelho Gomes|2008/09": 80,
+  "Heurelho Gomes|2009/10": 82,
+  "Heurelho Gomes|2010/11": 81,
+  "Hugo Lloris|2012/13": 85,
+  "Hugo Lloris|2013/14": 86,
+  "Hugo Lloris|2014/15": 87,
+  "Hugo Lloris|2015/16": 87,
+  "Hugo Lloris|2016/17": 88,
+  "Hugo Lloris|2017/18": 87,
+  "Hugo Lloris|2018/19": 89,
+  "Hugo Lloris|2019/20": 87,
+  "Hugo Lloris|2020/21": 87,
+  "Hugo Lloris|2021/22": 86,
+  "Hugo Lloris|2022/23": 84,
+  "Ian Walker|1994/95": 82,
+  "Ian Walker|1995/96": 83,
+  "Ian Walker|1996/97": 83,
+  "Ian Walker|1997/98": 82,
+  "Ian Walker|1998/99": 84,
+  "Ian Walker|1999/00": 83,
+  "Ivan Perišić|2022/23": 84,
+  "James Maddison|2023/24": 86,
+  "James Maddison|2026/27": 85,
+  "Jan Paul van Hecke|2026/27": 84,
+  "Jan Vertonghen|2012/13": 88,
+  "Jan Vertonghen|2013/14": 85,
+  "Jan Vertonghen|2014/15": 85,
+  "Jan Vertonghen|2015/16": 87,
+  "Jan Vertonghen|2016/17": 89,
+  "Jan Vertonghen|2017/18": 90,
+  "Jan Vertonghen|2018/19": 87,
+  "Jason Dozzell|1993/94": 78,
+  "Jason Dozzell|1995/96": 77,
+  "Jermain Defoe|2004/05": 83,
+  "Jermain Defoe|2009/10": 86,
+  "Jermain Defoe|2012/13": 84,
+  "Jermaine Jenas|2005/06": 80,
+  "Jermaine Jenas|2006/07": 81,
+  "Jermaine Jenas|2007/08": 82,
+  "Jermaine Jenas|2008/09": 80,
+  "Jimmy Greaves|THE LEGENDS": 96,
+  "Jonathan Woodgate|2008/09": 83,
+  "João Palhinha|2025/26": 85,
+  "Jurgen Klinsmann|1994/95": 90,
+  "Jurgen Klinsmann|1997/98": 86,
+  "Justin Edinburgh|1992/93": 79,
+  "Justin Edinburgh|1993/94": 79,
+  "Justin Edinburgh|1994/95": 79,
+  "Justin Edinburgh|1996/97": 78,
+  "Justin Edinburgh|1998/99": 80,
+  "Kasey Keller|2002/03": 82,
+  "Kasey Keller|2003/04": 82,
+  "Kieran Trippier|2017/18": 84,
+  "Kieran Trippier|2018/19": 83,
+  "Kyle Walker|2011/12": 85,
+  "Kyle Walker|2012/13": 84,
+  "Kyle Walker|2013/14": 84,
+  "Kyle Walker|2014/15": 83,
+  "Kyle Walker|2015/16": 85,
+  "Kyle Walker|2016/17": 87,
+  "Ledley King|2001/02": 85,
+  "Ledley King|2002/03": 83,
+  "Ledley King|2003/04": 84,
+  "Ledley King|2004/05": 86,
+  "Ledley King|2005/06": 84,
+  "Ledley King|2006/07": 84,
+  "Ledley King|2008/09": 84,
+  "Ledley King|2011/12": 83,
+  "Ledley King|THE LEGENDS": 90,
+  "Les Ferdinand|1997/98": 84,
+  "Les Ferdinand|1999/00": 83,
+  "Les Ferdinand|2000/01": 83,
+  "Les Ferdinand|2001/02": 82,
+  "Lucas Bergvall|2026/27": 83,
+  "Lucas Moura|2018/19": 86,
+  "Lucas Moura|2019/20": 84,
+  "Lucas Moura|2020/21": 84,
+  "Lucas Moura|2021/22": 83,
+  "Luka Modrić|2008/09": 85,
+  "Luka Modrić|2010/11": 86,
+  "Luka Modrić|2011/12": 87,
+  "Matheus Fernandes|2026/27": 84,
+  "Mathys Tel|2025/26": 81,
+  "Mathys Tel|2026/27": 82,
+  "Matt Doherty|2020/21": 80,
+  "Mauricio Taricco|1999/00": 78,
+  "Mauricio Taricco|2001/02": 80,
+  "Mauricio Taricco|2002/03": 78,
+  "Mauricio Taricco|2003/04": 77,
+  "Michael Carrick|2004/05": 84,
+  "Michael Carrick|2005/06": 85,
+  "Michael Dawson|2005/06": 80,
+  "Michael Dawson|2006/07": 83,
+  "Michael Dawson|2007/08": 83,
+  "Michael Dawson|2009/10": 85,
+  "Michael Dawson|2010/11": 84,
+  "Michael Dawson|2012/13": 82,
+  "Michael Dawson|2013/14": 81,
+  "Micky van de Ven|2023/24": 86,
+  "Micky van de Ven|2024/25": 88,
+  "Micky van de Ven|2025/26": 85,
+  "Micky van de Ven|2026/27": 85,
+  "Mido|2005/06": 83,
+  "Mohammed Kudus|2025/26": 85,
+  "Mohammed Kudus|2026/27": 84,
+  "Mousa Dembélé|2012/13": 85,
+  "Mousa Dembélé|2013/14": 84,
+  "Mousa Dembélé|2015/16": 87,
+  "Mousa Dembélé|2017/18": 85,
+  "Moussa Sissoko|2018/19": 85,
+  "Moussa Sissoko|2019/20": 82,
+  "Moussa Sissoko|2020/21": 81,
+  "Nabil Bentaleb|2014/15": 79,
+  "Nacer Chadli|2014/15": 82,
+  "Neil Ruddock|1992/93": 80,
+  "Neil Sullivan|2000/01": 80,
+  "Neil Sullivan|2001/02": 81,
+  "Nick Barmby|1992/93": 80,
+  "Nick Barmby|1993/94": 81,
+  "Nick Barmby|1994/95": 81,
+  "Noureddine Naybet|2004/05": 79,
+  "Noé Pamarot|2004/05": 77,
+  "Omar Marmoush|2026/27": 84,
+  "Ossie Ardiles|THE LEGENDS": 91,
+  "Pape Matar Sarr|2023/24": 82,
+  "Pape Matar Sarr|2024/25": 83,
+  "Pascal Chimbonda|2006/07": 80,
+  "Pascal Chimbonda|2007/08": 79,
+  "Pat Jennings|THE LEGENDS": 93,
+  "Paul Allen|1992/93": 77,
+  "Paul Gascoigne|THE LEGENDS": 93,
+  "Paul Robinson|2004/05": 82,
+  "Paul Robinson|2005/06": 83,
+  "Paul Robinson|2006/07": 82,
+  "Paul Robinson|2007/08": 81,
+  "Paul Stalteri|2005/06": 78,
+  "Paulinho|2013/14": 81,
+  "Pedro Mendes|2004/05": 80,
+  "Pedro Porro|2023/24": 85,
+  "Pedro Porro|2024/25": 86,
+  "Pedro Porro|2025/26": 86,
+  "Pedro Porro|2026/27": 88,
+  "Peter Crouch|2009/10": 84,
+  "Peter Crouch|2010/11": 84,
+  "Pierre-Emile Højbjerg|2020/21": 83,
+  "Pierre-Emile Højbjerg|2021/22": 83,
+  "Pierre-Emile Højbjerg|2022/23": 83,
+  "Rafael van der Vaart|2010/11": 87,
+  "Rafael van der Vaart|2011/12": 86,
+  "Ramon Vega|1997/98": 80,
+  "Ramon Vega|1998/99": 79,
+  "Richarlison|2025/26": 84,
+  "Robbie Keane|2002/03": 83,
+  "Robbie Keane|2003/04": 83,
+  "Robbie Keane|2004/05": 84,
+  "Robbie Keane|2005/06": 84,
+  "Robbie Keane|2006/07": 83,
+  "Robbie Keane|2007/08": 85,
+  "Roberto Soldado|2013/14": 79,
+  "Rodrigo Bentancur|2021/22": 83,
+  "Rodrigo Bentancur|2022/23": 84,
+  "Rodrigo Bentancur|2024/25": 86,
+  "Rodrigo Bentancur|2025/26": 84,
+  "Rodrigo Bentancur|2026/27": 84,
+  "Rohan Ricketts|2003/04": 78,
+  "Roman Pavlyuchenko|2008/09": 82,
+  "Ronny Rosenthal|1995/96": 78,
+  "Ruel Fox|1995/96": 81,
+  "Ruel Fox|1997/98": 79,
+  "Ryan Mason|2014/15": 80,
+  "Sandro|2012/13": 82,
+  "Sandro Tonali|2026/27": 86,
+  "Scott Parker|2011/12": 86,
+  "Sean Davies|2004/05": 77,
+  "Serge Aurier|2019/20": 81,
+  "Sergio Reguilón|2021/22": 81,
+  "Sergiy Rebrov|2000/01": 81,
+  "Simon Davies|2002/03": 80,
+  "Sol Campbell|1993/94": 79,
+  "Sol Campbell|1994/95": 82,
+  "Sol Campbell|1995/96": 83,
+  "Sol Campbell|1996/97": 84,
+  "Sol Campbell|1997/98": 85,
+  "Sol Campbell|1998/99": 86,
+  "Sol Campbell|1999/00": 87,
+  "Sol Campbell|2000/01": 88,
+  "Steed Malbranque|2006/07": 80,
+  "Steed Malbranque|2007/08": 80,
+  "Steffen Freund|1997/98": 80,
+  "Steffen Freund|1998/99": 81,
+  "Steffen Freund|1999/00": 80,
+  "Steffen Iversen|1996/97": 79,
+  "Steffen Iversen|1998/99": 82,
+  "Steffen Iversen|1999/00": 84,
+  "Stephen Carr|1996/97": 77,
+  "Stephen Carr|1997/98": 78,
+  "Stephen Carr|1998/99": 79,
+  "Stephen Carr|1999/00": 82,
+  "Stephen Carr|2000/01": 84,
+  "Stephen Carr|2002/03": 84,
+  "Stephen Carr|2003/04": 82,
+  "Stephen Clemence|2000/01": 76,
+  "Steve Perryman|THE LEGENDS": 90,
+  "Steve Sedgley|1992/93": 78,
+  "Steve Sedgley|1993/94": 78,
+  "Stéphane Dalmat|2003/04": 79,
+  "Sávio|2026/27": 84,
+  "Sébastien Bassong|2009/10": 80,
+  "Tanguy Ndombele|2020/21": 83,
+  "Teddy Sheringham|1992/93": 90,
+  "Teddy Sheringham|1993/94": 87,
+  "Teddy Sheringham|1994/95": 88,
+  "Teddy Sheringham|1995/96": 87,
+  "Teddy Sheringham|1996/97": 86,
+  "Teddy Sheringham|2001/02": 85,
+  "Teddy Sheringham|2002/03": 86,
+  "Tim Sherwood|1999/00": 80,
+  "Tim Sherwood|2000/01": 79,
+  "Tim Sherwood|2001/02": 79,
+  "Toby Alderweireld|2015/16": 89,
+  "Toby Alderweireld|2016/17": 89,
+  "Toby Alderweireld|2018/19": 88,
+  "Toby Alderweireld|2019/20": 86,
+  "Toby Alderweireld|2020/21": 85,
+  "Tom Huddlestone|2009/10": 81,
+  "Vedran Ćorluka|2008/09": 81,
+  "Vedran Ćorluka|2009/10": 81,
+  "Victor Wanyama|2016/17": 84,
+  "William Gallas|2010/11": 83,
+  "Wilson Palacios|2009/10": 80,
+  "Wilson Palacios|2010/11": 79,
+  "Xavi Simons|2025/26": 85,
+  "Young-Pyo Lee|2005/06": 79,
+  "Young-Pyo Lee|2006/07": 79,
+  "Young-Pyo Lee|2007/08": 81,
+  "Younès Kaboul|2007/08": 80,
+  "Younès Kaboul|2011/12": 81,
+  "Yves Bissouma|2023/24": 82,
+  "Øyvind Leonhardsen|1999/00": 79,
+  "Øyvind Leonhardsen|2000/01": 79
+};
+
 function adjustedCardOvr(name, seasonName, baseOvr){
-  return baseOvr;
+  const key = `${name}|${seasonName}`;
+  const value = excelSeasonOvrOverrides[key];
+  return Number.isFinite(value) ? value : baseOvr;
 }
 function buildPlayerObject(name, pos, ovr, seasonName){
   const [nation, tenure] = getPlayerMeta(name);
@@ -2247,15 +3463,15 @@ const primeTimeSeasonCards = new Set([
   "Christian Eriksen|2016/17",
   "Darren Anderton|1998/99",
   "Eric Dier|2016/17",
+  "Ian Walker|1998/99",
+  "Jermain Defoe|2009/10",
+  "Ledley King|2004/05",
+  "Michael Dawson|2009/10",
   "Mousa Dembélé|2015/16",
+  "Moussa Sissoko|2018/19",
   "Robbie Keane|2007/08",
   "Rodrigo Bentancur|2024/25",
-  "Toby Alderweireld|2016/17",
-  "Ledley King|2004/05",
-  "Moussa Sissoko|2018/19",
-  "Michael Dawson|2009/10",
-  "Ian Walker|1998/99",
-  "Jermain Defoe|2009/10"
+  "Toby Alderweireld|2016/17"
 ]);
 const wonderBoySeasons = new Set([
   "Harry Kane|2014/15",
@@ -2292,11 +3508,11 @@ const goldenBootSeasonCards = new Set([
   "Teddy Sheringham|1992/93"
 ]);
 const heroSeasonCards = new Set([
+  "Brennan Johnson|2024/25",
   "Heung-min Son|2018/19",
   "João Palhinha|2025/26",
   "Lucas Moura|2018/19",
-  "Micky van de Ven|2024/25",
-  "Brennan Johnson|2024/25"
+  "Micky van de Ven|2024/25"
 ]);
 const worldCupWinnerSeasonCards = new Set([
   "Cristian Romero|2022/23",
@@ -2366,35 +3582,35 @@ const playerMeta = {
   "Ben Davies": ["웨일스", "2014–"],
   "Benoît Assou-Ekotto": ["카메룬", "2006–2015"],
   "Brad Friedel": ["미국", "2011–2015"],
-  "Brennan Johnson": ["RW","LW","RM"],
-  "Chris Armstrong": ["ST"],
+  "Brennan Johnson": ["웨일스", "2023–"],
+  "Chris Armstrong": ["잉글랜드", "1995–2002"],
   "Chris Hughton": ["아일랜드", "1977–1990"],
   "Chris Perry": ["잉글랜드", "1999–2003"],
   "Chris Wilson": ["잉글랜드", "1995–1999"],
-  "Christian Eriksen": ["CAM","RW","LW","CM"],
+  "Christian Eriksen": ["덴마크", "2013–2020"],
   "Christian Ziege": ["독일", "2001–2004"],
   "Cliff Jones": ["웨일스", "1958–1968"],
   "Clint Dempsey": ["미국", "2012–2013"],
   "Colin Calderwood": ["스코틀랜드", "1993–1999"],
   "Cristian Romero": ["아르헨티나", "2021–"],
-  "Danny Blanchflower": ["CM","RM"],
-  "Danny Rose": ["LB","LM"],
+  "Danny Blanchflower": ["북아일랜드", "1954–1964"],
+  "Danny Rose": ["잉글랜드", "2007–2021"],
   "Darren Anderton": ["잉글랜드", "1992–2004"],
   "Darren Bent": ["잉글랜드", "2007–2009"],
-  "Dave Mackay": ["CM","LM","CB"],
-  "David Ginola": ["LW","LM","CAM"],
+  "Dave Mackay": ["스코틀랜드", "1959–1968"],
+  "David Ginola": ["프랑스", "1997–2000"],
   "David Howells": ["잉글랜드", "1988–2000"],
   "Davinson Sánchez": ["콜롬비아", "2017–2023"],
   "Dean Austin": ["잉글랜드", "1990–1998"],
   "Dean Richards": ["잉글랜드", "2001–2005"],
   "Dejan Kulusevski": ["스웨덴", "2022–"],
-  "Dele Alli": ["CAM","CM"],
+  "Dele Alli": ["잉글랜드", "2015–2022"],
   "Destiny Udogie": ["이탈리아", "2022–"],
   "Didier Zokora": ["코트디부아르", "2006–2009"],
   "Dimitar Berbatov": ["불가리아", "2006–2008"],
   "Djed Spence": ["잉글랜드", "2022–"],
   "Dominic Solanke": ["잉글랜드", "2024–"],
-  "Edgar Davids": ["LM","LW","CM"],
+  "Edgar Davids": ["네덜란드", "2005–2007"],
   "Emerson Royal": ["브라질", "2021–2024"],
   "Emmanuel Adebayor": ["토고", "2011–2015"],
   "Eric Dier": ["잉글랜드", "2014–2024"],
@@ -2402,15 +3618,15 @@ const playerMeta = {
   "Erik Lamela": ["아르헨티나", "재적 기간 미상"],
   "Erik Thorstvedt": ["노르웨이", "1988–1994"],
   "Frederic Kanouté": ["말리", "2003–2005"],
-  "Gareth Bale": ["LM","LW","RW","ST"],
-  "Gary Doherty": ["LB","CB"],
+  "Gareth Bale": ["웨일스", "2007–2013, 2020–2021"],
+  "Gary Doherty": ["북아일랜드", "2000–2010"],
   "Gary Mabbutt": ["잉글랜드", "1982–1998"],
   "Gary Samways": ["잉글랜드", "1989–1994"],
-  "Glenn Hoddle": ["CAM","CM"],
+  "Glenn Hoddle": ["잉글랜드", "1975–1987"],
   "Goran Bunjevcevic": ["세르비아", "2001–2006"],
   "Guglielmo Vicario": ["이탈리아", "2023–"],
-  "Gus Poyet": ["CM","CAM","LW","LM"],
-  "Gylfi Sigurdsson": ["LW","CAM","CM"],
+  "Gus Poyet": ["우루과이", "2001–2004"],
+  "Gylfi Sigurdsson": ["아이슬란드", "2012–2014"],
   "Harry Kane": ["잉글랜드", "2009–2023"],
   "Harry Winks": ["잉글랜드", "2014–2023"],
   "Heung-min Son": ["대한민국", "2015–2025"],
@@ -2436,10 +3652,10 @@ const playerMeta = {
   "Les Ferdinand": ["잉글랜드", "1997–2003"],
   "Lucas Bergvall": ["스웨덴", "2024–"],
   "Lucas Moura": ["브라질", "2018–2023"],
-  "Luka Modrić": ["CM","CAM"],
+  "Luka Modrić": ["크로아티아", "2008–2012"],
   "Matheus Fernandes": ["브라질", "2026–"],
   "Mathys Tel": ["프랑스", "2025–"],
-  "Matt Doherty": ["RB","CB"],
+  "Matt Doherty": ["아일랜드", "2020–2023"],
   "Mauricio Taricco": ["아르헨티나", "1998–2004"],
   "Michael Carrick": ["잉글랜드", "2004–2006"],
   "Michael Dawson": ["잉글랜드", "2005–2014"],
@@ -2449,10 +3665,10 @@ const playerMeta = {
   "Mousa Dembélé": ["벨기에", "2012–2019"],
   "Moussa Sissoko": ["프랑스", "2016–2021"],
   "Nabil Bentaleb": ["알제리", "2013–2017"],
-  "Nacer Chadli": ["LW","RW","RM","LM"],
+  "Nacer Chadli": ["벨기에", "2013–2016"],
   "Neil Ruddock": ["잉글랜드", "1992–1993"],
   "Neil Sullivan": ["스코틀랜드", "2000–2003"],
-  "Nick Barmby": ["RW","LW","LM","RM"],
+  "Nick Barmby": ["잉글랜드", "1992–1995"],
   "Noureddine Naybet": ["모로코", "2004–2006"],
   "Noé Pamarot": ["프랑스", "2004–2006"],
   "Omar Marmoush": ["이집트", "2026–"],
@@ -2471,7 +3687,7 @@ const playerMeta = {
   "Pierre-Emile Højbjerg": ["덴마크", "2020–2024"],
   "Rafael van der Vaart": ["네덜란드", "2010–2012"],
   "Ramon Vega": ["스위스", "1997–2001"],
-  "Richarlison": ["ST","LW"],
+  "Richarlison": ["브라질", "2022–"],
   "Robbie Keane": ["아일랜드", "2002–2008, 2009–2011"],
   "Roberto Soldado": ["스페인", "2013–2015"],
   "Rodrigo Bentancur": ["우루과이", "2022–"],
@@ -2497,9 +3713,9 @@ const playerMeta = {
   "Steve Perryman": ["잉글랜드", "1969–1986"],
   "Steve Sedgley": ["잉글랜드", "1989–1994"],
   "Stéphane Dalmat": ["프랑스", "2003–2004"],
-  "Sávio": ["RW","LW"],
-  "Sébastien Bassong": ["CB","LB"],
-  "Tanguy Ndombele": ["CAM","CM"],
+  "Sávio": ["프랑스", "재적 기간 미상"],
+  "Sébastien Bassong": ["카메룬", "2009–2013"],
+  "Tanguy Ndombele": ["프랑스", "2019–2024"],
   "Teddy Sheringham": ["잉글랜드", "1992–1997, 2001–2003"],
   "Tim Sherwood": ["잉글랜드", "1999–2003"],
   "Toby Alderweireld": ["벨기에", "2015–2021"],
@@ -2508,11 +3724,11 @@ const playerMeta = {
   "Victor Wanyama": ["케냐", "2016–2020"],
   "William Gallas": ["프랑스", "2010–2013"],
   "Wilson Palacios": ["온두라스", "2009–2011"],
-  "Xavi Simons": ["CAM","LW","RW"],
+  "Xavi Simons": ["네덜란드", "2025–"],
   "Young-Pyo Lee": ["대한민국", "2005–2008"],
   "Younès Kaboul": ["프랑스", "2007–2008, 2010–2014"],
   "Yves Bissouma": ["말리", "2022–"],
-  "Øyvind Leonhardsen": ["RW","LW","LM","RM"]
+  "Øyvind Leonhardsen": ["노르웨이", "2000–2003"]
 };
 
 const playerPositions = {
@@ -2850,9 +4066,12 @@ function getAssistDisplayName(name){
 
 
 function getPlayerMeta(name){
-  return playerMeta[name] || ["국적 미상","재적 기간 미상"];
+  const base = playerMeta[name] || ["국적 미상","재적 기간 미상"];
+  return [excelPlayerNationOverrides[name] || base[0], base[1]];
 }
 function getPlayerPositions(name, fallbackPos=null){
+  const override = excelPlayerPositionOverrides[name];
+  if(Array.isArray(override) && override.length) return [...new Set(override.filter(Boolean))];
   const arr = playerPositions[name];
   if(Array.isArray(arr) && arr.length) return [...new Set(arr.filter(Boolean))];
   if(fallbackPos) return [fallbackPos];
@@ -4068,38 +5287,109 @@ function renderPitch(){
 }
 
 const teamChemistries = [
-  {id:"dream_duo",name:"환상의 듀오",effect:"ATT +1",att:1,mid:0,def:0,overall:0,isActive:names=>names.has("Harry Kane")&&names.has("Heung-min Son")},
-  {id:"belgian_wall",name:"벨기에의 벽",effect:"DEF +1",att:0,mid:0,def:1,overall:0,isActive:names=>names.has("Jan Vertonghen")&&names.has("Toby Alderweireld")},
-  {id:"leadership",name:"리더십",effect:"OVR +1",att:0,mid:0,def:0,overall:1,isActive:names=>["Gary Mabbutt","Michael Dawson","Heung-min Son","Hugo Lloris","Ledley King","Cristian Romero"].filter(name=>names.has(name)).length>=3},
-  {id:"desk_line",name:"DESK 라인",effect:"ATT +2",att:2,mid:0,def:0,overall:0,isActive:names=>["Heung-min Son","Harry Kane","Christian Eriksen","Dele Alli"].every(name=>names.has(name))}
+  {
+    id:"dream_duo",
+    name:"환상의 듀오",
+    effect:"ATT +1",
+    att:1, mid:0, def:0, overall:0,
+    isActive:names=>names.has("Harry Kane") && names.has("Heung-min Son")
+  },
+  {
+    id:"belgian_wall",
+    name:"벨기에의 벽",
+    effect:"DEF +1",
+    att:0, mid:0, def:1, overall:0,
+    isActive:names=>names.has("Jan Vertonghen") && names.has("Toby Alderweireld")
+  },
+  {
+    id:"leadership",
+    name:"리더십",
+    effect:"OVR +1",
+    att:0, mid:0, def:0, overall:1,
+    isActive:names=>{
+      const leaders = [
+        "Gary Mabbutt",
+        "Michael Dawson",
+        "Heung-min Son",
+        "Hugo Lloris",
+        "Ledley King",
+        "Cristian Romero"
+      ];
+      return leaders.filter(name=>names.has(name)).length >= 3;
+    }
+  },
+  {
+    id:"desk_line",
+    name:"DESK 라인",
+    effect:"ATT +2",
+    att:2, mid:0, def:0, overall:0,
+    isActive:names=>[
+      "Heung-min Son",
+      "Harry Kane",
+      "Christian Eriksen",
+      "Dele Alli"
+    ].every(name=>names.has(name))
+  }
 ];
 
 function getActiveTeamChemistries(){
-  const names=new Set(drafted.filter(Boolean).map(player=>player.name));
+  const names = new Set(drafted.filter(Boolean).map(player=>player.name));
   return teamChemistries.filter(chem=>chem.isActive(names));
 }
+
 function getChemistryBoosts(){
-  return getActiveTeamChemistries().reduce((sum,chem)=>({att:sum.att+(chem.att||0),mid:sum.mid+(chem.mid||0),def:sum.def+(chem.def||0),overall:sum.overall+(chem.overall||0)}),{att:0,mid:0,def:0,overall:0});
+  return getActiveTeamChemistries().reduce((sum,chem)=>({
+    att:sum.att + (chem.att || 0),
+    mid:sum.mid + (chem.mid || 0),
+    def:sum.def + (chem.def || 0),
+    overall:sum.overall + (chem.overall || 0)
+  }), {att:0,mid:0,def:0,overall:0});
 }
+
 function triggerChemistryActivation(chem){
-  const pop=document.createElement("div");
-  pop.className="chem-activation";
-  pop.innerHTML=`<div class="chem-activation-kicker">TEAM CHEMISTRY ON</div><div class="chem-activation-name">${chem.name}</div><div class="chem-activation-effect">${chem.effect}</div>`;
+  const pop = document.createElement("div");
+  pop.className = "chem-activation";
+  pop.innerHTML = `
+    <div class="chem-activation-kicker">TEAM CHEMISTRY ON</div>
+    <div class="chem-activation-name">${chem.name}</div>
+    <div class="chem-activation-effect">${chem.effect}</div>
+  `;
   document.body.appendChild(pop);
-  setTimeout(()=>pop.remove(),1700);
+  setTimeout(()=>pop.remove(), 1700);
 }
+
 function renderTeamChemistryPanel(activeChems=getActiveTeamChemistries()){
-  const list=$("#teamChemistryList"),count=$("#teamChemistryCount");
-  if(!list||!count)return;
-  count.textContent=`${activeChems.length} ACTIVE`;
-  if(!activeChems.length){list.innerHTML='<div class="team-chemistry-empty">활성화된 팀캐미가 없습니다.</div>';return;}
-  list.innerHTML=activeChems.map(chem=>`<div class="chem-chip"><span class="chem-chip-name">${chem.name}</span><span class="chem-chip-effect">${chem.effect}</span></div>`).join("");
+  const list = $("#teamChemistryList");
+  const count = $("#teamChemistryCount");
+  if(!list || !count) return;
+
+  count.textContent = `${activeChems.length} ACTIVE`;
+  if(!activeChems.length){
+    list.innerHTML = '<div class="team-chemistry-empty">활성화된 팀캐미가 없습니다.</div>';
+    return;
+  }
+
+  list.innerHTML = activeChems.map(chem=>`
+    <div class="chem-chip">
+      <span class="chem-chip-name">${chem.name}</span>
+      <span class="chem-chip-effect">${chem.effect}</span>
+    </div>
+  `).join("");
 }
+
 function syncTeamChemistry({animate=true}={}){
-  const activeChems=getActiveTeamChemistries();
-  const activeIds=new Set(activeChems.map(chem=>chem.id));
-  if(animate)activeChems.forEach(chem=>{if(!activeChemistryIds.has(chem.id))triggerChemistryActivation(chem);});
-  activeChemistryIds=activeIds;
+  const activeChems = getActiveTeamChemistries();
+  const activeIds = new Set(activeChems.map(chem=>chem.id));
+
+  if(animate){
+    activeChems.forEach(chem=>{
+      if(!activeChemistryIds.has(chem.id)){
+        triggerChemistryActivation(chem);
+      }
+    });
+  }
+
+  activeChemistryIds = activeIds;
   renderTeamChemistryPanel(activeChems);
   return activeChems;
 }
@@ -4120,13 +5410,23 @@ function updateStats(){
   const defValue = avgIndexes(defIndexes);
   const chemistryBoost = getChemistryBoosts();
 
-  $("#atk").textContent = attValue ? Math.round(clamp(applyManagerBoost(attValue)+chemistryBoost.att,0,99)) : 0;
-  $("#mid").textContent = midValue ? Math.round(clamp(applyManagerBoost(midValue)+chemistryBoost.mid,0,99)) : 0;
-  $("#def").textContent = defValue ? Math.round(clamp(applyManagerBoost(defValue)+chemistryBoost.def,0,99)) : 0;
+  $("#atk").textContent = attValue
+    ? Math.round(clamp(applyManagerBoost(attValue) + chemistryBoost.att, 0, 99))
+    : 0;
+  $("#mid").textContent = midValue
+    ? Math.round(clamp(applyManagerBoost(midValue) + chemistryBoost.mid, 0, 99))
+    : 0;
+  $("#def").textContent = defValue
+    ? Math.round(clamp(applyManagerBoost(defValue) + chemistryBoost.def, 0, 99))
+    : 0;
 
   const all = drafted.filter(Boolean);
-  const overall = all.length ? Math.round(all.reduce((sum,p)=>sum+p.ovr,0)/all.length) : 0;
-  $("#ovr").textContent = overall ? Math.round(clamp(applyManagerBoost(overall)+chemistryBoost.overall,0,99)) : 0;
+  const overall = all.length
+    ? Math.round(all.reduce((sum,p)=>sum+p.ovr,0)/all.length)
+    : 0;
+  $("#ovr").textContent = overall
+    ? Math.round(clamp(applyManagerBoost(overall) + chemistryBoost.overall, 0, 99))
+    : 0;
 
   syncTeamChemistry({animate:true});
 }
@@ -4242,10 +5542,10 @@ function getMyTeamRatings(){
   const overall = all.reduce((sum,p)=>sum+p.ovr,0) / Math.max(1,all.length);
   const chemistryBoost = getChemistryBoosts();
   return {
-    overall: clamp(applyManagerBoost(overall)+chemistryBoost.overall,0,99),
-    att: clamp(applyManagerBoost(averageGroupOvr(statGroups.att))+chemistryBoost.att,0,99),
-    mid: clamp(applyManagerBoost(averageGroupOvr(statGroups.mid))+chemistryBoost.mid,0,99),
-    def: clamp(applyManagerBoost(averageGroupOvr(statGroups.def))+chemistryBoost.def,0,99)
+    overall: clamp(applyManagerBoost(overall) + chemistryBoost.overall, 0, 99),
+    att: clamp(applyManagerBoost(averageGroupOvr(statGroups.att)) + chemistryBoost.att, 0, 99),
+    mid: clamp(applyManagerBoost(averageGroupOvr(statGroups.mid)) + chemistryBoost.mid, 0, 99),
+    def: clamp(applyManagerBoost(averageGroupOvr(statGroups.def)) + chemistryBoost.def, 0, 99)
   };
 }
 
@@ -4300,9 +5600,11 @@ function buildMatchModel(myRatings, opponentRatings, venue){
   // 팀별 홈 가중치 / 토트넘 상대 상성 가중치.
   // 값이 높을수록 상대팀이 토트넘에게 더 까다롭게 작동한다.
   if(venue === "H"){
+    // 토트넘 홈: 기존 토트넘 홈 이점을 유지.
     myXg *= 1.06;
     oppXg *= 0.95;
   }else{
+    // 토트넘 원정: 상대팀별 홈 가중치를 사용.
     myXg *= 0.95;
     oppXg *= opponentRatings.homeWeight;
   }
@@ -4317,17 +5619,93 @@ function buildMatchModel(myRatings, opponentRatings, venue){
 }
 
 
-function scorerWeightForSlot(slot){
-  if(slot === "ST") return 6.2;
-  if(["LW","RW"].includes(slot)) return 4.6;
-  if(slot === "CAM") return 3.8;
-  if(["LM","RM"].includes(slot)) return 3.0;
-  if(slot === "CM") return 2.1;
-  if(slot === "DM") return 1.4;
-  if(["LB","RB"].includes(slot)) return 0.8;
-  if(slot === "CB") return 0.35;
-  if(slot === "GK") return 0.02;
-  return 1.0;
+// 득점/도움 배분은 '포지션 그룹 점유율 × 선수 OVR 보정' 방식.
+// 같은 그룹에 여러 명이 있으면 그룹 점유율을 인원수로 나눈 뒤,
+// 각 선수 OVR에 따라 다시 가중치를 조정한다.
+function playerOvrContributionFactor(ovr){
+  // OVR 85 = 1.00, 1포인트당 약 ±3%.
+  // 포지션 성향이 압도적으로 유지되도록 0.70~1.30 사이로 제한.
+  return clamp(1 + (Number(ovr || 85) - 85) * 0.03, 0.70, 1.30);
+}
+
+function goalShareForSlot(slot){
+  if(slot === "ST") return 40.0;
+  if(["LW","RW"].includes(slot)) return 30.0;
+  if(["CAM","RM","LM"].includes(slot)) return 15.0;
+  if(["CM","DM"].includes(slot)) return 6.0;
+  if(["RB","LB"].includes(slot)) return 4.0;
+  if(slot === "CB") return 4.5;
+  if(slot === "GK") return 0.5;
+  return 0;
+}
+
+function assistShareForSlot(slot){
+  if(slot === "CAM") return 35.0;
+  if(["LW","RW","RM","LM"].includes(slot)) return 35.0;
+  if(["CM","DM","RB","LB"].includes(slot)) return 20.0;
+  if(slot === "CB") return 8.0;
+  if(slot === "GK") return 2.0;
+  // 사용자가 지정한 분배표에서 ST는 제외. 따라서 직접 어시스트 가중치는 0.
+  return 0;
+}
+
+function contributionGroupKey(slot, type){
+  if(type === "goal"){
+    if(slot === "ST") return "ST";
+    if(["LW","RW"].includes(slot)) return "WING";
+    if(["CAM","RM","LM"].includes(slot)) return "AM_WIDE";
+    if(["CM","DM"].includes(slot)) return "CM";
+    if(["RB","LB"].includes(slot)) return "FB";
+    if(slot === "CB") return "CB";
+    if(slot === "GK") return "GK";
+  }else{
+    if(slot === "CAM") return "CAM";
+    if(["LW","RW","RM","LM"].includes(slot)) return "WIDE";
+    if(["CM","DM","RB","LB"].includes(slot)) return "BUILD";
+    if(slot === "CB") return "CB";
+    if(slot === "GK") return "GK";
+    if(slot === "ST") return "ST";
+  }
+  return slot || "OTHER";
+}
+
+function buildContributionWeights(type, excludeName=null){
+  const candidates = drafted
+    .map((player,index)=>({player,index,slot:slots[index]}))
+    .filter(x=>x.player && (!excludeName || x.player.name !== excludeName));
+
+  const groupCounts = {};
+  candidates.forEach(item=>{
+    const key = contributionGroupKey(item.slot, type);
+    groupCounts[key] = (groupCounts[key] || 0) + 1;
+  });
+
+  return candidates.map(item=>{
+    const baseShare = type === "goal"
+      ? goalShareForSlot(item.slot)
+      : assistShareForSlot(item.slot);
+    const groupKey = contributionGroupKey(item.slot, type);
+    const groupCount = Math.max(1, groupCounts[groupKey] || 1);
+
+    const perPlayerShare = baseShare / groupCount;
+    const ovrFactor = playerOvrContributionFactor(item.player.ovr);
+    const weight = perPlayerShare * ovrFactor;
+
+    return {...item, baseShare, perPlayerShare, ovrFactor, weight};
+  }).filter(item=>item.weight > 0);
+}
+
+function pickWeightedContribution(type, excludeName=null){
+  const weighted = buildContributionWeights(type, excludeName);
+  const total = weighted.reduce((sum,item)=>sum + item.weight, 0);
+  if(total <= 0) return null;
+
+  let roll = Math.random() * total;
+  for(const item of weighted){
+    roll -= item.weight;
+    if(roll <= 0) return item;
+  }
+  return weighted[weighted.length-1] || null;
 }
 
 function initializeScorerState(){
@@ -4335,124 +5713,34 @@ function initializeScorerState(){
   const assistCounts = {};
   const ratingTotals = {};
   const ratingMatches = {};
-  const cbPlans = [];
 
-  drafted.forEach((player,index)=>{
+  drafted.forEach(player=>{
     if(!player) return;
     goalCounts[player.name] = 0;
     assistCounts[player.name] = 0;
     ratingTotals[player.name] = 0;
     ratingMatches[player.name] = 0;
-
-    if(slots[index] === "CB"){
-      const target = Math.random() < 0.38 ? 2 : 1;
-      const thresholds = target === 2
-        ? [
-            4 + Math.floor(Math.random()*12),   // 4R~15R 이후 첫 세트피스 골
-            20 + Math.floor(Math.random()*12)   // 20R~31R 이후 두 번째
-          ]
-        : [
-            7 + Math.floor(Math.random()*18)    // 7R~24R 이후
-          ];
-
-      cbPlans.push({
-        name:player.name,
-        target,
-        scored:0,
-        thresholds
-      });
-    }
   });
 
-  return {goalCounts, assistCounts, ratingTotals, ratingMatches, cbPlans};
-}
-
-function pickWeightedScorer(){
-  const candidates = drafted
-    .map((player,index)=>({player,index,slot:slots[index]}))
-    .filter(x=>x.player);
-
-  let total = 0;
-  const weighted = candidates.map(item=>{
-    const weight = scorerWeightForSlot(item.slot);
-    total += weight;
-    return {...item,weight};
-  });
-
-  let roll = Math.random()*total;
-  for(const item of weighted){
-    roll -= item.weight;
-    if(roll <= 0) return {name:item.player.name,setPiece:false};
-  }
-
-  const fallback = weighted[weighted.length-1];
-  return {name:fallback?.player?.name || "Tottenham",setPiece:false};
+  return {goalCounts, assistCounts, ratingTotals, ratingMatches};
 }
 
 function pickSpursScorer(scorerState, roundNumber){
-  // CB는 시즌마다 1~2골 정도가 나오도록, 정해진 라운드가 지난 뒤
-  // 다음 토트넘 득점 중 하나를 세트피스 골로 배정합니다.
-  const dueCB = scorerState.cbPlans
-    .filter(plan=>{
-      const nextThreshold = plan.thresholds[plan.scored];
-      return plan.scored < plan.target &&
-        nextThreshold !== undefined &&
-        roundNumber >= nextThreshold;
-    })
-    .sort((a,b)=>(a.thresholds[a.scored] ?? 99) - (b.thresholds[b.scored] ?? 99));
+  const picked = pickWeightedContribution("goal");
+  const name = picked?.player?.name || drafted.find(Boolean)?.name || "Tottenham";
 
-  if(dueCB.length){
-    const plan = dueCB[0];
-    plan.scored++;
-    scorerState.goalCounts[plan.name] = (scorerState.goalCounts[plan.name] || 0) + 1;
-    return {name:plan.name,setPiece:true};
-  }
+  scorerState.goalCounts[name] = (scorerState.goalCounts[name] || 0) + 1;
 
-  const scorer = pickWeightedScorer();
-  scorerState.goalCounts[scorer.name] = (scorerState.goalCounts[scorer.name] || 0) + 1;
-  return scorer;
-}
-
-
-function assistWeightForSlot(slot){
-  if(slot === "CAM") return 5.4;
-  if(["LW","RW"].includes(slot)) return 4.6;
-  if(["LM","RM"].includes(slot)) return 4.0;
-  if(slot === "CM") return 3.6;
-  if(slot === "ST") return 2.8;
-  if(slot === "DM") return 2.5;
-  if(["LB","RB"].includes(slot)) return 2.2;
-  if(slot === "CB") return 0.5;
-  if(slot === "GK") return 0.08;
-  return 1.0;
+  const setPiece = picked?.slot === "CB" && Math.random() < 0.70;
+  return {name, setPiece};
 }
 
 function pickSpursAssist(scorerName, setPiece=false){
-  // 모든 골에 어시스트가 붙지는 않도록 함.
-  // 세트피스는 직접 프리킥/세컨드볼 등을 고려해 어시스트 확률을 조금 낮춤.
   const assistChance = setPiece ? 0.62 : 0.80;
   if(Math.random() > assistChance) return null;
 
-  const candidates = drafted
-    .map((player,index)=>({player,index,slot:slots[index]}))
-    .filter(x=>x.player && x.player.name !== scorerName);
-
-  let total = 0;
-  const weighted = candidates.map(item=>{
-    const weight = assistWeightForSlot(item.slot);
-    total += weight;
-    return {...item,weight};
-  });
-
-  if(total <= 0) return null;
-
-  let roll = Math.random()*total;
-  for(const item of weighted){
-    roll -= item.weight;
-    if(roll <= 0) return item.player.name;
-  }
-
-  return weighted[weighted.length-1]?.player?.name || null;
+  const picked = pickWeightedContribution("assist", scorerName);
+  return picked?.player?.name || null;
 }
 
 function updateSeasonPlayerRatings(scorerState, match, result){
