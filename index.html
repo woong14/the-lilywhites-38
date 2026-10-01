@@ -2127,8 +2127,9 @@
     <section class="card">
       <div class="row roulette-actions">
         <button id="drawBtn">시즌 룰렛 돌리기</button>
-        <button id="managerDrawBtn" class="secondary" disabled>감독 룰렛 돌리기</button>
-        <button id="rerollBtn" class="secondary" disabled>리롤 2회</button>
+        <button id="rerollBtn" class="secondary" disabled>리롤 3회</button>
+        <button id="managerDrawBtn" class="secondary" style="display:none" disabled>감독 룰렛 돌리기</button>
+        <button id="managerRerollBtn" class="secondary" style="display:none" disabled>감독 리롤 1회</button>
         <button class="secondary reset-align-right" id="resetBtn">처음부터</button>
       </div>
       <button id="finalSimBtn" class="final-sim-btn">시즌 시뮬레이션 시작하기</button>
@@ -4196,7 +4197,8 @@ let rouletteIndex = 0;
 let rouletteTimer = null;
 let pendingPlayer = null;
 let dragSource = null;
-let rerollRemaining = 2;
+let rerollRemaining = 3;
+let managerRerollRemaining = 1;
 const ROULETTE_REPEAT = 60;
 
 const $ = s => document.querySelector(s);
@@ -4283,52 +4285,93 @@ function renderXIManagerCard(){
 }
 
 function updateFinalDraftUI(){
-  const complete = draftedCount() === 11 && !!selectedManager && managerPlaced;
+  const playerComplete = draftedCount() === 11;
+  const complete = playerComplete && !!selectedManager && managerPlaced;
   const drawBtn = $("#drawBtn");
-  const managerBtn = $("#managerDrawBtn");
   const rerollBtn = $("#rerollBtn");
+  const managerBtn = $("#managerDrawBtn");
+  const managerRerollBtn = $("#managerRerollBtn");
+  const resetBtn = $("#resetBtn");
   const finalSimBtn = $("#finalSimBtn");
 
-  if(!drawBtn || !managerBtn || !rerollBtn || !finalSimBtn) return;
+  if(!drawBtn || !rerollBtn || !managerBtn || !managerRerollBtn || !finalSimBtn) return;
 
   if(complete){
     drawBtn.style.display = "none";
-    managerBtn.style.display = "none";
     rerollBtn.style.display = "none";
+    managerBtn.style.display = "none";
+    managerRerollBtn.style.display = "none";
+    if(resetBtn) resetBtn.style.display = "none";
     finalSimBtn.style.display = "block";
+    return;
+  }
+
+  finalSimBtn.style.display = "none";
+
+  if(playerComplete){
+    drawBtn.style.display = "none";
+    rerollBtn.style.display = "none";
+    if(resetBtn) resetBtn.style.display = "none";
+    managerBtn.style.display = "";
+    managerRerollBtn.style.display = "";
   }else{
     drawBtn.style.display = "";
-    managerBtn.style.display = "";
     rerollBtn.style.display = "";
-    finalSimBtn.style.display = "none";
+    if(resetBtn) resetBtn.style.display = "";
+    managerBtn.style.display = "none";
+    managerRerollBtn.style.display = "none";
   }
+}
+
+function updateManagerRerollUI(){
+  const btn = $("#managerRerollBtn");
+  if(!btn) return;
+  btn.textContent = `감독 리롤 ${managerRerollRemaining}회`;
+  btn.disabled = !(
+    draftedCount() === 11 &&
+    managerRerollRemaining > 0 &&
+    !!selectedManager &&
+    !managerPlaced &&
+    !managerRolling
+  );
 }
 
 function updateManagerUI(){
   updateFinalDraftUI();
   const complete = draftedCount() === 11;
   const managerBtn = $("#managerDrawBtn");
-  const seasonBtn = $("#drawBtn");
 
   if(!complete){
-    managerBtn.disabled = true;
+    if(managerBtn) managerBtn.disabled = true;
+    updateManagerRerollUI();
     refreshSeasonRouletteButton();
     return;
   }
 
-  // 11명 완성 이후에는 시즌 룰렛을 완전히 잠금
-  seasonBtn.disabled = true;
-
-  if(managerRolling || selectedManager){
-    managerBtn.disabled = true;
-  }else{
-    managerBtn.disabled = false;
-  }
-
+  if(managerBtn) managerBtn.disabled = managerRolling || !!selectedManager;
+  updateManagerRerollUI();
   $("#simBtn").disabled = !(complete && selectedManager && managerPlaced);
 }
 
-function startManagerRoulette(){
+function rerollManager(){
+  if(
+    draftedCount() !== 11 ||
+    managerRerollRemaining <= 0 ||
+    !selectedManager ||
+    managerPlaced ||
+    managerRolling
+  ) return;
+
+  const previousManagerName = selectedManager.name;
+  managerRerollRemaining--;
+  selectedManager = null;
+  managerPlaced = false;
+  renderXIManagerCard();
+  updateManagerRerollUI();
+  startManagerRoulette(previousManagerName);
+}
+
+function startManagerRoulette(excludeManagerName=null){
   if(managerRolling || draftedCount() !== 11 || selectedManager) return;
 
   managerRolling = true;
@@ -4337,6 +4380,7 @@ function startManagerRoulette(){
   $("#drawBtn").disabled = true;
   $("#managerDrawBtn").disabled = true;
   $("#rerollBtn").disabled = true;
+  $("#managerRerollBtn").disabled = true;
   $("#simBtn").disabled = true;
 
   setRouletteMode("manager");
@@ -4351,12 +4395,15 @@ function startManagerRoulette(){
   if(managerTimer) clearTimeout(managerTimer);
 
   const list = $("#rouletteList");
-  const totalManagerWeight = managers.reduce((sum,m)=>sum+(m.weight ?? 1),0);
+  const eligibleManagerWeights = managers.map(m=>
+    m.name === excludeManagerName ? 0 : (m.weight ?? 1)
+  );
+  const totalManagerWeight = eligibleManagerWeights.reduce((sum,w)=>sum+w,0);
   let managerRoll = Math.random()*totalManagerWeight;
   let targetIndex = 0;
   for(let i=0;i<managers.length;i++){
-    managerRoll -= (managers[i].weight ?? 1);
-    if(managerRoll <= 0){
+    managerRoll -= eligibleManagerWeights[i];
+    if(managerRoll <= 0 && eligibleManagerWeights[i] > 0){
       targetIndex = i;
       break;
     }
@@ -5637,14 +5684,15 @@ function goalShareForIndex(index){
   return shares[currentFormationKey]?.[index] ?? 0;
 }
 
-function assistShareForSlot(slot){
-  if(slot === "CAM") return 35.0;
-  if(["LW","RW","RM","LM"].includes(slot)) return 35.0;
-  if(["CM","DM","RB","LB"].includes(slot)) return 20.0;
-  if(slot === "CB") return 8.0;
-  if(slot === "GK") return 2.0;
-  // 사용자가 지정한 분배표에서 ST는 제외. 따라서 직접 어시스트 가중치는 0.
-  return 0;
+function assistShareForIndex(index, setPiece=false){
+  const shares = {
+    "4231":[0.2,6.0,0.9,0.9,6.0,7.0,7.0,14.0,21.0,19.0,19.0],
+    "433":[0.2,5.0,0.9,0.9,5.0,10.0,8.0,10.0,18.0,22.0,20.0],
+    "442":[0.2,5.0,0.9,0.9,5.0,17.0,14.0,14.0,17.0,13.0,13.0]
+  };
+  let share = shares[currentFormationKey]?.[index] ?? 0;
+  if(setPiece && slots[index] === "ST") share *= 0.15;
+  return share;
 }
 
 function contributionGroupKey(slot, type){
@@ -5667,36 +5715,24 @@ function contributionGroupKey(slot, type){
   return slot || "OTHER";
 }
 
-function buildContributionWeights(type, excludeName=null){
+function buildContributionWeights(type, excludeName=null, setPiece=false){
   const candidates = drafted
     .map((player,index)=>({player,index,slot:slots[index]}))
     .filter(x=>x.player && (!excludeName || x.player.name !== excludeName));
 
-  const groupCounts = {};
-  candidates.forEach(item=>{
-    const key = contributionGroupKey(item.slot, type);
-    groupCounts[key] = (groupCounts[key] || 0) + 1;
-  });
-
   return candidates.map(item=>{
     const baseShare = type === "goal"
       ? goalShareForIndex(item.index)
-      : assistShareForSlot(item.slot);
-    const groupKey = contributionGroupKey(item.slot, type);
-    const groupCount = Math.max(1, groupCounts[groupKey] || 1);
-
-    const perPlayerShare = type === "goal"
-      ? baseShare
-      : baseShare / groupCount;
+      : assistShareForIndex(item.index, setPiece);
+    const perPlayerShare = baseShare;
     const ovrFactor = playerOvrContributionFactor(item.player.ovr);
     const weight = perPlayerShare * ovrFactor;
-
     return {...item, baseShare, perPlayerShare, ovrFactor, weight};
   }).filter(item=>item.weight > 0);
 }
 
-function pickWeightedContribution(type, excludeName=null){
-  const weighted = buildContributionWeights(type, excludeName);
+function pickWeightedContribution(type, excludeName=null, setPiece=false){
+  const weighted = buildContributionWeights(type, excludeName, setPiece);
   const total = weighted.reduce((sum,item)=>sum + item.weight, 0);
   if(total <= 0) return null;
 
@@ -5731,15 +5767,15 @@ function pickSpursScorer(scorerState, roundNumber){
 
   scorerState.goalCounts[name] = (scorerState.goalCounts[name] || 0) + 1;
 
-  const setPiece = picked?.slot === "CB" && Math.random() < 0.70;
+  const setPiece = picked?.slot === "CB" && Math.random() < 0.90;
   return {name, setPiece};
 }
 
 function pickSpursAssist(scorerName, setPiece=false){
-  const assistChance = setPiece ? 0.62 : 0.80;
+  const assistChance = setPiece ? 0.75 : 0.85;
   if(Math.random() > assistChance) return null;
 
-  const picked = pickWeightedContribution("assist", scorerName);
+  const picked = pickWeightedContribution("assist", scorerName, setPiece);
   return picked?.player?.name || null;
 }
 
@@ -6428,7 +6464,8 @@ function reset(){
   managerPlaced = false;
   renderXIManagerCard();
   formationChosen = false;
-  rerollRemaining = 2;
+  rerollRemaining = 3;
+  managerRerollRemaining = 1;
   drafted = [];
   activeChemistryIds = new Set();
   renderTeamChemistryPanel([]);
@@ -6438,10 +6475,13 @@ function reset(){
   $("#drawBtn").disabled = false;
   $("#drawBtn").style.display = "";
   $("#managerDrawBtn").disabled = true;
-  $("#managerDrawBtn").style.display = "";
+  $("#managerDrawBtn").style.display = "none";
+  $("#managerRerollBtn").disabled = true;
+  $("#managerRerollBtn").style.display = "none";
   $("#rerollBtn").disabled = true;
   $("#rerollBtn").style.display = "";
-  $("#rerollBtn").textContent = "리롤 2회";
+  $("#rerollBtn").textContent = "리롤 3회";
+  $("#managerRerollBtn").textContent = "감독 리롤 1회";
   $("#finalSimBtn").style.display = "none";
   const seasonBox = document.querySelector(".season");
   if(seasonBox) seasonBox.style.display = "";
@@ -6488,7 +6528,8 @@ document.addEventListener("keydown", e=>{
   if(e.key === "Escape") closeBillboard();
 });
 
-$("#managerDrawBtn").onclick = startManagerRoulette;
+$("#managerDrawBtn").onclick = ()=>startManagerRoulette();
+$("#managerRerollBtn").onclick = rerollManager;
 $("#simBtn").onclick = simulate;
 $("#finalSimBtn").onclick = simulate;
 const xiManagerDropSlot = document.getElementById("xiManagerSlot");
