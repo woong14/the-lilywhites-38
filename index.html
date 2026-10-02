@@ -9554,6 +9554,11 @@ const LILY_ACHIEVEMENTS = [
   ["first_season","첫 시즌","시즌 1회 완료","season",1],
   ["season_10","단골 감독","시즌 10회 완료","season",10],
   ["champion","챔피언","프리미어리그 우승","flag","champion"],
+  ["threepeat","쓰리핏","프리미어리그 3회 우승","championships",3],
+  ["pl_legend","프리미어리그 레전드","프리미어리그 5회 우승","championships",5],
+  ["hall_of_fame","명예의 전당","프리미어리그 10회 우승","championships",10],
+  ["unbreakable","언브레이커블","무패우승","flag","unbreakable"],
+  ["low_ovr_champion","이게 되네?","OVR 85 이하로 리그 우승","flag","low_ovr_champion"],
   ["points_90","90점 클럽","한 시즌 승점 90점 이상","points",90],
 
   ["first_chemistry","첫 번째 연결","팀캐미 1종 발동","chemistry",1],
@@ -9632,6 +9637,10 @@ function getAchievementProgress(profile, def){
     const current = Number(profile?.best_points || 0);
     return {current:Math.min(current, Number(target)), total:Number(target), done:current >= Number(target), label:`${current}/${target}`};
   }
+  if(kind === "championships"){
+    const current = Number(profile?.championship_count || 0);
+    return {current:Math.min(current, Number(target)), total:Number(target), done:current >= Number(target), label:`${current}/${target}`};
+  }
   if(kind === "chemistry"){
     const current = chemistryCount;
     return {current:Math.min(current, Number(target)), total:Number(target), done:current >= Number(target), label:`${current}/${target}`};
@@ -9646,7 +9655,11 @@ function getAchievementProgress(profile, def){
     return {current:Math.min(current,total), total, done:total > 0 && current >= total, label:`${current}/${total}`};
   }
   if(kind === "flag" && target === "champion"){
-    const done = Number(profile?.best_rank) === 1;
+    const done = Number(profile?.best_rank) === 1 || Number(profile?.championship_count || 0) >= 1;
+    return {current:done?1:0,total:1,done,label:done?"1/1":"0/1"};
+  }
+  if(kind === "flag"){
+    const done = new Set(profile?.achievements || []).has(target);
     return {current:done?1:0,total:1,done,label:done?"1/1":"0/1"};
   }
   const done = new Set(profile?.achievements || []).has(id);
@@ -9931,6 +9944,7 @@ async function recordCompletedSeasonToProfile(place,state,teamRatings){
       season:{
         rank:place,
         points:state.points,
+        losses:Number(state.l || 0),
         team_ovr:Number(teamRatings.overall.toFixed(2)),
         players:[...sessionDraftPicks],
         chemistries:[...sessionChemistryHistory],
