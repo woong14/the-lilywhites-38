@@ -2889,7 +2889,6 @@
 
   .quick-menu{
     position:fixed;
-    right:18px;
     top:18px;
     z-index:9000;
     display:flex;
@@ -2897,6 +2896,8 @@
     align-items:stretch;
     gap:8px;
   }
+  .quick-menu-left{left:18px}
+  .quick-menu-right{right:18px}
   .billboard-fab,
   .quick-info-btn{
     border:1px solid rgba(255,255,255,.28);
@@ -2917,7 +2918,7 @@
     color:#ffffff;
     border-color:#38578d;
   }
-  .billboard-fab:hover,.quick-info-btn:hover{transform:translateY(-1px)}
+  .profile-fab:hover,.billboard-fab:hover,.quick-info-btn:hover{transform:translateY(-1px)}
   .info-list{
     padding:14px;
     display:flex;
@@ -3314,8 +3315,10 @@
   }
   .season-restart-small:hover{color:#fff;border-color:#5272a8}
   @media(max-width:650px){
-    .quick-menu{right:10px;top:10px;gap:6px}
-    .billboard-fab,.quick-info-btn{min-width:124px;padding:9px 11px;font-size:9px}
+    .quick-menu{top:10px;gap:6px}
+    .quick-menu-left{left:10px}
+    .quick-menu-right{right:10px}
+    .profile-fab,.billboard-fab,.quick-info-btn{min-width:124px;padding:9px 11px;font-size:9px}
     .info-row{grid-template-columns:1fr auto;gap:5px 10px}
     .info-desc{grid-column:1/-1}
     .card-count-list{grid-template-columns:1fr}
@@ -3460,11 +3463,13 @@
 </style>
 </head>
 <body>
-<div class="quick-menu">
+<div class="quick-menu quick-menu-left">
   <button id="profileFab" class="profile-fab" type="button">MY PROFILE · LOGIN</button>
   <button id="billboardFab" class="billboard-fab" type="button">BILLBOARD · TOP 20</button>
-  <button id="chemistryInfoFab" class="quick-info-btn" type="button">TEAM CHEMISTRY</button>
-  <button id="cardInfoFab" class="quick-info-btn" type="button">CARD INFO</button>
+</div>
+<div class="quick-menu quick-menu-right">
+  <button id="chemistryInfoFab" class="quick-info-btn" type="button">팀캐미 정보</button>
+  <button id="cardInfoFab" class="quick-info-btn" type="button">카드 정보</button>
 </div>
 <div id="profileOverlay" class="billboard-overlay" aria-hidden="true">
   <div class="billboard-modal">
@@ -3498,7 +3503,7 @@
   <div class="billboard-modal">
     <div class="billboard-modal-head">
       <div>
-        <div class="billboard-title">THE LILYWHITES 38 · TEAM CHEMISTRY</div>
+        <div class="billboard-title">THE LILYWHITES 38 · 팀캐미 정보</div>
         <div class="billboard-sub">조건을 충족하면 여러 팀캐미가 동시에 적용됩니다.</div>
       </div>
       <button id="chemistryInfoClose" class="billboard-close" type="button">×</button>
@@ -3527,7 +3532,7 @@
   <div class="billboard-modal">
     <div class="billboard-modal-head">
       <div>
-        <div class="billboard-title">THE LILYWHITES 38 · CARD INFO</div>
+        <div class="billboard-title">THE LILYWHITES 38 · 카드 정보</div>
         <div class="billboard-sub">현재 게임에 등록된 선수 시즌 카드 수</div>
       </div>
       <button id="cardInfoClose" class="billboard-close" type="button">×</button>
