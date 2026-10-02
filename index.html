@@ -3797,9 +3797,42 @@
     .info-row{grid-template-columns:1fr auto;gap:5px 10px}
     .info-desc{grid-column:1/-1}
     .card-count-list{grid-template-columns:1fr}
-    /* 모바일에서도 리그순위 열을 유지 */
-    .billboard-table{min-width:920px}
-    .billboard-table th,.billboard-table td{padding-left:4px;padding-right:4px;font-size:9px}
+
+    /* 모바일 BILLBOARD: 순위~OVR 6개 열을 한 화면에 고정 표시 */
+    .billboard-modal{width:96vw}
+    .billboard-table-wrap{padding:8px;overflow-x:hidden}
+    .billboard-table{
+      width:100%;
+      min-width:0 !important;
+      table-layout:fixed;
+    }
+    .billboard-table col:nth-child(1){width:10% !important}
+    .billboard-table col:nth-child(2){width:30% !important}
+    .billboard-table col:nth-child(3){width:16% !important}
+    .billboard-table col:nth-child(4){width:15% !important}
+    .billboard-table col:nth-child(5){width:16% !important}
+    .billboard-table col:nth-child(6){width:13% !important}
+    .billboard-table col:nth-child(7),
+    .billboard-table col:nth-child(8){display:none}
+
+    .billboard-table th:nth-child(7),
+    .billboard-table th:nth-child(8),
+    .billboard-table td:nth-child(7),
+    .billboard-table td:nth-child(8){display:none}
+
+    .billboard-table th,
+    .billboard-table td{
+      padding-left:3px;
+      padding-right:3px;
+      font-size:9px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .billboard-table th:nth-child(2),
+    .billboard-table td:nth-child(2){padding-left:7px}
+    .billboard-table td:first-child{font-size:13px}
+
     .billboard-register-row{flex-direction:column}
     .billboard-submit{padding:11px 14px}
   }
