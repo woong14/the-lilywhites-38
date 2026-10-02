@@ -7731,7 +7731,11 @@ function revealAndPick(player){
 }
 
 function compatible(slot,pos){
-  // 엑셀의 '가능 포지션'에 직접 적어둔 위치만 배치 가능
+  // 기본은 엑셀의 '가능 포지션'에 직접 적어둔 위치만 배치 가능.
+  // 단, 4-4-2의 LM/RM 자리는 측면 자원끼리 좌우 구분 없이 배치 가능.
+  if(currentFormationKey === "442" && ["LM","RM"].includes(slot)){
+    return ["LM","RM","LW","RW"].includes(pos);
+  }
   return slot === pos;
 }
 
