@@ -3680,9 +3680,12 @@
     text-align:left;color:#fff;font-weight:1000;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
-  /* BILLBOARD TOP 3 · 카드 색상 테마 */
+  /* BILLBOARD TOP 3 · 카드 색상 테마 · 행 전체 그라데이션 */
+  .billboard-table tr.billboard-rank-1{
+    background:linear-gradient(90deg,#fff3bf 0%,#f7d567 42%,#e5ad27 72%,#c9890f 100%);
+  }
   .billboard-table tr.billboard-rank-1 td{
-    background:linear-gradient(145deg,#fff2bf 0%,#f4d05f 44%,#dd9e15 100%);
+    background:transparent;
     border-top-color:#17130a;
     border-bottom-color:#17130a;
     color:#17130a;
@@ -3691,8 +3694,11 @@
   .billboard-table tr.billboard-rank-1 td:last-child{border-right-color:#17130a}
   .billboard-table tr.billboard-rank-1 td:nth-child(2){color:#17130a}
 
+  .billboard-table tr.billboard-rank-2{
+    background:linear-gradient(90deg,#416f9c 0%,#35638f 43%,#2a537e 72%,#1f4167 100%);
+  }
   .billboard-table tr.billboard-rank-2 td{
-    background:linear-gradient(145deg,#3d6f9f 0%,#2e5b89 48%,#224a75 100%);
+    background:transparent;
     border-top-color:#d9ba63;
     border-bottom-color:#d9ba63;
     color:#fff7dc;
@@ -3701,10 +3707,13 @@
   .billboard-table tr.billboard-rank-2 td:last-child{border-right-color:#d9ba63}
   .billboard-table tr.billboard-rank-2 td:nth-child(2){color:#fff7dc}
 
-  .billboard-table tr.billboard-rank-3 td{
+  .billboard-table tr.billboard-rank-3{
     background:
-      radial-gradient(circle at 18% 20%,rgba(255,255,255,.52),rgba(255,255,255,0) 30%),
-      linear-gradient(150deg,#eefbff 0%,#83CBEB 45%,#22789d 100%);
+      radial-gradient(circle at 10% 35%,rgba(255,255,255,.55),rgba(255,255,255,0) 26%),
+      linear-gradient(90deg,#eafaff 0%,#9ddcf3 32%,#63bddf 58%,#2f8eb4 80%,#1f6f93 100%);
+  }
+  .billboard-table tr.billboard-rank-3 td{
+    background:transparent;
     border-top-color:#6dc1e2;
     border-bottom-color:#6dc1e2;
     color:#0f2d3f;
