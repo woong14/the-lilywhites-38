@@ -3680,6 +3680,23 @@
     text-align:left;color:#fff;font-weight:1000;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
+  .billboard-table tr.billboard-separator td{
+    position:relative;
+    height:14px;
+    padding:0;
+    background:transparent;
+    border:0;
+    border-radius:0;
+  }
+  .billboard-table tr.billboard-separator td::after{
+    content:"";
+    position:absolute;
+    left:6px;
+    right:6px;
+    top:50%;
+    border-top:1px solid rgba(122,151,205,.48);
+    box-shadow:0 1px 0 rgba(255,255,255,.035);
+  }
   /* BILLBOARD TOP 3 · 카드 색상 테마 · 행 전체 그라데이션 */
   .billboard-table tr.billboard-rank-1{
     background:linear-gradient(90deg,#fff3bf 0%,#f7d567 42%,#e5ad27 72%,#c9890f 100%);
@@ -4196,7 +4213,7 @@
   <button id="chemistryInfoFab" class="quick-info-btn" type="button">팀캐미 정보</button>
   <button id="profileFab" class="profile-fab" type="button">MY PROFILE · LOGIN</button>
   <button id="cardInfoFab" class="quick-info-btn" type="button">카드 정보</button>
-  <button id="billboardFab" class="billboard-fab" type="button">BILLBOARD · TOP 20</button>
+  <button id="billboardFab" class="billboard-fab" type="button">BILLBOARD · TOP 30</button>
 </div>
 <div id="profileOverlay" class="billboard-overlay" aria-hidden="true">
   <div class="billboard-modal">
@@ -4216,7 +4233,7 @@
     <div class="billboard-modal-head">
       <div>
         <div class="billboard-title">THE LILYWHITES LEGACY · BILLBOARD</div>
-        <div class="billboard-sub">ALL TIME TOP 20</div>
+        <div class="billboard-sub">ALL TIME TOP 30</div>
       </div>
       <button id="billboardClose" class="billboard-close" type="button">×</button>
     </div>
@@ -10097,7 +10114,7 @@ async function loadBillboard(){
   if(content) content.innerHTML = '<div class="billboard-empty">기록을 불러오는 중...</div>';
   try{
     const data = await billboardRequest(
-      "leaderboard?select=id,nickname,league_rank,points,goal_difference,team_ovr,manager,top_scorer,top_scorer_goals,created_at&order=league_rank.asc,points.desc,goal_difference.desc.nullslast,team_ovr.asc,created_at.asc&limit=20"
+      "leaderboard?select=id,nickname,league_rank,points,goal_difference,team_ovr,manager,top_scorer,top_scorer_goals,created_at&order=league_rank.asc,points.desc,goal_difference.desc.nullslast,team_ovr.asc,created_at.asc&limit=30"
     );
     renderBillboard(data || []);
   }catch(error){
@@ -10142,6 +10159,9 @@ function renderBillboard(rows){
           const leagueRank = Number(row.league_rank);
           const gd = Number(row.goal_difference || 0);
           const podiumClass = index < 3 ? `billboard-rank-${index+1}` : "";
+          const separator = (index === 9 || index === 19) && index < rows.length - 1
+            ? '<tr class="billboard-separator" aria-hidden="true"><td colspan="8"></td></tr>'
+            : "";
           return `
           <tr class="${podiumClass}">
             <td>${index+1}</td>
@@ -10152,7 +10172,7 @@ function renderBillboard(rows){
             <td>${Number(row.team_ovr).toFixed(1)}</td>
             <td title="${escapeBillboardHtml(row.manager || "-")}">${escapeBillboardHtml(row.manager || "-")}</td>
             <td>${escapeBillboardHtml(row.top_scorer)} · ${Number(row.top_scorer_goals)}골</td>
-          </tr>`;
+          </tr>` + separator;
         }).join("")}
       </tbody>
     </table>
@@ -10241,16 +10261,16 @@ async function submitBillboardRecord(){
     }
     const insertedId = inserted?.record?.id;
 
-    const top20 = await billboardRequest(
-      "leaderboard?select=id,nickname,league_rank,points,goal_difference,team_ovr,manager,top_scorer,top_scorer_goals,created_at&order=league_rank.asc,points.desc,goal_difference.desc.nullslast,team_ovr.asc,created_at.asc&limit=20"
+    const top30 = await billboardRequest(
+      "leaderboard?select=id,nickname,league_rank,points,goal_difference,team_ovr,manager,top_scorer,top_scorer_goals,created_at&order=league_rank.asc,points.desc,goal_difference.desc.nullslast,team_ovr.asc,created_at.asc&limit=30"
     );
-    const rankIndex = (top20 || []).findIndex(row=>String(row.id) === String(insertedId));
+    const rankIndex = (top30 || []).findIndex(row=>String(row.id) === String(insertedId));
 
     if(status){
       status.className = "billboard-status ok";
       status.textContent = rankIndex >= 0
         ? `등록 완료 · BILLBOARD ${rankIndex+1}위`
-        : "등록 완료 · 현재 TOP 20 밖입니다.";
+        : "등록 완료 · 현재 TOP 30 밖입니다.";
     }
     if(input) input.disabled = true;
     if(button){
