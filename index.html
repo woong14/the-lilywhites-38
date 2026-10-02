@@ -3640,6 +3640,116 @@
     flex:0 0 36px;
     box-sizing:border-box;
   }
+  .billboard-tabs{
+    display:flex;
+    gap:8px;
+    padding:12px 12px 0;
+    background:#0b162a;
+  }
+  .billboard-tab{
+    flex:1;
+    border:1px solid #2a416d;
+    background:#0d1a31;
+    color:#7f95bd;
+    border-radius:12px;
+    padding:11px 14px;
+    font-size:11px;
+    font-weight:1000;
+    letter-spacing:.25px;
+    cursor:pointer;
+  }
+  .billboard-tab.active{
+    background:#f5f7fb;
+    border-color:#f5f7fb;
+    color:#102651;
+  }
+  .hall-wrap{
+    padding:12px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .hall-section{
+    border:1px solid #21385e;
+    border-radius:16px;
+    background:#0a162b;
+    padding:12px;
+    overflow:hidden;
+  }
+  .hall-title{
+    color:#fff;
+    font-size:13px;
+    font-weight:1000;
+    letter-spacing:.15px;
+    margin:0 0 8px;
+  }
+  .hall-sub{
+    color:#7189b4;
+    font-size:9px;
+    font-weight:800;
+    margin:-3px 0 8px;
+  }
+  .hall-table{
+    width:100%;
+    min-width:760px;
+    border-collapse:separate;
+    border-spacing:0 6px;
+    table-layout:fixed;
+  }
+  .hall-table th{
+    color:#7189b4;
+    font-size:8px;
+    font-weight:950;
+    padding:4px 6px;
+    text-align:center;
+  }
+  .hall-table th:nth-child(2){text-align:left}
+  .hall-table td{
+    padding:9px 6px;
+    background:#0d1a31;
+    border-top:1px solid #1d3154;
+    border-bottom:1px solid #1d3154;
+    color:#dbe6fb;
+    font-size:10px;
+    font-weight:850;
+    text-align:center;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .hall-table td:first-child{
+    border-left:1px solid #1d3154;
+    border-radius:10px 0 0 10px;
+    color:#f4d475;
+    font-weight:1000;
+  }
+  .hall-table td:last-child{
+    border-right:1px solid #1d3154;
+    border-radius:0 10px 10px 0;
+  }
+  .hall-table td:nth-child(2){text-align:left;color:#fff;font-weight:1000}
+  .hall-table tr.billboard-rank-1,
+  .hall-table tr.billboard-rank-2,
+  .hall-table tr.billboard-rank-3{background:transparent}
+  .hall-player-list{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+  }
+  .hall-player-row{
+    display:grid;
+    grid-template-columns:42px 1fr auto;
+    gap:10px;
+    align-items:center;
+    padding:10px 12px;
+    border:1px solid #1d3154;
+    border-radius:12px;
+    background:#0d1a31;
+  }
+  .hall-player-rank{color:#f4d475;font-size:13px;font-weight:1000}
+  .hall-player-name{color:#fff;font-size:12px;font-weight:1000}
+  .hall-player-count{color:#9fb4d9;font-size:10px;font-weight:900}
+  .hall-empty{padding:18px 8px;text-align:center;color:#6f86ae;font-size:10px;font-weight:800}
   .billboard-table-wrap{padding:12px;overflow-x:auto}
   .billboard-table{
     width:100%;
@@ -4224,9 +4334,13 @@
     <div class="billboard-modal-head">
       <div>
         <div class="billboard-title">THE LILYWHITES LEGACY · BILLBOARD</div>
-        <div class="billboard-sub">ALL TIME TOP 30</div>
+        <div id="billboardSub" class="billboard-sub">ALL TIME TOP 30</div>
       </div>
       <button id="billboardClose" class="billboard-close" type="button">×</button>
+    </div>
+    <div class="billboard-tabs">
+      <button id="billboardTopTab" class="billboard-tab active" type="button">ALL TIME TOP 30</button>
+      <button id="billboardHallTab" class="billboard-tab" type="button">명예의 전당</button>
     </div>
     <div id="billboardContent" class="billboard-table-wrap">
       <div class="billboard-empty">기록을 불러오는 중...</div>
@@ -10156,14 +10270,183 @@ async function billboardRequest(path, options={}){
   return txt ? JSON.parse(txt) : null;
 }
 
+let billboardActiveTab = "top";
+let billboardTopRows = [];
+let billboardAllRows = [];
+let billboardHallData = null;
+
+function uniqueBestByNickname(rows, sorter, limit){
+  const sorted = [...rows].sort(sorter);
+  const seen = new Set();
+  const out = [];
+  for(const row of sorted){
+    const key = String(row.nickname || "").trim().toLowerCase();
+    if(!key || seen.has(key)) continue;
+    seen.add(key);
+    out.push(row);
+    if(out.length >= limit) break;
+  }
+  return out;
+}
+
+function leagueRankText(row){
+  const rank = Number(row?.league_rank || 0);
+  return rank === 1 ? "우승" : rank ? `${rank}위` : "-";
+}
+
+function renderHallRecordRows(rows, mode="default"){
+  if(!rows?.length) return '<div class="hall-empty">아직 해당 기록이 없습니다.</div>';
+
+  const headers = mode === "scorer"
+    ? ["순위","닉네임","최다 득점자","감독","구단순위","승점"]
+    : mode === "points"
+      ? ["순위","닉네임","승점","구단순위","감독","OVR"]
+      : mode === "ovr" || mode === "lowovr"
+        ? ["순위","닉네임","OVR","구단순위","승점","감독"]
+        : ["달성","닉네임","구단순위","승점","골득실","OVR","감독","최다 득점자"];
+
+  return `
+    <div style="overflow-x:auto">
+      <table class="hall-table">
+        <thead><tr>${headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead>
+        <tbody>
+          ${rows.map((row,index)=>{
+            const gd=Number(row.goal_difference||0);
+            const cls=index<3?`billboard-rank-${index+1}`:"";
+            if(mode==="scorer") return `
+              <tr class="${cls}">
+                <td>${index+1}</td>
+                <td>${escapeBillboardHtml(row.nickname)}</td>
+                <td>${escapeBillboardHtml(row.top_scorer||"-")} · ${Number(row.top_scorer_goals||0)}골</td>
+                <td>${escapeBillboardHtml(row.manager||"-")}</td>
+                <td>${leagueRankText(row)}</td>
+                <td>${Number(row.points||0)}pts</td>
+              </tr>`;
+            if(mode==="points") return `
+              <tr class="${cls}">
+                <td>${index+1}</td>
+                <td>${escapeBillboardHtml(row.nickname)}</td>
+                <td>${Number(row.points||0)}pts</td>
+                <td>${leagueRankText(row)}</td>
+                <td>${escapeBillboardHtml(row.manager||"-")}</td>
+                <td>${Number(row.team_ovr||0).toFixed(1)}</td>
+              </tr>`;
+            if(mode==="ovr" || mode==="lowovr") return `
+              <tr class="${cls}">
+                <td>${index+1}</td>
+                <td>${escapeBillboardHtml(row.nickname)}</td>
+                <td>${Number(row.team_ovr||0).toFixed(1)}</td>
+                <td>${leagueRankText(row)}</td>
+                <td>${Number(row.points||0)}pts</td>
+                <td>${escapeBillboardHtml(row.manager||"-")}</td>
+              </tr>`;
+            return `
+              <tr class="${cls}">
+                <td>${index===0?"최초":index+1+"번째"}</td>
+                <td>${escapeBillboardHtml(row.nickname)}</td>
+                <td>${leagueRankText(row)}</td>
+                <td>${Number(row.points||0)}pts</td>
+                <td>${gd>0?"+":""}${gd}</td>
+                <td>${Number(row.team_ovr||0).toFixed(1)}</td>
+                <td>${escapeBillboardHtml(row.manager||"-")}</td>
+                <td>${escapeBillboardHtml(row.top_scorer||"-")} · ${Number(row.top_scorer_goals||0)}골</td>
+              </tr>`;
+          }).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function getBestRegisteredRowForNickname(nickname){
+  const key=String(nickname||"").trim().toLowerCase();
+  const matches=billboardAllRows.filter(r=>String(r.nickname||"").trim().toLowerCase()===key);
+  return matches.sort((a,b)=>
+    Number(a.league_rank)-Number(b.league_rank) ||
+    Number(b.points)-Number(a.points) ||
+    Number(b.goal_difference||0)-Number(a.goal_difference||0) ||
+    Number(a.team_ovr)-Number(b.team_ovr)
+  )[0] || null;
+}
+
+async function loadHallOfFame(){
+  const [allRows, hallResponse] = await Promise.all([
+    billboardRequest("leaderboard?select=id,nickname,league_rank,points,goal_difference,team_ovr,manager,top_scorer,top_scorer_goals,created_at&order=created_at.asc&limit=5000"),
+    fetch(`${LILY_SUPABASE_URL}/functions/v1/lily-hall-of-fame`,{
+      method:"GET",
+      headers:{"apikey":LILY_SUPABASE_KEY}
+    }).then(async res=>{
+      const data=await res.json().catch(()=>({}));
+      if(!res.ok) throw new Error(data?.error || `HALL OF FAME ${res.status}`);
+      return data;
+    })
+  ]);
+
+  billboardAllRows=allRows||[];
+  billboardHallData=hallResponse?.hall_of_fame||{};
+
+  const unbeaten=(billboardHallData.unbeaten_users||[])
+    .map(item=>{
+      const row=getBestRegisteredRowForNickname(item.nickname);
+      return row ? {...row,achieved_at:item.achieved_at} : null;
+    })
+    .filter(Boolean)
+    .slice(0,4);
+
+  const topScorers=uniqueBestByNickname(
+    billboardAllRows,
+    (a,b)=>Number(b.top_scorer_goals||0)-Number(a.top_scorer_goals||0) ||
+      Number(a.league_rank||99)-Number(b.league_rank||99) ||
+      Number(b.points||0)-Number(a.points||0) ||
+      new Date(a.created_at)-new Date(b.created_at),
+    3
+  );
+
+  const topPoints=uniqueBestByNickname(
+    billboardAllRows,
+    (a,b)=>Number(b.points||0)-Number(a.points||0) ||
+      Number(a.league_rank||99)-Number(b.league_rank||99) ||
+      Number(b.goal_difference||0)-Number(a.goal_difference||0) ||
+      new Date(a.created_at)-new Date(b.created_at),
+    3
+  );
+
+  const topOvr=uniqueBestByNickname(
+    billboardAllRows,
+    (a,b)=>Number(b.team_ovr||0)-Number(a.team_ovr||0) ||
+      Number(a.league_rank||99)-Number(b.league_rank||99) ||
+      Number(b.points||0)-Number(a.points||0) ||
+      new Date(a.created_at)-new Date(b.created_at),
+    3
+  );
+
+  const lowestOvrChampions=uniqueBestByNickname(
+    billboardAllRows.filter(r=>Number(r.league_rank)===1),
+    (a,b)=>Number(a.team_ovr||999)-Number(b.team_ovr||999) ||
+      Number(b.points||0)-Number(a.points||0) ||
+      Number(b.goal_difference||0)-Number(a.goal_difference||0) ||
+      new Date(a.created_at)-new Date(b.created_at),
+    3
+  );
+
+  return {unbeaten,topScorers,topPoints,topOvr,lowestOvrChampions};
+}
+
 async function loadBillboard(){
   const content = $("#billboardContent");
   if(content) content.innerHTML = '<div class="billboard-empty">기록을 불러오는 중...</div>';
   try{
+    if(billboardActiveTab === "hall"){
+      const hall=await loadHallOfFame();
+      renderHallOfFame(hall);
+      return;
+    }
+
     const data = await billboardRequest(
       "leaderboard?select=id,nickname,league_rank,points,goal_difference,team_ovr,manager,top_scorer,top_scorer_goals,created_at&order=league_rank.asc,points.desc,goal_difference.desc.nullslast,team_ovr.asc,created_at.asc&limit=30"
     );
-    renderBillboard(data || []);
+    billboardTopRows=data||[];
+    renderBillboard(billboardTopRows);
   }catch(error){
     console.error(error);
     if(content) content.innerHTML = '<div class="billboard-empty">BILLBOARD 기록을 불러오지 못했습니다.</div>';
@@ -10173,6 +10456,7 @@ async function loadBillboard(){
 function renderBillboard(rows){
   const content = $("#billboardContent");
   if(!content) return;
+  content.className="billboard-table-wrap";
   if(!rows.length){
     content.innerHTML = '<div class="billboard-empty">아직 등록된 기록이 없습니다.<br>첫 번째 기록을 남겨보세요.</div>';
     return;
@@ -10180,25 +10464,13 @@ function renderBillboard(rows){
   content.innerHTML = `
     <table class="billboard-table">
       <colgroup>
-        <col style="width:52px">
-        <col style="width:120px">
-        <col style="width:82px">
-        <col style="width:72px">
-        <col style="width:78px">
-        <col style="width:70px">
-        <col style="width:150px">
-        <col>
+        <col style="width:52px"><col style="width:120px"><col style="width:82px"><col style="width:72px">
+        <col style="width:78px"><col style="width:70px"><col style="width:150px"><col>
       </colgroup>
       <thead>
         <tr>
-          <th>순위</th>
-          <th>닉네임</th>
-          <th>리그순위</th>
-          <th>승점</th>
-          <th>골득실</th>
-          <th>OVR</th>
-          <th>감독</th>
-          <th>최다 득점자</th>
+          <th>순위</th><th>닉네임</th><th>리그순위</th><th>승점</th>
+          <th>골득실</th><th>OVR</th><th>감독</th><th>최다 득점자</th>
         </tr>
       </thead>
       <tbody>
@@ -10226,13 +10498,92 @@ function renderBillboard(rows){
   `;
 }
 
+function renderHallOfFame(hall){
+  const content=$("#billboardContent");
+  if(!content) return;
+  content.className="hall-wrap";
+
+  const champs=billboardHallData?.most_championships||[];
+  const used=billboardHallData?.most_used_players||[];
+
+  content.innerHTML=`
+    <section class="hall-section">
+      <h3 class="hall-title">🏆 무패우승 달성 · 최초 4인</h3>
+      <div class="hall-sub">MY PROFILE의 무패우승 도전과제 달성 순서를 기준으로 표시합니다.</div>
+      ${renderHallRecordRows(hall.unbeaten)}
+    </section>
+
+    <section class="hall-section">
+      <h3 class="hall-title">⚽ 최다 득점 랭킹 · TOP 3</h3>
+      ${renderHallRecordRows(hall.topScorers,"scorer")}
+    </section>
+
+    <section class="hall-section">
+      <h3 class="hall-title">👑 최고 승점 랭킹 · TOP 3</h3>
+      ${renderHallRecordRows(hall.topPoints,"points")}
+    </section>
+
+    <section class="hall-section">
+      <h3 class="hall-title">🏅 최다 우승 달성 · TOP 3</h3>
+      ${champs.length ? `
+        <div style="overflow-x:auto">
+          <table class="hall-table">
+            <thead><tr><th>순위</th><th>닉네임</th><th>리그 우승</th><th>가장 자주 영입한 선수</th></tr></thead>
+            <tbody>
+              ${champs.map((row,index)=>`
+                <tr class="${index<3?`billboard-rank-${index+1}`:""}">
+                  <td>${index+1}</td>
+                  <td>${escapeBillboardHtml(row.nickname)}</td>
+                  <td>${Number(row.championship_count||0)}회</td>
+                  <td>${escapeBillboardHtml(row.top_player||"-")} · ${Number(row.top_player_count||0)}회</td>
+                </tr>`).join("")}
+            </tbody>
+          </table>
+        </div>` : '<div class="hall-empty">아직 우승 기록이 없습니다.</div>'}
+    </section>
+
+    <section class="hall-section">
+      <h3 class="hall-title">💎 최고 OVR 달성 · TOP 3</h3>
+      ${renderHallRecordRows(hall.topOvr,"ovr")}
+    </section>
+
+    <section class="hall-section">
+      <h3 class="hall-title">🛡️ 최저 OVR 우승 · TOP 3</h3>
+      <div class="hall-sub">프리미어리그 우승 기록 중 가장 낮은 팀 OVR 순입니다.</div>
+      ${renderHallRecordRows(hall.lowestOvrChampions,"lowovr")}
+    </section>
+
+    <section class="hall-section">
+      <h3 class="hall-title">⭐ THE LILYWHITES 최다 사용선수 · TOP 5</h3>
+      ${used.length ? `
+        <div class="hall-player-list">
+          ${used.map((row,index)=>`
+            <div class="hall-player-row">
+              <div class="hall-player-rank">${index+1}위</div>
+              <div class="hall-player-name">${escapeBillboardHtml(row.player||"-")}</div>
+              <div class="hall-player-count">총 ${Number(row.count||0).toLocaleString("ko-KR")}회 선택</div>
+            </div>`).join("")}
+        </div>` : '<div class="hall-empty">아직 선수 사용 기록이 없습니다.</div>'}
+    </section>
+  `;
+}
+
+function setBillboardTab(tab){
+  billboardActiveTab=tab==="hall"?"hall":"top";
+  $("#billboardTopTab")?.classList.toggle("active",billboardActiveTab==="top");
+  $("#billboardHallTab")?.classList.toggle("active",billboardActiveTab==="hall");
+  const sub=$("#billboardSub");
+  if(sub) sub.textContent=billboardActiveTab==="top"?"ALL TIME TOP 30":"HALL OF FAME";
+  loadBillboard();
+}
+
 async function openBillboard(){
   const overlay = $("#billboardOverlay");
   if(overlay){
     overlay.classList.add("show");
     overlay.setAttribute("aria-hidden","false");
   }
-  await loadBillboard();
+  setBillboardTab(billboardActiveTab);
 }
 
 function closeBillboard(){
@@ -11767,6 +12118,8 @@ $("#cardInfoOverlay")?.addEventListener("click", e=>{
 });
 
 $("#billboardFab")?.addEventListener("click", openBillboard);
+$("#billboardTopTab")?.addEventListener("click", ()=>setBillboardTab("top"));
+$("#billboardHallTab")?.addEventListener("click", ()=>setBillboardTab("hall"));
 $("#billboardClose")?.addEventListener("click", closeBillboard);
 $("#billboardOverlay")?.addEventListener("click", e=>{
   if(e.target === $("#billboardOverlay")) closeBillboard();
