@@ -10051,6 +10051,7 @@ function closeBillboard(){
 }
 
 function renderBillboardRegistration(record){
+  const profileNickname = lilyProfileSession?.nickname || "";
   return `
     <div class="billboard-register">
       <div class="billboard-register-title">BILLBOARD에 시즌 기록 등록</div>
@@ -10059,10 +10060,11 @@ function renderBillboardRegistration(record){
         감독 ${escapeBillboardHtml(record.manager || "-")} · 최다 득점자 ${escapeBillboardHtml(record.top_scorer)} · ${record.top_scorer_goals}골
       </div>
       <div class="billboard-register-row">
-        <input id="billboardNickname" class="billboard-nickname" type="text" maxlength="20" autocomplete="off" placeholder="닉네임을 입력하세요">
+        <input id="billboardNickname" class="billboard-nickname" type="text" maxlength="20" autocomplete="off"
+          value="${escapeBillboardHtml(profileNickname)}" placeholder="MY PROFILE 로그인 필요" readonly>
         <button id="billboardSubmit" class="billboard-submit" type="button">기록 등록</button>
       </div>
-      <div id="billboardStatus" class="billboard-status">전체 기간 TOP 20에 도전합니다.</div>
+      <div id="billboardStatus" class="billboard-status">${lilyProfileSession ? "로그인한 MY PROFILE 계정으로 등록됩니다." : "MY PROFILE 로그인 후 빌보드에 등록할 수 있습니다."}</div>
     </div>
   `;
 }
@@ -10072,37 +10074,47 @@ async function submitBillboardRecord(){
   const input = $("#billboardNickname");
   const button = $("#billboardSubmit");
   const status = $("#billboardStatus");
-  const nickname = String(input?.value || "").trim();
 
-  if(!nickname){
+  if(!lilyProfileSession?.nickname || !lilyProfileSession?.pin){
     if(status){
       status.className = "billboard-status error";
-      status.textContent = "닉네임을 입력해주세요.";
+      status.textContent = "MY PROFILE에 로그인한 뒤 기록을 등록해주세요.";
     }
     return;
   }
+
+  const nickname = String(lilyProfileSession.nickname).trim();
+  if(input) input.value = nickname;
 
   billboardSubmitting = true;
   if(button) button.disabled = true;
   if(status){
     status.className = "billboard-status";
-    status.textContent = "기록을 등록하는 중...";
+    status.textContent = "기록을 안전하게 등록하는 중...";
   }
 
   try{
     const payload = {
       nickname:nickname.slice(0,20),
+      pin:String(lilyProfileSession.pin),
       ...latestSeasonBillboardRecord
     };
-    const inserted = await billboardRequest("leaderboard", {
+
+    const response = await fetch(`${LILY_SUPABASE_URL}/functions/v1/lily-billboard`, {
       method:"POST",
       headers:{
         "Content-Type":"application/json",
-        "Prefer":"return=representation"
+        "apikey":LILY_SUPABASE_KEY,
+        "Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqZ2pkaW9xZ2JtYmlldnFvZ2ZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NTQ0NzQsImV4cCI6MjEwNjQzMDQ3NH0.qPO0-rNaNR--BdZKFWu90c7ZfTfRt1x4pHlnHIs16sU"
       },
       body:JSON.stringify(payload)
     });
-    const insertedId = inserted?.[0]?.id;
+
+    const inserted = await response.json().catch(()=>({}));
+    if(!response.ok){
+      throw new Error(inserted?.error || `BILLBOARD ${response.status}`);
+    }
+    const insertedId = inserted?.record?.id;
 
     const top20 = await billboardRequest(
       "leaderboard?select=id,nickname,league_rank,points,goal_difference,team_ovr,manager,top_scorer,top_scorer_goals,created_at&order=league_rank.asc,points.desc,goal_difference.desc.nullslast,team_ovr.asc,created_at.asc&limit=20"
@@ -10129,7 +10141,7 @@ async function submitBillboardRecord(){
     if(button) button.disabled = false;
     if(status){
       status.className = "billboard-status error";
-      status.textContent = "등록에 실패했습니다. 잠시 후 다시 시도해주세요.";
+      status.textContent = "등록에 실패했습니다. MY PROFILE 로그인 상태를 확인해주세요.";
     }
   }
 }
