@@ -8981,9 +8981,38 @@ function goalShareForIndex(index){
       11.0, // RM
       25.0, // ST1
       25.0  // ST2
+    ],
+    "343":[
+      0.2,  // GK
+      3.2,  // CB1
+      3.2,  // CB2
+      3.2,  // CB3
+      7.0,  // LWB
+      6.0,  // CM1
+      6.0,  // CM2
+      7.0,  // RWB
+      18.1, // LW
+      28.0, // ST
+      18.1  // RW
     ]
   };
-  return shares[currentFormationKey]?.[index] ?? 0;
+
+  const formationShares = shares[currentFormationKey];
+  if(Array.isArray(formationShares) && Number.isFinite(Number(formationShares[index]))){
+    return Number(formationShares[index]);
+  }
+
+  // 전용 분배표가 빠져도 첫 선수에게 골이 몰리지 않도록 포지션 기반으로 복구.
+  const slot = slots[index];
+  if(slot === "ST") return 40.0;
+  if(["LW","RW"].includes(slot)) return 30.0;
+  if(["CAM","LM","RM"].includes(slot)) return 15.0;
+  if(["LWB","RWB"].includes(slot)) return 9.5;
+  if(["CM","DM"].includes(slot)) return 6.0;
+  if(["LB","RB"].includes(slot)) return 4.0;
+  if(slot === "CB") return 4.5;
+  if(slot === "GK") return 0.5;
+  return 1.0;
 }
 
 function assistShareForIndex(index, setPiece=false){
@@ -9028,11 +9057,39 @@ function assistShareForIndex(index, setPiece=false){
       17.0, // RM
       13.0, // ST1
       13.0  // ST2
+    ],
+    "343":[
+      0.2,  // GK
+      0.9,  // CB1
+      0.9,  // CB2
+      0.9,  // CB3
+      11.0, // LWB
+      10.0, // CM1
+      10.0, // CM2
+      11.0, // RWB
+      20.0, // LW
+      15.1, // ST
+      20.0  // RW
     ]
   };
 
-  let share = shares[currentFormationKey]?.[index] ?? 0;
   const slot = slots[index];
+  const formationShares = shares[currentFormationKey];
+  let share;
+
+  if(Array.isArray(formationShares) && Number.isFinite(Number(formationShares[index]))){
+    share = Number(formationShares[index]);
+  }else{
+    // 전용 어시스트 표 누락 시 포지션 기반 기본 가중치.
+    if(slot === "CAM") share = 35.0;
+    else if(["LW","RW","LM","RM"].includes(slot)) share = 35.0;
+    else if(["LWB","RWB"].includes(slot)) share = 27.5;
+    else if(["CM","DM","LB","RB"].includes(slot)) share = 20.0;
+    else if(slot === "CB") share = 8.0;
+    else if(slot === "GK") share = 2.0;
+    else if(slot === "ST") share = 15.0;
+    else share = 1.0;
+  }
 
   // SP 골에서는 ST의 어시스트 가능성을 '급감'시키기 위해 기존 몫의 15%만 유지.
   // 나머지 선수들과 함께 최종적으로 다시 정규화되므로 ST 비중이 크게 줄어든다.
@@ -9048,13 +9105,13 @@ function contributionGroupKey(slot, type){
     if(["LW","RW"].includes(slot)) return "WING";
     if(["CAM","RM","LM"].includes(slot)) return "AM_WIDE";
     if(["CM","DM"].includes(slot)) return "CM";
-    if(["RB","LB"].includes(slot)) return "FB";
+    if(["RB","LB","LWB","RWB"].includes(slot)) return "FB_WB";
     if(slot === "CB") return "CB";
     if(slot === "GK") return "GK";
   }else{
     if(slot === "CAM") return "CAM";
     if(["LW","RW","RM","LM"].includes(slot)) return "WIDE";
-    if(["CM","DM","RB","LB"].includes(slot)) return "BUILD";
+    if(["CM","DM","RB","LB","LWB","RWB"].includes(slot)) return "BUILD";
     if(slot === "CB") return "CB";
     if(slot === "GK") return "GK";
     if(slot === "ST") return "ST";
@@ -9120,14 +9177,20 @@ function initializeScorerState(){
 
 function pickSpursScorer(scorerState, roundNumber){
   const picked = pickWeightedContribution("goal");
-  const name = picked?.player?.name || drafted.find(Boolean)?.name || "Tottenham";
 
+  // 득점 후보 생성 실패 시 첫 번째 선수(GK)에 골을 몰아주지 않는다.
+  if(!picked?.player?.name){
+    console.error("[SCORER] 득점자 선택 실패", {formation:currentFormationKey, roundNumber});
+    return {name:"Tottenham", setPiece:false, unassigned:true};
+  }
+
+  const name = picked.player.name;
   scorerState.goalCounts[name] = (scorerState.goalCounts[name] || 0) + 1;
 
   // 득점자 선택 확률과 세트피스 표시는 분리.
   // CB 득점 중 일부만 SP로 보이게 하되 득점 확률 자체에는 영향을 주지 않는다.
-  const setPiece = picked?.slot === "CB" && Math.random() < 0.90;
-  return {name, setPiece};
+  const setPiece = picked.slot === "CB" && Math.random() < 0.90;
+  return {name, setPiece, unassigned:false};
 }
 
 function pickSpursAssist(scorerName, setPiece=false){
@@ -9157,6 +9220,8 @@ function updateSeasonPlayerRatings(scorerState, match, result){
     CAM:{goal:2.45,assist:2.15},
     LM:{goal:2.45,assist:2.15},
     RM:{goal:2.45,assist:2.15},
+    LWB:{goal:2.85,assist:2.55},
+    RWB:{goal:2.85,assist:2.55},
     CM:{goal:3.00,assist:2.50},
     DM:{goal:3.20,assist:2.65},
     LB:{goal:3.25,assist:2.90},
@@ -9191,6 +9256,15 @@ function updateSeasonPlayerRatings(scorerState, match, result){
       if(conceded === 3) return -0.30;
       if(conceded === 4) return -0.55;
       return -0.80;
+    }
+    // 윙백은 LM/RM과 풀백의 중간 성격: 수비 결과 영향도 풀백의 약 절반.
+    if(slot === "LWB" || slot === "RWB"){
+      if(conceded === 0) return 0.36;
+      if(conceded === 1) return 0.09;
+      if(conceded === 2) return -0.02;
+      if(conceded === 3) return -0.15;
+      if(conceded === 4) return -0.28;
+      return -0.40;
     }
     if(slot === "DM"){
       if(conceded === 0) return 0.36;
