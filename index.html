@@ -6659,12 +6659,8 @@ function managerTierClass(manager){
   return managerRarityClass(manager);
 }
 
-// 팀 라인 평균 기준:
-// 4-2-3-1: ATT = RW/LW/ST, MID = CM/CM/CAM
-// 4-3-3:   ATT = RW/LW/ST, MID = CM/CM/CM
-// 4-4-2:   ATT = ST/ST,    MID = LM/CM/CM/RM
-// 3-4-3:   ATT = LW/ST/RW, MID = LWB/CM/CM/RWB, DEF = CB/CB/CB
-// 3-5-2:   ATT = CAM/ST/ST, MID = LWB/CM/CM/RWB/CAM, DEF = CB/CB/CB
+// 팀 라인 능력치는 getFormationLineRatings()에서 포메이션별 가중평균으로 계산.
+// 4-3-3만 기존 statGroups 단순 평균 로직을 그대로 사용.
 const formations = {
   "4231": {
     label: "4-2-3-1",
@@ -8850,15 +8846,171 @@ function averageGroupOvr(indexes){
   return players.reduce((sum,p)=>sum+p.ovr,0) / players.length;
 }
 
+// 포메이션별 ATT / MID / DEF 계산.
+// 가중치가 있는 자리는 해당 비율만큼 한 자리의 영향력으로 계산하며,
+// 드래프트 도중 빈 자리는 분모에서도 제외해 중간 표시가 비정상적으로 낮아지지 않게 한다.
+function weightedDraftedOvr(entries){
+  let weightedSum = 0;
+  let totalWeight = 0;
+
+  entries.forEach(([index, weight=1])=>{
+    const player = drafted[index];
+    if(!player || !Number.isFinite(Number(player.ovr)) || weight <= 0) return;
+    weightedSum += Number(player.ovr) * weight;
+    totalWeight += weight;
+  });
+
+  return totalWeight > 0 ? weightedSum / totalWeight : 0;
+}
+
+function getFormationLineRatings(){
+  // 4-2-3-1
+  // ATT = LW + ST + RW + CAM(0.5) / 총 가중치 3.5
+  // MID = CM + CM + CAM / 3
+  // DEF = RB + CB + CB + LB / 4
+  if(currentFormationKey === "4231"){
+    return {
+      att: weightedDraftedOvr([[7,1],[9,1],[10,1],[8,0.5]]),
+      mid: weightedDraftedOvr([[5,1],[6,1],[8,1]]),
+      def: weightedDraftedOvr([[1,1],[2,1],[3,1],[4,1]])
+    };
+  }
+
+  // 4-4-2
+  // LM/RM 둘의 평균을 ATT와 MID에서 각각 한 자리로 취급.
+  if(currentFormationKey === "442"){
+    const widePair = weightedDraftedOvr([[5,1],[8,1]]);
+    const wideReady = drafted[5] || drafted[8];
+
+    const attEntries = [[9,1],[10,1]];
+    const midEntries = [[6,1],[7,1]];
+
+    let attSum = 0, attWeight = 0;
+    attEntries.forEach(([index,weight])=>{
+      const p=drafted[index];
+      if(!p) return;
+      attSum += Number(p.ovr) * weight;
+      attWeight += weight;
+    });
+    if(wideReady){
+      attSum += widePair;
+      attWeight += 1;
+    }
+
+    let midSum = 0, midWeight = 0;
+    midEntries.forEach(([index,weight])=>{
+      const p=drafted[index];
+      if(!p) return;
+      midSum += Number(p.ovr) * weight;
+      midWeight += weight;
+    });
+    if(wideReady){
+      midSum += widePair;
+      midWeight += 1;
+    }
+
+    return {
+      att: attWeight > 0 ? attSum / attWeight : 0,
+      mid: midWeight > 0 ? midSum / midWeight : 0,
+      def: weightedDraftedOvr([[1,1],[2,1],[3,1],[4,1]])
+    };
+  }
+
+  // 3-4-3
+  // 윙백 둘의 평균을 MID와 DEF에서 각각 한 자리로 취급.
+  if(currentFormationKey === "343"){
+    const wingBackPair = weightedDraftedOvr([[4,1],[7,1]]);
+    const wingBackReady = drafted[4] || drafted[7];
+
+    let midSum = 0, midWeight = 0;
+    [[5,1],[6,1]].forEach(([index,weight])=>{
+      const p=drafted[index];
+      if(!p) return;
+      midSum += Number(p.ovr) * weight;
+      midWeight += weight;
+    });
+    if(wingBackReady){
+      midSum += wingBackPair;
+      midWeight += 1;
+    }
+
+    let defSum = 0, defWeight = 0;
+    [[1,1],[2,1],[3,1]].forEach(([index,weight])=>{
+      const p=drafted[index];
+      if(!p) return;
+      defSum += Number(p.ovr) * weight;
+      defWeight += weight;
+    });
+    if(wingBackReady){
+      defSum += wingBackPair;
+      defWeight += 1;
+    }
+
+    return {
+      att: weightedDraftedOvr([[8,1],[9,1],[10,1]]),
+      mid: midWeight > 0 ? midSum / midWeight : 0,
+      def: defWeight > 0 ? defSum / defWeight : 0
+    };
+  }
+
+  // 3-5-2
+  // ATT에서 CAM은 공격수 한 자리의 절반(0.5)만 반영.
+  // 윙백 둘의 평균은 MID와 DEF에서 각각 한 자리로 취급.
+  if(currentFormationKey === "352"){
+    const wingBackPair = weightedDraftedOvr([[4,1],[7,1]]);
+    const wingBackReady = drafted[4] || drafted[7];
+
+    let midSum = 0, midWeight = 0;
+    [[8,1],[5,1],[6,1]].forEach(([index,weight])=>{
+      const p=drafted[index];
+      if(!p) return;
+      midSum += Number(p.ovr) * weight;
+      midWeight += weight;
+    });
+    if(wingBackReady){
+      midSum += wingBackPair;
+      midWeight += 1;
+    }
+
+    let defSum = 0, defWeight = 0;
+    [[1,1],[2,1],[3,1]].forEach(([index,weight])=>{
+      const p=drafted[index];
+      if(!p) return;
+      defSum += Number(p.ovr) * weight;
+      defWeight += weight;
+    });
+    if(wingBackReady){
+      defSum += wingBackPair;
+      defWeight += 1;
+    }
+
+    return {
+      att: weightedDraftedOvr([[9,1],[10,1],[8,0.5]]),
+      mid: midWeight > 0 ? midSum / midWeight : 0,
+      def: defWeight > 0 ? defSum / defWeight : 0
+    };
+  }
+
+  // 4-3-3은 기존 계산 로직 그대로 유지.
+  return {
+    att: averageGroupOvr(statGroups.att),
+    mid: averageGroupOvr(statGroups.mid),
+    def: averageGroupOvr(statGroups.def)
+  };
+}
+
 function getMyTeamRatings(){
   const all = drafted.filter(Boolean);
   const overall = all.reduce((sum,p)=>sum+p.ovr,0) / Math.max(1,all.length);
   const chemistryBoost = getChemistryBoosts();
+  const managerMods = getManagerModifiers();
+  const lineRatings = getFormationLineRatings();
+
   return {
-    overall: clamp(overall + getManagerModifiers().ovr + chemistryBoost.overall + winterTeamOvrBoost, 0, 99),
-    att: clamp(averageGroupOvr(statGroups.att) + getManagerModifiers().att + chemistryBoost.att, 0, 99),
-    mid: clamp(averageGroupOvr(statGroups.mid) + getManagerModifiers().mid + chemistryBoost.mid, 0, 99),
-    def: clamp(averageGroupOvr(statGroups.def) + getManagerModifiers().def + chemistryBoost.def, 0, 99)
+    overall: clamp(overall + managerMods.ovr + chemistryBoost.overall + winterTeamOvrBoost, 0, 99),
+    att: clamp(lineRatings.att + managerMods.att + chemistryBoost.att, 0, 99),
+    mid: clamp(lineRatings.mid + managerMods.mid + chemistryBoost.mid, 0, 99),
+    def: clamp(lineRatings.def + managerMods.def + chemistryBoost.def, 0, 99)
   };
 }
 
