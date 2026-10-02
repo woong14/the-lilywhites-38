@@ -9873,12 +9873,14 @@ async function openProfile(){
 }
 
 function closeProfile(){
+  const wasStartupLogin = startupLoginFlow;
   const overlay = $("#profileOverlay");
   if(overlay){
     overlay.classList.remove("show");
     overlay.setAttribute("aria-hidden","true");
   }
   startupLoginFlow = false;
+  if(wasStartupLogin) showStartupModal();
 }
 
 function queueProfileProgressSync(){
@@ -11323,6 +11325,7 @@ function showStartupModal(){
 
 function beginStartupLogin(){
   startupLoginFlow = true;
+  hideStartupModal();
   openProfile();
 }
 
