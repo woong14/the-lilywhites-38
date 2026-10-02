@@ -10351,7 +10351,14 @@ function escapeBillboardHtml(value){
 }
 
 function getSeasonTopScorers(scorerState){
-  const entries = Object.entries(scorerState?.goalCounts || {});
+  // GK는 득점 집계 후보에서 완전히 제외한다.
+  const goalkeeperNames = new Set(
+    drafted
+      .map((player,index)=>slots[index] === "GK" ? player?.name : null)
+      .filter(Boolean)
+  );
+  const entries = Object.entries(scorerState?.goalCounts || {})
+    .filter(([name])=>!goalkeeperNames.has(name));
   if(!entries.length) return {names:"-", goals:0};
   const maxGoals = Math.max(...entries.map(([,goals])=>Number(goals)||0));
   const leaders = entries
@@ -10514,8 +10521,17 @@ async function loadHallOfFame(){
   const unbeaten=(billboardHallData.unbeaten_champions||[])
     .slice(0,3);
 
+  const invalidGoalkeeperTopScorers = new Set([
+    "굴리엘모 비카리오","닐 설리번","브래드 프리델","안토닌 킨스키",
+    "에리크 토르스트베트","에우렐류 고메스","위고 요리스","이안 워커",
+    "케이시 켈러","팻 제닝스","폴 로빈슨"
+  ]);
+
   const topScorers=uniqueBestByNickname(
-    billboardAllRows,
+    billboardAllRows.filter(r=>
+      Number(r.top_scorer_goals||0) > 0 &&
+      !invalidGoalkeeperTopScorers.has(String(r.top_scorer||"").trim())
+    ),
     (a,b)=>Number(b.top_scorer_goals||0)-Number(a.top_scorer_goals||0) ||
       Number(a.league_rank||99)-Number(b.league_rank||99) ||
       Number(b.points||0)-Number(a.points||0) ||
