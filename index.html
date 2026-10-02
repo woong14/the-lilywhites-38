@@ -3680,6 +3680,39 @@
     text-align:left;color:#fff;font-weight:1000;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
+  /* BILLBOARD TOP 3 · 카드 색상 테마 */
+  .billboard-table tr.billboard-rank-1 td{
+    background:linear-gradient(145deg,#fff2bf 0%,#f4d05f 44%,#dd9e15 100%);
+    border-top-color:#17130a;
+    border-bottom-color:#17130a;
+    color:#17130a;
+  }
+  .billboard-table tr.billboard-rank-1 td:first-child{border-left-color:#17130a;color:#7d5708}
+  .billboard-table tr.billboard-rank-1 td:last-child{border-right-color:#17130a}
+  .billboard-table tr.billboard-rank-1 td:nth-child(2){color:#17130a}
+
+  .billboard-table tr.billboard-rank-2 td{
+    background:linear-gradient(145deg,#3d6f9f 0%,#2e5b89 48%,#224a75 100%);
+    border-top-color:#d9ba63;
+    border-bottom-color:#d9ba63;
+    color:#fff7dc;
+  }
+  .billboard-table tr.billboard-rank-2 td:first-child{border-left-color:#d9ba63;color:#ffe6a0}
+  .billboard-table tr.billboard-rank-2 td:last-child{border-right-color:#d9ba63}
+  .billboard-table tr.billboard-rank-2 td:nth-child(2){color:#fff7dc}
+
+  .billboard-table tr.billboard-rank-3 td{
+    background:
+      radial-gradient(circle at 18% 20%,rgba(255,255,255,.52),rgba(255,255,255,0) 30%),
+      linear-gradient(150deg,#eefbff 0%,#83CBEB 45%,#22789d 100%);
+    border-top-color:#6dc1e2;
+    border-bottom-color:#6dc1e2;
+    color:#0f2d3f;
+  }
+  .billboard-table tr.billboard-rank-3 td:first-child{border-left-color:#6dc1e2;color:#155d7d}
+  .billboard-table tr.billboard-rank-3 td:last-child{border-right-color:#6dc1e2}
+  .billboard-table tr.billboard-rank-3 td:nth-child(2){color:#0f2d3f}
+
   .billboard-empty{
     padding:34px 14px;text-align:center;color:#738ab5;font-size:12px
   }
@@ -10066,8 +10099,9 @@ function renderBillboard(rows){
         ${rows.map((row,index)=>{
           const leagueRank = Number(row.league_rank);
           const gd = Number(row.goal_difference || 0);
+          const podiumClass = index < 3 ? `billboard-rank-${index+1}` : "";
           return `
-          <tr>
+          <tr class="${podiumClass}">
             <td>${index+1}</td>
             <td title="${escapeBillboardHtml(row.nickname)}">${escapeBillboardHtml(row.nickname)}</td>
             <td>${leagueRank === 1 ? "우승" : `${leagueRank}위`}</td>
