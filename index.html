@@ -4465,6 +4465,7 @@
         <button class="formation-btn" data-formation="4231">4-2-3-1</button>
         <button class="formation-btn" data-formation="433">4-3-3</button>
         <button class="formation-btn" data-formation="442">4-4-2</button>
+        <button class="formation-btn" data-formation="343">3-4-3</button>
       </div>
     </div>
   </div>
@@ -6644,6 +6645,7 @@ function managerTierClass(manager){
 // 4-2-3-1: ATT = RW/LW/ST, MID = CM/CM/CAM
 // 4-3-3:   ATT = RW/LW/ST, MID = CM/CM/CM
 // 4-4-2:   ATT = ST/ST,    MID = LM/CM/CM/RM
+// 3-4-3:   ATT = LW/ST/RW, MID = LWB/CM/CM/RWB, DEF = CB/CB/CB
 const formations = {
   "4231": {
     label: "4-2-3-1",
@@ -6685,6 +6687,19 @@ const formations = {
     def:[0,1,2,3,4],
     mid:[5,6,7,8],
     att:[9,10]
+  },
+  "343": {
+    label: "3-4-3",
+    slots: ["GK","CB","CB","CB","LWB","CM","CM","RWB","LW","ST","RW"],
+    pitchLayout: [
+      {x:50,y:89},
+      {x:24,y:70},{x:50,y:72},{x:76,y:70},
+      {x:10,y:47},{x:37,y:51},{x:63,y:51},{x:90,y:47},
+      {x:18,y:16},{x:50,y:12},{x:82,y:16}
+    ],
+    def:[1,2,3],
+    mid:[4,5,6,7],
+    att:[8,9,10]
   }
 };
 let currentFormationKey = "4231";
@@ -7732,9 +7747,14 @@ function revealAndPick(player){
 
 function compatible(slot,pos){
   // 기본은 엑셀의 '가능 포지션'에 직접 적어둔 위치만 배치 가능.
-  // 단, 4-4-2의 LM/RM 자리는 측면 자원끼리 좌우 구분 없이 배치 가능.
+  // 4-4-2의 LM/RM 자리는 측면 자원끼리 좌우 구분 없이 배치 가능.
   if(currentFormationKey === "442" && ["LM","RM"].includes(slot)){
     return ["LM","RM","LW","RW"].includes(pos);
+  }
+  // 3-4-3 윙백은 풀백 전용: LWB=LB, RWB=RB.
+  if(currentFormationKey === "343"){
+    if(slot === "LWB") return pos === "LB";
+    if(slot === "RWB") return pos === "RB";
   }
   return slot === pos;
 }
@@ -7750,6 +7770,16 @@ function normalizePlayerPositions(playerOrPos){
 }
 
 function isPlayerCompatibleWithSlot(playerOrPos, slot){
+  // 가레스 베일은 3-4-3에서 유일하게 LB 보유 여부와 무관하게 LWB 배치 가능.
+  if(
+    currentFormationKey === "343" &&
+    slot === "LWB" &&
+    playerOrPos &&
+    typeof playerOrPos === "object" &&
+    playerOrPos.name === "Gareth Bale"
+  ){
+    return true;
+  }
   return normalizePlayerPositions(playerOrPos).some(pos=>compatible(slot,pos));
 }
 
