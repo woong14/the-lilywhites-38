@@ -8985,42 +8985,98 @@ function updateSeasonPlayerRatings(scorerState, match, result){
     if(event.assist) assistByPlayer[event.assist] = (assistByPlayer[event.assist] || 0) + 1;
   });
 
+  const attackingWeights = {
+    ST:{goal:2.20,assist:1.80},
+    LW:{goal:2.25,assist:1.90},
+    RW:{goal:2.25,assist:1.90},
+    CAM:{goal:2.45,assist:2.15},
+    LM:{goal:2.45,assist:2.15},
+    RM:{goal:2.45,assist:2.15},
+    CM:{goal:3.00,assist:2.50},
+    DM:{goal:3.20,assist:2.65},
+    LB:{goal:3.25,assist:2.90},
+    RB:{goal:3.25,assist:2.90},
+    CB:{goal:3.60,assist:3.10},
+    GK:{goal:5.00,assist:4.00}
+  };
+
+  function defensiveMatchAdjustment(slot, conceded){
+    // 수비수/GK는 클린시트와 실제 실점 수를 직접 평점에 반영.
+    // 포지션이 뒤로 갈수록 팀 수비 결과의 영향이 커진다.
+    if(slot === "GK"){
+      if(conceded === 0) return 1.05;
+      if(conceded === 1) return 0.30;
+      if(conceded === 2) return -0.05;
+      if(conceded === 3) return -0.45;
+      if(conceded === 4) return -0.80;
+      return -1.10;
+    }
+    if(slot === "CB"){
+      if(conceded === 0) return 0.85;
+      if(conceded === 1) return 0.22;
+      if(conceded === 2) return -0.05;
+      if(conceded === 3) return -0.35;
+      if(conceded === 4) return -0.65;
+      return -0.90;
+    }
+    if(slot === "LB" || slot === "RB"){
+      if(conceded === 0) return 0.72;
+      if(conceded === 1) return 0.18;
+      if(conceded === 2) return -0.04;
+      if(conceded === 3) return -0.30;
+      if(conceded === 4) return -0.55;
+      return -0.80;
+    }
+    if(slot === "DM"){
+      if(conceded === 0) return 0.36;
+      if(conceded === 1) return 0.08;
+      if(conceded <= 2) return 0;
+      if(conceded === 3) return -0.15;
+      return -0.30;
+    }
+    if(slot === "CM"){
+      if(conceded === 0) return 0.12;
+      if(conceded >= 4) return -0.10;
+    }
+    return 0;
+  }
+
+  const activePlayers = drafted.filter(Boolean);
+  const teamAverage = activePlayers.reduce((s,p)=>s+p.ovr,0) / Math.max(1,activePlayers.length);
+
   drafted.forEach((player,index)=>{
     if(!player) return;
 
     const slot = slots[index];
     const goals = goalByPlayer[player.name] || 0;
     const assists = assistByPlayer[player.name] || 0;
+    const weights = attackingWeights[slot] || {goal:2.20,assist:1.80};
 
-    let rating = 6.45;
+    // 모든 선수의 경기 평점 기준점.
+    let rating = 6.80;
 
-    // Team result
-    if(result === "W") rating += 0.32;
-    else if(result === "L") rating -= 0.24;
+    // 승패는 개인 기록보다 약하게 반영.
+    if(result === "W") rating += 0.12;
+    else if(result === "L") rating -= 0.12;
 
-    // Individual attacking contribution
-    rating += goals * 0.78;
-    rating += assists * 0.46;
+    // 공격포인트: 공격수보다 CM/DM/수비수의 1골·1도움 가치가 더 크다.
+    rating += goals * weights.goal;
+    rating += assists * weights.assist;
 
-    // Defensive contribution / clean sheet
-    if(match.oppGoals === 0 && ["GK","RB","LB","CB"].includes(slot)){
-      rating += 0.30;
-    }
-    if(match.oppGoals >= 3 && ["GK","RB","LB","CB"].includes(slot)){
-      rating -= Math.min(0.45, (match.oppGoals-2) * 0.15);
-    }
+    // GK/수비수는 클린시트와 실점 수 중심으로 평가.
+    rating += defensiveMatchAdjustment(slot, match.oppGoals);
 
-    // Strong scorelines give the whole team a small lift; heavy defeats do the opposite.
+    // 큰 점수차의 영향은 보조적으로만 반영.
     const margin = match.myGoals - match.oppGoals;
-    rating += clamp(margin * 0.07, -0.28, 0.28);
+    rating += clamp(margin * 0.04, -0.16, 0.16);
 
-    // Better cards are a little more consistent, without overpowering goals/assists.
-    const teamAverage = drafted.filter(Boolean).reduce((s,p)=>s+p.ovr,0) / 11;
-    rating += clamp((player.ovr - teamAverage) * 0.025, -0.18, 0.18);
+    // OVR은 같은 활약을 했을 때의 미세한 안정성 차이만 만든다.
+    rating += clamp((player.ovr - teamAverage) * 0.015, -0.12, 0.12);
 
-    // Match-to-match variation.
-    rating += (Math.random()+Math.random()-1) * 0.32;
-    rating = clamp(rating, 5.2, 10.0);
+    // 경기별 자연스러운 편차. 시즌 누적에서는 거의 상쇄된다.
+    rating += (Math.random()+Math.random()-1) * 0.18;
+
+    rating = clamp(rating, 5.0, 10.0);
 
     scorerState.ratingTotals[player.name] += rating;
     scorerState.ratingMatches[player.name] += 1;
