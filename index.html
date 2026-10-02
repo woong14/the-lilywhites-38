@@ -3815,32 +3815,23 @@
     .info-desc{grid-column:1/-1}
     .card-count-list{grid-template-columns:1fr}
 
-    /* 모바일 BILLBOARD: 순위~OVR 6개 열을 한 화면에 고정 표시 */
+    /* 모바일 BILLBOARD: 8개 열 전체 유지 + 좌우 스와이프 */
     .billboard-modal{width:96vw}
-    .billboard-table-wrap{padding:8px;overflow-x:hidden}
+    .billboard-table-wrap{
+      padding:8px;
+      overflow-x:auto;
+      -webkit-overflow-scrolling:touch;
+      overscroll-behavior-x:contain;
+    }
     .billboard-table{
       width:100%;
-      min-width:0 !important;
+      min-width:820px !important;
       table-layout:fixed;
     }
-    .billboard-table col:nth-child(1){width:10% !important}
-    .billboard-table col:nth-child(2){width:30% !important}
-    .billboard-table col:nth-child(3){width:16% !important}
-    .billboard-table col:nth-child(4){width:15% !important}
-    .billboard-table col:nth-child(5){width:16% !important}
-    .billboard-table col:nth-child(6){width:13% !important}
-    .billboard-table col:nth-child(7),
-    .billboard-table col:nth-child(8){display:none}
-
-    .billboard-table th:nth-child(7),
-    .billboard-table th:nth-child(8),
-    .billboard-table td:nth-child(7),
-    .billboard-table td:nth-child(8){display:none}
-
     .billboard-table th,
     .billboard-table td{
-      padding-left:3px;
-      padding-right:3px;
+      padding-left:5px;
+      padding-right:5px;
       font-size:9px;
       white-space:nowrap;
       overflow:hidden;
