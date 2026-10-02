@@ -10399,7 +10399,7 @@ async function loadHallOfFame(){
   );
 
   const topPoints=uniqueBestByNickname(
-    billboardAllRows,
+    billboardAllRows.filter(r=>Number(r.league_rank)>1),
     (a,b)=>Number(b.points||0)-Number(a.points||0) ||
       Number(a.league_rank||99)-Number(b.league_rank||99) ||
       Number(b.goal_difference||0)-Number(a.goal_difference||0) ||
@@ -10515,7 +10515,8 @@ function renderHallOfFame(hall){
     </section>
 
     <section class="hall-section">
-      <h3 class="hall-title">👑 최고 승점 랭킹 · TOP 3</h3>
+      <h3 class="hall-title">💔 가장 아쉬운 시즌 · TOP 3</h3>
+      <div class="hall-sub">우승하지 못한 시즌 중 승점이 가장 높은 기록입니다.</div>
       ${renderHallRecordRows(hall.topPoints,"points")}
     </section>
 
