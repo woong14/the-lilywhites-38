@@ -6534,6 +6534,23 @@ function getPlayerDisplayName(name){
   return playerDisplayNames[name] || name;
 }
 
+function getFormationPlayerDisplayName(name){
+  const display = getPlayerDisplayName(name);
+  const fullLen = [...display.replace(/\s/g,"")].length;
+  if(fullLen < 8) return display;
+
+  const parts = display.trim().split(/\s+/);
+  const surname = parts[parts.length - 1] || display;
+  const surnameLen = [...surname.replace(/\s/g,"")].length;
+
+  // 성이 아주 긴 선수는 이니셜까지 붙이면 다시 잘릴 수 있으므로 성만 표시
+  if(surnameLen >= 6) return surname;
+
+  const initialMatch = String(name || "").match(/[A-Za-zÀ-ÖØ-öø-ÿ]/);
+  const initial = initialMatch ? initialMatch[0].toUpperCase() : "";
+  return initial ? `${initial}. ${surname}` : surname;
+}
+
 function getAssistDisplayName(name){
   const display = getPlayerDisplayName(name);
   if(display === "손흥민" || display === "이영표") return display;
@@ -8201,7 +8218,7 @@ function renderPitch(){
     if(p){
       node.draggable = true;
       node.classList.add("drag-ready");
-      node.innerHTML = `<div class="node-top"><div class="slot-label">${slot}</div>${playerChipHtml(p)}</div><div class="player-main"><strong class="meta-ovr">${p.ovr}</strong><div class="player-copy"><div class="name">${getPlayerDisplayName(p.name)}</div><div class="meta-season">${shortSeasonLabel(p.season)}</div></div></div>`;
+      node.innerHTML = `<div class="node-top"><div class="slot-label">${slot}</div>${playerChipHtml(p)}</div><div class="player-main"><strong class="meta-ovr">${p.ovr}</strong><div class="player-copy"><div class="name">${getFormationPlayerDisplayName(p.name)}</div><div class="meta-season">${shortSeasonLabel(p.season)}</div></div></div>`;
       node.addEventListener("dragstart", e=>{
         dragSource = {type:"existing", index:i};
         e.dataTransfer.effectAllowed = "move";
