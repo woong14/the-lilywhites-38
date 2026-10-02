@@ -11582,5 +11582,123 @@ renderXIManagerCard();
 updateManagerUI();
 updateRerollUI();
 </script>
+
+<!-- lily-global-stats-v1 -->
+<style>
+  #lilyGlobalStats{
+    width:100%;
+    box-sizing:border-box;
+    text-align:center;
+    padding:22px 12px 18px;
+    margin-top:20px;
+    color:rgba(255,255,255,.58);
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.04em;
+    user-select:none;
+  }
+  #lilyGlobalStats .stats-sep{
+    display:inline-block;
+    margin:0 9px;
+    opacity:.45;
+  }
+  #lilyGlobalStats strong{
+    color:rgba(255,255,255,.82);
+    font-weight:800;
+  }
+</style>
+<div id="lilyGlobalStats" aria-live="polite">
+  방문수 <strong id="lilyVisitCount">-</strong>
+  <span class="stats-sep">·</span>
+  시즌 플레이 <strong id="lilySeasonPlayCount">-</strong>회
+</div>
+<script>
+(()=>{
+  const STATS_URL = "https://bjgjdioqgbmbievqogfs.supabase.co/functions/v1/lily-stats";
+  const STATS_KEY = "sb_publishable_OZFxmAOevXOpMh4yNVotQQ_zNZujbo4";
+  const VISITOR_KEY = "lily_legacy_visitor_id_v1";
+  let statsSeasonCounted = false;
+  let visitorHashPromise = null;
+
+  function renderStats(data){
+    const visits = document.getElementById("lilyVisitCount");
+    const seasons = document.getElementById("lilySeasonPlayCount");
+    if(visits && Number.isFinite(Number(data?.visits))){
+      visits.textContent = Number(data.visits).toLocaleString("ko-KR");
+    }
+    if(seasons && Number.isFinite(Number(data?.season_plays))){
+      seasons.textContent = Number(data.season_plays).toLocaleString("ko-KR");
+    }
+  }
+
+  async function getVisitorHash(){
+    if(visitorHashPromise) return visitorHashPromise;
+    visitorHashPromise = (async()=>{
+      let id = "";
+      try{
+        id = localStorage.getItem(VISITOR_KEY) || "";
+        if(!id){
+          id = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + Math.random());
+          localStorage.setItem(VISITOR_KEY,id);
+        }
+      }catch(_){
+        id = "temp-" + String(Date.now()) + "-" + Math.random();
+      }
+      const bytes = new TextEncoder().encode(id);
+      const digest = await crypto.subtle.digest("SHA-256",bytes);
+      return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,"0")).join("");
+    })();
+    return visitorHashPromise;
+  }
+
+  async function callStats(action){
+    try{
+      const visitorHash = action === "get" ? null : await getVisitorHash();
+      const response = await fetch(STATS_URL,{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "apikey":STATS_KEY
+        },
+        body:JSON.stringify({
+          action,
+          visitor_hash:visitorHash
+        })
+      });
+      if(!response.ok) throw new Error("stats " + response.status);
+      const data = await response.json();
+      renderStats(data);
+      return data;
+    }catch(error){
+      console.warn("Global stats unavailable",error);
+      return null;
+    }
+  }
+
+  callStats("visit");
+
+  const drawBtn = document.getElementById("drawBtn");
+  if(drawBtn){
+    const originalDrawClick = drawBtn.onclick;
+    drawBtn.onclick = function(event){
+      if(!statsSeasonCounted && !window.deadSeasonNoSelectable){
+        statsSeasonCounted = true;
+        callStats("season_start");
+      }
+      if(typeof originalDrawClick === "function"){
+        return originalDrawClick.call(this,event);
+      }
+    };
+  }
+
+  ["resetBtn","simulationResetBtn","gameOverRestart"].forEach(id=>{
+    document.getElementById(id)?.addEventListener("click",()=>{
+      statsSeasonCounted = false;
+    });
+  });
+})();
+</script>
+<!-- /lily-global-stats-v1 -->
+
 </body>
 </html>
