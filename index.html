@@ -8840,13 +8840,10 @@ function updateStats(){
     }
   };
 
-  const defIndexes = statGroups.def;
-  const midIndexes = statGroups.mid;
-  const attIndexes = statGroups.att;
-
-  const attValue = avgIndexes(attIndexes);
-  const midValue = avgIndexes(midIndexes);
-  const defValue = avgIndexes(defIndexes);
+  const lineRatings = getFormationLineRatings();
+  const attValue = Math.round(lineRatings.att);
+  const midValue = Math.round(lineRatings.mid);
+  const defValue = Math.round(lineRatings.def);
   const chemistryBoost = getChemistryBoosts();
   const managerBoost = getManagerModifiers();
 
