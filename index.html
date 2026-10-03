@@ -9941,32 +9941,28 @@ function getFormationPlayerDisplayName(name){
   return initial ? `${initial}. ${surname}` : surname;
 }
 
-const snapshotMobileScorerNames = {
-  "Heung-min Son":"손흥민",
-  "Harry Kane":"해리 케인",
-  "Christian Eriksen":"C.에릭센",
-  "Gareth Bale":"G.베일",
-  "David Ginola":"D.지놀라",
-  "Teddy Sheringham":"T.셰링엄",
-  "Jermain Defoe":"J.데포",
-  "Robbie Keane":"로비 킨",
-  "Glenn Hoddle":"글렌 호들",
-  "Cliff Jones":"C.존스",
-  "Dele Alli":"델리 알리",
-  "Brennan Johnson":"B.존슨",
-  "Lucas Moura":"L.모우라",
-  "Erik Lamela":"E.라멜라",
-  "Darren Anderton":"D.앤더튼"
-};
-
 function getSnapshotTopScorerDisplayName(name){
   const raw=String(name||"").trim();
-  if(snapshotMobileScorerNames[raw]) return snapshotMobileScorerNames[raw];
-
   const display=getPlayerDisplayName(raw);
+
+  if(raw==="Heung-min Son" || display==="손흥민") return "손흥민";
+
   const parts=display.trim().split(/\s+/);
   return parts[parts.length-1] || display || "-";
 }
+
+function getSnapshotManagerDisplayName(name){
+  const display=String(name||"").trim();
+  if(!display) return "-";
+
+  if(display.includes("안드레 빌라스 보아스")) return "안비보";
+  if(display.includes("누누 에스페리투")) return "누누";
+  if(display.includes("포스테코글루")) return "포스텍";
+
+  const parts=display.split(/\s+/);
+  return parts[parts.length-1] || display;
+}
+
 
 function getAssistDisplayName(name){
   const display = getPlayerDisplayName(name);
@@ -14789,7 +14785,7 @@ function billboardSnapshotChemistryHtml(snapshot){
         ${chems.length ? chems.map(chem=>{
           const theme=chemistryDetailMeta?.[chem.id]?.theme || "";
           return `
-            <div class="chem-chip chem-themed ${theme}">
+            <div class="chem-chip chem-themed ${theme}" data-chem-detail="${chem.id}" role="button" tabindex="0" aria-label="${escapeBillboardHtml(chem.name||"-")} 팀캐미 상세 보기">
               <span class="chem-chip-name chem-card-name">${escapeBillboardHtml(chem.name||"-")}</span>
               <span class="chem-chip-effect chem-card-effect">${escapeBillboardHtml(chem.effect||"")}</span>
             </div>
@@ -14831,10 +14827,13 @@ function openBillboardSquadRow(row, summaryPrefix="BILLBOARD", options={}){
   const snapshotScorerName=compactSnapshot
     ? getSnapshotTopScorerDisplayName(row.top_scorer)
     : (row.top_scorer||"-");
+  const snapshotManagerName=compactSnapshot
+    ? getSnapshotManagerDisplayName(row.manager)
+    : (row.manager||"-");
 
   const statsPanel=`
     <div class="billboard-squad-record-panel">
-      <div class="billboard-squad-record-item"><span>감독</span><strong>${escapeBillboardHtml(row.manager||"-")}</strong></div>
+      <div class="billboard-squad-record-item"><span>감독</span><strong>${escapeBillboardHtml(snapshotManagerName)}</strong></div>
       <div class="billboard-squad-record-item"><span>순위</span><strong>${escapeBillboardHtml(snapshotRankText)}</strong></div>
       <div class="billboard-squad-record-item"><span>승점</span><strong>${escapeBillboardHtml(snapshotPointsText)}</strong></div>
       <div class="billboard-squad-record-item"><span>골득실</span><strong>${gd>0?"+":""}${gd}</strong></div>
@@ -16626,6 +16625,18 @@ $("#teamChemistryList")?.addEventListener("click", e=>{
   if(chip) openChemistryDetail(chip.dataset.chemDetail);
 });
 $("#teamChemistryList")?.addEventListener("keydown", e=>{
+  if(e.key !== "Enter" && e.key !== " ") return;
+  const chip = e.target.closest("[data-chem-detail]");
+  if(!chip) return;
+  e.preventDefault();
+  openChemistryDetail(chip.dataset.chemDetail);
+});
+
+$("#billboardSquadBody")?.addEventListener("click", e=>{
+  const chip = e.target.closest("[data-chem-detail]");
+  if(chip) openChemistryDetail(chip.dataset.chemDetail);
+});
+$("#billboardSquadBody")?.addEventListener("keydown", e=>{
   if(e.key !== "Enter" && e.key !== " ") return;
   const chip = e.target.closest("[data-chem-detail]");
   if(!chip) return;
