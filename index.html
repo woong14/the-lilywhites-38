@@ -2542,36 +2542,61 @@
     top:28%;
     z-index:12000;
     transform:translate(-50%,-50%) scale(.78);
-    min-width:240px;
-    max-width:min(86vw,520px);
-    padding:18px 22px;
+    min-width:280px;
+    max-width:min(90vw,420px);
+    padding:14px 18px 16px;
     border-radius:20px;
     border:1px solid rgba(169,201,255,.62);
     background:linear-gradient(145deg,rgba(19,40,75,.98),rgba(8,22,45,.98));
     box-shadow:0 24px 70px rgba(0,0,0,.48),0 0 36px rgba(100,153,255,.24);
-    text-align:center;
+    text-align:left;
     pointer-events:none;
     opacity:0;
+    overflow:hidden;
+    isolation:isolate;
     animation:chemActivation 1.55s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  .chem-activation > *{
+    position:relative;
+    z-index:2;
   }
   .chem-activation-kicker{
     color:#8eaded;
     font-size:10px;
     font-weight:1000;
     letter-spacing:2px;
+    margin-bottom:8px;
+    text-transform:uppercase;
+  }
+  .chem-activation-main{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:14px;
   }
   .chem-activation-name{
-    margin-top:6px;
+    margin-top:0;
     color:#fff;
     font-size:23px;
     font-weight:1000;
     letter-spacing:.3px;
+    line-height:1.12;
+    flex:1 1 auto;
   }
   .chem-activation-effect{
-    margin-top:5px;
+    margin-top:0;
     color:#b9ceff;
-    font-size:12px;
+    font-size:13px;
     font-weight:1000;
+    white-space:nowrap;
+    text-align:right;
+    flex:0 0 auto;
+  }
+  .chem-activation .chem-card-name,
+  .chem-activation .chem-card-effect{
+    font-size:inherit;
+    font-weight:1000;
+    line-height:inherit;
   }
   @keyframes chemActivation{
     0%{opacity:0;transform:translate(-50%,-50%) scale(.72)}
@@ -7430,6 +7455,15 @@
     transform:translateY(-1px);
   }
 
+
+  .team-chemistry-hint{
+    margin:4px 0 7px;
+    color:#8fa3cc;
+    font-size:10px;
+    font-weight:750;
+    letter-spacing:.05px;
+    line-height:1.35;
+  }
 </style>
 
 <style id="lily-maintenance-style">
@@ -7802,6 +7836,7 @@
           <div class="team-chemistry-title">TEAM CHEMISTRY</div>
           <div id="teamChemistryCount" class="team-chemistry-count">0 ACTIVE</div>
         </div>
+        <div class="team-chemistry-hint">팀캐미 칩을 클릭해 상세 정보를 확인하세요</div>
         <div id="teamChemistryList" class="team-chemistry-list">
           <div class="team-chemistry-empty">활성화된 팀캐미가 없습니다.</div>
         </div>
@@ -12262,13 +12297,16 @@ function playNextChemistryActivation(){
 
   chemistryAnimationPlaying = true;
   const chem = chemistryAnimationQueue.shift();
+  const theme = chemistryDetailMeta?.[chem.id]?.theme || "";
 
   const pop = document.createElement("div");
-  pop.className = "chem-activation";
+  pop.className = `chem-activation ${theme}`.trim();
   pop.innerHTML = `
     <div class="chem-activation-kicker">TEAM CHEMISTRY ON</div>
-    <div class="chem-activation-name">${chem.name}</div>
-    <div class="chem-activation-effect">${chem.effect}</div>
+    <div class="chem-activation-main">
+      <div class="chem-activation-name chem-card-name">${chem.name}</div>
+      <div class="chem-activation-effect chem-card-effect">${chem.effect}</div>
+    </div>
   `;
   document.body.appendChild(pop);
 
@@ -14891,28 +14929,19 @@ function renderNinetyPlusFormationRanking(){
   const rows=getNinetyPlusFormationRanking();
   const total=rows.reduce((sum,row)=>sum+row.count,0);
 
-  return `
-    <div class="hall-sub">BILLBOARD 기록 중 승점 90점 이상 시즌만 집계합니다. 포메이션 정보가 저장된 기록만 반영됩니다.</div>
-    <div style="overflow-x:auto">
-      <table class="hall-table">
-        <thead>
-          <tr><th>순위</th><th>포메이션</th><th>사용 횟수</th><th>채택율</th></tr>
-        </thead>
-        <tbody>
-          ${rows.map((row,index)=>{
-            const share=total>0 ? (row.count/total*100).toFixed(1) : "0.0";
-            return `
-              <tr class="${index<3?`billboard-rank-${index+1}`:""}">
-                <td>${index+1}</td>
-                <td><strong>${row.label}</strong></td>
-                <td>${row.count.toLocaleString("ko-KR")}회</td>
-                <td>${share}%</td>
-              </tr>`;
-          }).join("")}
-        </tbody>
-      </table>
+  return rows.length ? `
+    <div class="hall-player-list">
+      ${rows.map((row,index)=>{
+        const share=total>0 ? Math.round(row.count/total*100) : 0;
+        return `
+          <div class="hall-player-row">
+            <div class="hall-player-rank">${index+1}위</div>
+            <div class="hall-player-name">${row.label}</div>
+            <div class="hall-player-count">${row.count.toLocaleString("ko-KR")}회 선택 · 채택율 ${share}%</div>
+          </div>`;
+      }).join("")}
     </div>
-  `;
+  ` : '<div class="hall-empty">아직 승점 90+ 포메이션 기록이 없습니다.</div>';
 }
 
 function renderHallOfFame(hall){
