@@ -4198,7 +4198,16 @@
     background:#0c1830;
   }
   .profile-login-title{font-size:16px;font-weight:1000;color:#fff}
-  .profile-login-sub{margin-top:6px;color:#8096c0;font-size:10px;line-height:1.55}
+  .profile-login-sub{margin-top:6px;color:#8096c0;font-size:10px;line-height:1.65}
+  .profile-login-sub strong{color:#dbe7ff;font-weight:1000}
+  .profile-login-rule{
+    display:inline-block;
+    margin-top:6px;
+    color:#a9bce0;
+    font-size:9px;
+    font-weight:850;
+    letter-spacing:.05px;
+  }
   .profile-login-row{display:grid;grid-template-columns:1fr 110px;gap:8px;margin-top:14px}
   .profile-login input{
     width:100%;
@@ -8667,6 +8676,7 @@
         <strong>안내</strong>
         <p>이 게임은 토트넘 팬이 만든 비영리 팬메이드 게임입니다.</p>
         <p>선수 및 감독의 OVR은 실제 공식 데이터가 아닌, 게임 밸런스를 위해 임의로 설정한 수치입니다.</p>
+        <p>별도 회원가입 없이 닉네임 + 숫자 3자리 PIN으로 이용하며, 처음 로그인한 닉네임은 MY PROFILE이 자동 생성됩니다.</p>
         <p>로그인하고 플레이하면 시즌 기록과 도전과제가 MY PROFILE에 저장됩니다.</p>
       </div>
       <div class="startup-actions">
@@ -15185,14 +15195,16 @@ function renderProfileLogin(message="", kind=""){
     <div class="profile-login">
       <div class="profile-login-title">MY SPURS PROFILE</div>
       <div class="profile-login-sub">
-        닉네임과 숫자 3자리 PIN으로 로그인합니다.<br>
-        처음 사용하는 닉네임이면 입력한 PIN으로 계정이 자동 생성됩니다.
+        별도의 회원가입은 없습니다. 닉네임과 숫자 3자리 PIN만 입력하면 됩니다.<br>
+        <strong>처음 사용하는 닉네임</strong>은 첫 로그인과 동시에 입력한 PIN으로 MY PROFILE이 자동 생성됩니다.<br>
+        이미 사용 중인 닉네임은 기존에 설정한 PIN으로 로그인합니다.<br>
+        <span class="profile-login-rule">닉네임 · 한글 / 영문 / 숫자 / 띄어쓰기 가능 · 영문 대소문자 구분 · 최대 20자</span>
       </div>
       <div class="profile-login-row">
         <input id="profileNickname" type="text" maxlength="20" autocomplete="username" placeholder="닉네임">
         <input id="profilePin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="current-password" placeholder="PIN 3자리">
       </div>
-      <button id="profileLoginBtn" type="button" style="width:100%;margin-top:8px">로그인 / 처음이면 계정 만들기</button>
+      <button id="profileLoginBtn" type="button" style="width:100%;margin-top:8px">로그인 / 첫 로그인 시 자동 생성</button>
       <div id="profileLoginStatus" class="profile-login-status ${kind}">${escapeProfileHtml(message)}</div>
     </div>
   `;
