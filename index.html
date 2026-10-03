@@ -5133,12 +5133,17 @@
     gap:7px;
   }
   .billboard-snapshot-chemistry .chem-chip{
-    cursor:default;
+    cursor:pointer;
   }
-  .billboard-snapshot-chemistry .chem-chip:hover{
-    transform:none;
-    filter:none;
-    box-shadow:none;
+  .billboard-snapshot-chemistry .chem-chip:hover,
+  .billboard-snapshot-chemistry .chem-chip:focus-visible{
+    transform:translateY(-3px) scale(1.025);
+    filter:brightness(1.08);
+    box-shadow:0 8px 18px rgba(4,13,31,.28),0 0 0 1px rgba(255,255,255,.12);
+    outline:none;
+  }
+  .billboard-snapshot-chemistry .chem-chip:active{
+    transform:translateY(-1px) scale(.99);
   }
 
   .billboard-squad-pitch{
@@ -5195,7 +5200,12 @@
     .billboard-squad-overlay{padding:10px}
     .billboard-squad-body{padding:11px}
     .billboard-squad-pitch{height:430px}
-    .billboard-squad-pitch .player-node{transform:translate(-50%,-50%) scale(.88)}
+    /* transform 애니메이션을 쓰는 CAPTAIN / GOLDEN BOOT도 동일하게 축소되도록
+       독립 scale 속성을 사용한다. */
+    .billboard-squad-pitch .player-node{
+      scale:.88;
+      transform-origin:center;
+    }
   }
   .billboard-empty{
     padding:34px 14px;text-align:center;color:#738ab5;font-size:12px
@@ -7737,7 +7747,7 @@
           <div class="chemistry-info-card chem-theme-captain" data-chem-detail="leadership"><div class="chem-card-name">리더십</div><div class="chem-card-effect">OVR +1</div></div>
           <div class="chemistry-info-card chem-theme-prime" data-chem-detail="golden_generation"><div class="chem-card-name">황금세대</div><div class="chem-card-effect">OVR +1</div></div>
           <div class="chemistry-info-card chem-theme-winner" data-chem-detail="world_champion"><div class="chem-card-name">월드 챔피언</div><div class="chem-card-effect">OVR +1</div></div>
-          <div class="chemistry-info-card chem-theme-toty" data-chem-detail="league_best_xi"><div class="chem-card-name">리그베스트 XI</div><div class="chem-card-effect">OVR +1</div></div>
+          <div class="chemistry-info-card chem-theme-toty" data-chem-detail="league_best_xi"><div class="chem-card-name">리그베스트</div><div class="chem-card-effect">OVR +1</div></div>
           <div class="chemistry-info-card chem-theme-platinum" data-chem-detail="world_class"><div class="chem-card-name">월드클래스</div><div class="chem-card-effect">OVR +1</div></div>
           <div class="chemistry-info-card chem-theme-legend" data-chem-detail="legend_class"><div class="chem-card-name">레전드의 품격</div><div class="chem-card-effect">OVR +1</div></div>
         
@@ -12335,7 +12345,7 @@ const teamChemistries = [
     },
   {
       id:"league_best_xi",
-      name:"리그베스트 XI",
+      name:"리그베스트",
       effect:"OVR +1",
       att:0, mid:0, def:0, overall:1,
       isActive:(names,players)=>players.filter(player=>isTotyCard(player)).length >= 3
@@ -14237,7 +14247,7 @@ function renderProfile(){
     leadership:"리더십",
     golden_generation:"황금세대",
     world_champion:"월드 챔피언",
-    league_best_xi:"리그베스트 XI",
+    league_best_xi:"리그베스트",
     world_class:"월드클래스",
     legend_class:"레전드의 품격"
   };
@@ -16633,7 +16643,7 @@ const chemistryDetailMeta = {
   silent_devotion:{title:"묵묵한 헌신",category:"카드 팀캐미 · THE UNSUNG",theme:"chem-theme-unsung",description:"THE UNSUNG 카드 3장 이상 보유",effect:"MID +2 · DEF +1"},
   world_champion:{title:"월드 챔피언",category:"카드 팀캐미 · WORLD CUP WINNER",theme:"chem-theme-winner",description:"WORLD CUP WINNER 카드 정확히 2명 보유 · 단, 요리스 + 로메로 조합은 발동하지 않음",effect:"OVR +1"},
   legend_class:{title:"레전드의 품격",category:"카드 팀캐미 · LEGACY XI",theme:"chem-theme-legend",description:"LEGACY XI 카드 1장 이상 보유",effect:"OVR +1"},
-  league_best_xi:{title:"리그베스트 XI",category:"카드 팀캐미 · Team Of The Year",theme:"chem-theme-toty",description:"TOTY 카드 3장 이상 보유",effect:"OVR +1"}
+  league_best_xi:{title:"리그베스트",category:"카드 팀캐미 · Team Of The Year",theme:"chem-theme-toty",description:"TOTY 카드 3장 이상 보유",effect:"OVR +1"}
 };
 
 function openChemistryDetail(id){
