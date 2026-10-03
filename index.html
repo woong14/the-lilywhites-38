@@ -41,7 +41,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050a15}
         <h2 id="maintenanceTitle" class="maintenance-title">점검중</h2>
         <div class="maintenance-message">
           <p>현재 업데이트를 위해 점검중에 있습니다.</p>
-          <p>20시 이전에는 끝낼 수 있도록 노력하겠습니다.</p>
+          <p>21시 이전에는 끝낼 수 있도록 노력하겠습니다.</p>
           <p>업데이트가 완료되면 카페에 패치노트글과 함께 서버 오픈하겠습니다.</p>
         </div>
         <div class="maintenance-note">점검 중에는 새 시즌을 시작할 수 없습니다.</div>
@@ -84,7 +84,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050a15}
           if(maintenanceCheckPromise)return maintenanceCheckPromise;
           maintenanceCheckPromise=(async()=>{
             try{
-              const rows=await billboardRequest("game_config?id=eq.1&select=maintenance&t="+Date.now(),{
+              const rows=await billboardRequest("game_config?id=eq.1&select=maintenance",{
                 method:"GET",
                 cache:"no-store",
                 headers:{"Accept":"application/json"}
