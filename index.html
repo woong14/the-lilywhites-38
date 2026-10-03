@@ -4834,6 +4834,10 @@
     backdrop-filter:blur(8px);
   }
   .billboard-squad-overlay.show{display:flex}
+  /* 스냅샷 위에서 팀캐미 상세를 열어도 항상 최상단에 표시 */
+  #chemistryDetailOverlay{
+    z-index:10080;
+  }
   .billboard-squad-modal{
     width:min(760px,96vw);
     max-height:92vh;
@@ -4903,15 +4907,23 @@
     cursor:default;
   }
   .billboard-squad-close{
-    flex:0 0 auto;
+    flex:0 0 34px;
     width:34px;
     height:34px;
+    min-width:34px;
+    min-height:34px;
+    padding:0;
     border-radius:10px;
     border:1px solid #314a74;
     background:#0d1b31;
     color:#d9e5fb;
-    font-size:19px;
-    font-weight:1000;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:22px;
+    font-weight:700;
+    line-height:1;
+    display:grid;
+    place-items:center;
+    box-sizing:border-box;
     cursor:pointer;
   }
   .billboard-squad-body{padding:16px}
