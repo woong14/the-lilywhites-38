@@ -84,9 +84,11 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050a15}
           if(maintenanceCheckPromise)return maintenanceCheckPromise;
           maintenanceCheckPromise=(async()=>{
             try{
-              const res=await fetch(MAINTENANCE_URL+"&t="+Date.now(),{method:"GET",cache:"no-store",headers:{"apikey":LILY_SUPABASE_KEY,"Accept":"application/json"}});
-              if(!res.ok)throw new Error("maintenance "+res.status);
-              const rows=await res.json();
+              const rows=await billboardRequest("game_config?id=eq.1&select=maintenance&t="+Date.now(),{
+                method:"GET",
+                cache:"no-store",
+                headers:{"Accept":"application/json"}
+              });
               maintenanceActive=!!(rows&&rows[0]&&rows[0].maintenance);
               if(maintenanceActive&&!seasonStarted)showMaintenancePopup(); else hideMaintenancePopup();
               return maintenanceActive;
@@ -105,7 +107,6 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050a15}
         window.lilyMaintenance={get active(){return maintenanceActive},refresh:refreshMaintenanceState,guardNewSeasonStart,show:showMaintenancePopup};
 
         refreshMaintenanceState();
-        setInterval(refreshMaintenanceState,30000);
 
         document.addEventListener("click",async(event)=>{
           const btn=event.target.closest&&event.target.closest("#drawBtn");
@@ -118,7 +119,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050a15}
           if(ok){bypassNextDrawGuard=true;btn.click();}
         },true);
 
-        ["resetBtn","simulationResetBtn","gameOverRestart"].forEach(id=>{
+        ["resetBtn","simulationResetBtn","gameOverRestart","seasonRestartSmall"].forEach(id=>{
           const el=document.getElementById(id);
           if(el)el.addEventListener("click",()=>{seasonStarted=false;if(maintenanceActive)showMaintenancePopup();});
         });
