@@ -14684,6 +14684,15 @@ function pickWeightedContribution(type, excludeName=null, setPiece=false){
   return weighted[weighted.length-1] || null;
 }
 
+
+function profileCardKey(player){return player.name+'|'+player.season;}
+function rememberCardContribution(scorerState,player,kind){
+ if(!player)return;
+ const field=kind==='goal'?'cardGoalCounts':'cardAssistCounts';
+ if(!scorerState[field])scorerState[field]={};
+ const key=profileCardKey(player);scorerState[field][key]=Number(scorerState[field][key]||0)+1;
+}
+
 function initializeScorerState(){
   const goalCounts = {};
   const assistCounts = {};
@@ -14698,7 +14707,7 @@ function initializeScorerState(){
     ratingMatches[player.name] = 0;
   });
 
-  return {goalCounts, assistCounts, ratingTotals, ratingMatches};
+  return {goalCounts, assistCounts, ratingTotals, ratingMatches,cardGoalCounts:{},cardAssistCounts:{}};
 }
 
 function pickSpursScorer(scorerState, roundNumber){
@@ -14712,6 +14721,7 @@ function pickSpursScorer(scorerState, roundNumber){
 
   const name = picked.player.name;
   scorerState.goalCounts[name] = (scorerState.goalCounts[name] || 0) + 1;
+  rememberCardContribution(scorerState,picked.player,'goal');
 
   // 득점자 선택 확률과 세트피스 표시는 분리.
   // CB 득점 중 일부만 SP로 보이게 하되 득점 확률 자체에는 영향을 주지 않는다.
@@ -14904,6 +14914,7 @@ function createScoreline(myRatings, opponentRatings, venue, scorerState, roundNu
     const assist = pickSpursAssist(scorer.name, scorer.setPiece);
     if(assist){
       scorerState.assistCounts[assist] = (scorerState.assistCounts[assist] || 0) + 1;
+      rememberCardContribution(scorerState,drafted.find(player=>player?.name===assist),'assist');
     }
     events.push({
       minute:3+Math.floor(Math.random()*87),
@@ -15912,24 +15923,25 @@ function rememberChemistriesForProfile(activeChems){
   if(changed) queueProfileProgressSync();
 }
 
-async function recordCompletedSeasonToProfile(place,state,teamRatings){
+
+async function recordCompletedSeasonToProfile(place,state,teamRatings,scorerState){
   if(!lilyProfileSession) return;
-  try{
-    const data = await profileRequest("record_season",{
-      season:{
-        rank:place,
-        points:state.points,
-        losses:Number(state.l || 0),
-        team_ovr:Number(teamRatings.overall.toFixed(2)),
-        players:[...sessionDraftPicks],
-        chemistries:[...sessionChemistryHistory],
-        special_cards:[...sessionSpecialHistory],
-        special_card_items:[...sessionSpecialItemHistory]
-      }
-    });
-    lilyProfileData = data.profile;
-  }catch(error){
-    console.warn("PROFILE season save failed",error);
+  const season={
+    id:state.profileSeasonId || (state.profileSeasonId=(crypto.randomUUID?.() || 'season-'+Date.now()+'-'+Math.random().toString(36).slice(2))),
+    rank:place,points:state.points,wins:Number(state.w),draws:Number(state.d),losses:Number(state.l),
+    goals_for:Number(state.gf),goals_against:Number(state.ga),goal_difference:Number(state.gf)-Number(state.ga),
+    team_ovr:Number(teamRatings.overall.toFixed(2)),formation:currentFormationKey,manager:selectedManager?.name||'-',
+    top_scorer:latestSeasonBillboardRecord?.top_scorer||'-',top_scorer_goals:latestSeasonBillboardRecord?.top_scorer_goals||0,
+    squad:drafted.map(player=>player ? profileCardKey(player) : ''),
+    card_stats:drafted.filter(Boolean).map(player=>({key:profileCardKey(player),goals:Number(scorerState?.cardGoalCounts?.[profileCardKey(player)]||0),assists:Number(scorerState?.cardAssistCounts?.[profileCardKey(player)]||0)})),
+    final_chemistries:getActiveTeamChemistries().map(chem=>chem.id),
+    players:drafted.filter(Boolean).map(player=>player.name),
+    chemistries:[...sessionChemistryHistory],special_cards:[...sessionSpecialHistory],special_card_items:[...sessionSpecialItemHistory]
+  };
+  for(let attempt=0;attempt<3;attempt++){
+    if(!lilyProfileSession)return;
+    try{const data=await profileRequest('record_season',{season});lilyProfileData=data.profile;return;}
+    catch(error){if(attempt===2){console.warn('PROFILE season save failed',error);return;}await new Promise(resolve=>setTimeout(resolve,1000*(attempt+1)));}
   }
 }
 
@@ -15978,8 +15990,8 @@ function buildBillboardRecord(place, state, teamRatings, scorerState){
     top_scorer: top.names,
     top_scorer_goals: top.goals,
     losses: Number(state.l || 0),
-    wins: Number(state.l || 0) === 0 ? Number(state.w || 0) : null,
-    draws: Number(state.l || 0) === 0 ? Number(state.d || 0) : null,
+    wins: Number(state.w),
+    draws: Number(state.d),
     formation: currentFormationKey,
     squad: drafted.map(player=>player ? `${player.name}|${player.season}` : "")
   };
@@ -17924,7 +17936,7 @@ function finishSeasonSimulation(state, teamRatings, scorerState){
   if(snapshotReplayBtn) snapshotReplayBtn.style.display = "inline-flex";
   const ceremonyReplayBtn = $("#seasonCeremonyReplayBtn");
   if(ceremonyReplayBtn) ceremonyReplayBtn.style.display = "inline-flex";
-  recordCompletedSeasonToProfile(place,state,teamRatings);
+  recordCompletedSeasonToProfile(place,state,teamRatings,scorerState);
   const summary = $("#simSummary");
   if(summary){
     summary.innerHTML = `
