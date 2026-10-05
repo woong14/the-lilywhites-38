@@ -17457,6 +17457,7 @@ async function recordCompletedSeasonToProfile(place,state,teamRatings,scorerStat
     squad:drafted.map(player=>player ? profileCardKey(player) : ''),
     card_stats:drafted.filter(Boolean).map(player=>({key:profileCardKey(player),goals:Number(scorerState?.cardGoalCounts?.[profileCardKey(player)]||0),assists:Number(scorerState?.cardAssistCounts?.[profileCardKey(player)]||0)})),
     final_chemistries:getActiveTeamChemistries().map(chem=>chem.id),
+    achievement_facts:buildSeasonAchievementFacts(state),
     players:drafted.filter(Boolean).map(player=>player.name),
     chemistries:[...sessionChemistryHistory],special_cards:[...sessionSpecialHistory],special_card_items:[...sessionSpecialItemHistory]
   };
@@ -18695,6 +18696,27 @@ const winterTransferEvents = [
 
 let winterTransferResolvedThisSeason = false;
 let winterTeamOvrBoost = 0;
+let winterSeasonAudit = null;
+
+function newWinterSeasonAudit(){
+  return {participated:false,event:null,resolved:false,decision:null,changes:0,upgrades:0,manager_changed:false,ovr_boost:0};
+}
+function buildSeasonAchievementFacts(state){
+  const counts={};
+  let specialPlayers=0;
+  drafted.filter(Boolean).forEach(player=>{
+    const types=getSpecialCardCollectionTypes(player);
+    if(types.length) specialPlayers++;
+    types.forEach(type=>{counts[type]=(counts[type]||0)+1;});
+  });
+  const runnerUp=state.leagueTable ? sortedLeagueTable(state.leagueTable)[1] : null;
+  return {
+    schema:1,final_special_counts:counts,final_special_players:specialPlayers,
+    runner_up_points:runnerUp?.pts ?? null,runner_up_goal_difference:runnerUp?.gd ?? null,
+    winter:winterSeasonAudit ? {...winterSeasonAudit} : null
+  };
+}
+
 
 function getAllWinterTransferCards(){
   const cards = [];
@@ -18778,6 +18800,13 @@ function winterEnsureScorerPlayer(scorerState, player){
 
 function winterReplacePlayer(slotIndex, replacement, scorerState){
   if(!replacement || slotIndex < 0 || slotIndex >= drafted.length) return false;
+  if(winterSeasonAudit && winterPendingEvent){
+    const previous = drafted[slotIndex];
+    if(previous && profileCardKey(previous) !== profileCardKey(replacement)){
+      winterSeasonAudit.changes++;
+      if(replacement.ovr > previous.ovr) winterSeasonAudit.upgrades++;
+    }
+  }
   drafted[slotIndex] = replacement;
   rememberSpecialCardForProfile(replacement);
   winterEnsureScorerPlayer(scorerState,replacement);
@@ -18916,6 +18945,7 @@ let winterStarExitResults = [];
 let winterLockerRoomChoices = [];
 
 function openWinterTransferPrompt(scorerState, state, onContinue){
+  winterSeasonAudit = newWinterSeasonAudit();
   winterPendingContinue = onContinue;
   winterPendingScorerState = scorerState;
 
@@ -18978,6 +19008,7 @@ function openWinterTransferPrompt(scorerState, state, onContinue){
 }
 
 function declineWinterTransfer(){
+  if(winterSeasonAudit) winterSeasonAudit.resolved = true;
   closeWinterOverlay();
   const next = winterPendingContinue;
   winterPendingContinue = null;
@@ -18985,6 +19016,7 @@ function declineWinterTransfer(){
 }
 
 function participateWinterTransfer(){
+  if(winterSeasonAudit) winterSeasonAudit.participated = true;
   startWinterEventRoulette();
 }
 
@@ -19038,6 +19070,7 @@ function startWinterEventRoulette(){
 }
 
 function winterContinueAfterEvent(){
+  if(winterSeasonAudit) winterSeasonAudit.resolved = true;
   closeWinterOverlay();
   winterPendingCandidates = [];
   winterPendingSlotIndex = -1;
@@ -19063,6 +19096,7 @@ function showWinterResult(eventName, lines, bad=false){
 
 function resolveWinterTransferEvent(event){
   if(!event) return;
+  if(winterSeasonAudit) winterSeasonAudit.event = event.id;
   const scorerState = winterPendingScorerState;
 
   if(event.id === "owner_investment"){
@@ -19221,6 +19255,7 @@ function resolveWinterTransferEvent(event){
 
   if(event.id === "recruitment_effect"){
     winterTeamOvrBoost += 1;
+    if(winterSeasonAudit) winterSeasonAudit.ovr_boost = 1;
     updateStats();
     showWinterResult(event.name,[
       "아무도 영입하지 않은 0입 효과! 기존 선수단의 조직력이 향상되었습니다.",
@@ -19273,6 +19308,7 @@ function resolveWinterTransferEvent(event){
     const oldManager = selectedManager;
     const replacement = higherManagers[Math.floor(Math.random()*higherManagers.length)];
     selectedManager = replacement;
+    if(winterSeasonAudit) winterSeasonAudit.manager_changed = true;
     managerPlaced = true;
     renderXIManagerCard();
     updateStats();
@@ -19291,6 +19327,7 @@ function resolveWinterTransferEvent(event){
 }
 
 function acceptRivalOffer(){
+  if(winterSeasonAudit) winterSeasonAudit.decision = "accepted";
   if(!winterStarExitQueue.length){
     showWinterResult("라이벌팀의 제의",["이적 제의를 처리할 수 없습니다."],true);
     return;
@@ -19299,6 +19336,7 @@ function acceptRivalOffer(){
 }
 
 function rejectRivalOffer(){
+  if(winterSeasonAudit) winterSeasonAudit.decision = "rejected";
   winterStarExitResults = ["라이벌팀의 제의를 거절했습니다. 기존 스쿼드를 유지합니다."];
   showWinterResult("라이벌팀의 제의",winterStarExitResults);
 }
@@ -19807,6 +19845,7 @@ function reset(){
   closeWinterOverlay();
   winterTransferResolvedThisSeason = false;
   winterTeamOvrBoost = 0;
+  winterSeasonAudit = null;
   winterPendingContinue = null;
   winterPendingScorerState = null;
   winterPendingCandidates = [];
