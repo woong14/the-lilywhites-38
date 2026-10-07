@@ -17992,6 +17992,9 @@ function profileCatalog(){
  const entries=[];
  for(const[type,keys]of Object.entries(PROFILE_CARD_CATALOG))for(const key of keys){let cut=key.lastIndexOf('|'),name=key.slice(0,cut),season=key.slice(cut+1);const item=seasons.find(s=>s.name===season);const row=item?.players.find(r=>r[0]===name);const player=row?buildPlayerObject(row[0],row[1],row[2],season):null;
  entries.push({type,key,item:`${type}::${key}`,name,season,player,ovr:player?.ovr??'—',pos:player?.pos||'—'});}
+ const typeOrder=Object.keys(PROFILE_CARD_CATALOG);
+ const startYear=x=>Number(String(x.type==='LEGACY XI'?x.player?.tenure:x.season).match(/\d{4}/)?.[0]||9999);
+ entries.sort((a,b)=>typeOrder.indexOf(a.type)-typeOrder.indexOf(b.type)||startYear(a)-startYear(b));
  return profileCatalogCache=entries;
 }
 const PROFILE_SPECIAL_AWARD=['woong_origin','⌜GM⌟','✦','태초에 웅이 있었다. 그가 룰렛을 돌리라 하니 시즌이 생겼고, 열한 명을 모으라 하니 이 게임이 시작되었다.'];
@@ -18088,8 +18091,9 @@ async function goToProfileNotification(id){
  if(!target){document.getElementById('profileNotificationCount').textContent='항목을 찾을 수 없습니다. 알림은 미확인으로 유지합니다.';return;}
  if(event.tab==='catalog')mountProfileCatalogCard(target);
  closeProfileNotifications();target.setAttribute('tabindex','-1');target.scrollIntoView({behavior:'instant',block:'center'});target.focus({preventScroll:true});
+ profileNoticeMarkRead(event);profileNoticeSave(nick);profileNoticeHighlight();profileNoticePaint();
  const a=profileNoticeArrival={id:event.id,el:target,manual:false,timer:null};target.classList.add('profile-notification-arrival');
- a.timer=setTimeout(()=>{if(profileNoticeArrival!==a)return;target.classList.add('profile-notification-pulse');a.timer=setTimeout(()=>{if(profileNoticeArrival!==a)return;target.classList.remove('profile-notification-pulse','profile-notification-arrival');profileNoticeMarkRead(event);profileNoticeArrival=null;profileNoticeSave(nick);profileNoticeHighlight();profileNoticePaint();},1400);},500);
+ a.timer=setTimeout(()=>{if(profileNoticeArrival!==a)return;target.classList.add('profile-notification-pulse');a.timer=setTimeout(()=>{if(profileNoticeArrival!==a)return;target.classList.remove('profile-notification-pulse','profile-notification-arrival');profileNoticeArrival=null;},1400);},500);
 }
 let profileNoticeViewed=new Set(),profileNoticeExposure=new Map(),profileNoticeViewTimer=null,profileNoticeArrival=null;
 const PROFILE_NOTICE_ATTRS={catalog:'data-profile-item',chemistry:'data-profile-chem',achievements:'data-achievement-id',showcase:'data-profile-award'};
@@ -23154,8 +23158,8 @@ function restoreViewportAfterSuccessfulLogin(){
 
 
 
-/* Legacy reveal and popup labels use a soft navy shadow. */
-:is(#pendingCard,.player-card-detail-body>.reveal-card).tier-legend :is(.reveal-name,.reveal-season){color:#e2c779!important;-webkit-text-stroke:0!important;text-shadow:0 2px 4px #10213b,0 0 7px rgba(16,33,59,.75)!important}
+/* Legacy reveal and popup labels use a soft navy shadow in every direction. */
+:is(#pendingCard,.player-card-detail-body>.reveal-card).tier-legend :is(.reveal-name,.reveal-season){color:#e2c779!important;-webkit-text-stroke:0!important;text-shadow:0 0 4px rgba(16,33,59,.75),0 0 7px rgba(16,33,59,.45)!important}
 </style>
 <script>// Photo mode reuses the original nodes so drag/drop coordinates and listeners stay intact.
 (()=>{
