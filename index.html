@@ -10524,7 +10524,7 @@ body:has(#startupModal.show) #gameMenuButton{visibility:hidden}
 .profile-remember-nickname{display:flex;align-items:center;gap:8px;width:fit-content;margin:12px 0 4px;color:#b7c8e0;font-size:13px;cursor:pointer;user-select:none}.profile-remember-nickname input{width:16px;height:16px;margin:0;accent-color:#d7b66e;cursor:pointer}
 </style>
 <script id="game-build-version">
-const LILY_BUILD_VERSION="v1.951";
+const LILY_BUILD_VERSION="v1.952";
 // 제작 식별 기록: 토트넘 공식 팬카페 릴리화이트 웅이
 const LILY_CREATION_ID = Object.freeze({
   origin: "토트넘 공식 팬카페 릴리화이트 웅이",
@@ -11309,7 +11309,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
  let frame=0;function layout(){frame=0;
  document.querySelectorAll('.prepick-name[data-full-name]').forEach(e=>{const full=e.dataset.fullName,english=e.dataset.englishName.split(' ');const surname=full.split(' ').slice(1).join(' ')||full;const forms=[full,(english[0]?.[0]||'')+'. '+surname,surname];e.textContent=full;for(const name of forms){e.textContent=name;if(e.scrollWidth<=e.clientWidth+1)break;}});
- document.querySelectorAll('.prepick-list').forEach(list=>{const season=typeof currentSeason!=='undefined'?currentSeason:null;if(list.querySelector('.prepick-row')&&season){let head=list.querySelector('.candidate-season');if(!head){head=document.createElement('div');head.className='candidate-season';list.prepend(head);}head.textContent=season.name+' · 선수 선택';}});
+ document.querySelectorAll('.prepick-list').forEach(list=>{const season=typeof currentSeason!=='undefined'?currentSeason:null;if(list.querySelector('.prepick-row')&&season){let head=list.querySelector('.candidate-season');if(!head){head=document.createElement('div');head.className='candidate-season';list.prepend(head);}let label=head.querySelector('.candidate-season-label');if(!label){head.textContent='';label=document.createElement('span');label.className='candidate-season-label';head.append(label);}const text=season.name+' · 선수 선택';if(label.textContent!==text)label.textContent=text;}});
  }
  function schedule(){if(!frame)frame=requestAnimationFrame(layout)}
  new MutationObserver(ms=>{if(ms.some(m=>m.type==='childList'&&[...m.addedNodes].some(n=>n.nodeType===1)))schedule();}).observe(document.body,{childList:true,subtree:true});window.addEventListener('resize',schedule);schedule();
@@ -11601,7 +11601,7 @@ card.classList.add('field-effects-reveal');card.prepend(art);
   <div class="hero">
     <div class="brand">
       <img class="brand-logo" data-lily-asset="asset12" alt="THE LILYWHITES LEGACY" />
-      <p class="game-version-line"><span id="gameBuildVersion" class="game-version-badge">v1.951</span><span>토트넘 시즌 드래프트 비영리 팬게임</span></p>
+      <p class="game-version-line"><span id="gameBuildVersion" class="game-version-badge">v1.952</span><span>토트넘 시즌 드래프트 비영리 팬게임</span></p>
     </div>
     <div class="hero-account-actions">
       <button id="profileFab" class="profile-fab" type="button">MY PROFILE · LOGIN</button>
@@ -11615,7 +11615,7 @@ card.classList.add('field-effects-reveal');card.prepend(art);
   </div>
   <div id="startupModal" class="formation-modal show" aria-hidden="false">
     <div class="formation-modal-card startup-modal-card">
-      <div id="startupLogoSlot" class="startup-logo-slot"></div><div style="text-align:center;margin:4px 0 12px"><span id="startupBuildVersion" class="game-version-badge">v1.951</span></div>
+      <div id="startupLogoSlot" class="startup-logo-slot"></div><div style="text-align:center;margin:4px 0 12px"><span id="startupBuildVersion" class="game-version-badge">v1.952</span></div>
       <div class="formation-disclaimer startup-guide">
         <strong>안내</strong>
         <p>본 게임은 토트넘팬이 만든 <strong class="guide-accent-blue">비영리 팬메이드 게임</strong>입니다.</p>
@@ -14619,6 +14619,48 @@ function placeManager(){
   });
 }
 
+let draftNumberMode=false;
+try{draftNumberMode=localStorage.getItem('lily-draft-number-mode')==='true';}catch(_){}
+const draftNumberCache=new Map();
+let draftNumberFrame=0;
+function draftNumberReferenceWidth(){const columns=innerWidth<=900?4:6,gap=columns===4?5:7;return (Math.min(980,innerWidth*.96)-44-(columns-1)*gap)/columns;}
+function buildDraftNumberSources(players){
+ const width=draftNumberReferenceWidth(),missing=players.filter(p=>!draftNumberCache.has(p.name+'|'+p.season+'|'+width));if(!missing.length)return;
+ const host=document.createElement('div');host.style.cssText='position:absolute;left:-10000px;top:0;width:980px;visibility:hidden;pointer-events:none';
+ const items=missing.map(p=>({player:p,item:'NORMAL::'+p.name+'|'+p.season,key:p.name+'|'+p.season,season:p.season}));host.innerHTML=profileSeasonCardGridHtml(items,new Set(items.map(x=>x.item)));document.body.append(host);
+ host.querySelectorAll('.season-field-card').forEach(card=>{card.style.setProperty('width',width+'px','important');card.style.setProperty('height',width*1.25+'px','important');card.style.setProperty('min-width',width+'px');card.style.setProperty('max-width',width+'px');});
+ renderSeasonJerseyCards(host);
+ for(const [i,card]of [...host.querySelectorAll('.season-field-card')].entries()){
+  const p=missing[i],key=p.name+'|'+p.season+'|'+width,svg=card.querySelector('.season-card-name svg'),digits=[...card.querySelectorAll('.jersey-digit-image')],ink=isLegendCard(p)?'#f6df93':'#fff';
+  if(!svg||!digits.length){draftNumberCache.set(key,{fallback:true,name:playerShirtName(p),ink});continue;}
+  const box=card.getBoundingClientRect(),ctx=seasonShirtNameMeasure;let top=Infinity;
+  for(const group of svg.querySelectorAll('.jersey-letter')){const text=group.querySelector('text');ctx.font='400 '+text.getAttribute('font-size')+'px LilySpursNumber';const m=ctx.measureText(text.textContent),matrix=group.getScreenCTM();for(const x of [-m.actualBoundingBoxLeft-m.width/2,m.actualBoundingBoxRight-m.width/2])for(const y of [-m.actualBoundingBoxAscent,m.actualBoundingBoxDescent])top=Math.min(top,new DOMPoint(x,y).matrixTransform(matrix).y-box.top);for(const accent of group.querySelectorAll('path')){const b=accent.getBBox();for(const x of [b.x,b.x+b.width])for(const y of [b.y,b.y+b.height])top=Math.min(top,new DOMPoint(x,y).matrixTransform(matrix).y-box.top);}}
+  const bottom=Math.max(...digits.map(d=>d.getBoundingClientRect().bottom))-box.top;
+  const source=document.createElement('div');source.className=card.className+' draft-jersey-source';source.style.cssText=card.style.cssText;source.style.boxSizing='border-box';const cs=getComputedStyle(card);for(const side of ['Top','Right','Bottom','Left'])source.style['border'+side+'Width']=cs['border'+side+'Width'];source.append(card.querySelector('.season-card-name').cloneNode(true),...digits.map(d=>d.cloneNode(true)));source.querySelector('.season-card-name').style.setProperty('color',ink,'important');source.querySelectorAll('.jersey-digit-image').forEach(d=>{d.style.color=ink;const use=d.querySelector('use');use.setAttribute('href',use.getAttribute('href').replace(/-(white|navy)$/,'-navy'));});
+  draftNumberCache.set(key,{html:source.outerHTML,top,bottom,width:box.width});
+ }
+ host.remove();
+}
+function syncDraftNumberMode(){
+ const list=document.getElementById('players'),rows=[...list.querySelectorAll('.prepick-row')];if(!rows.length)return;
+ let head=list.querySelector('.candidate-season');if(!head){head=document.createElement('div');head.className='candidate-season';list.prepend(head);}
+ let label=head.querySelector('.candidate-season-label');if(!label){head.textContent='';label=document.createElement('span');label.className='candidate-season-label';head.append(label);}const text=currentSeason.name+' · 선수 선택';if(label.textContent!==text)label.textContent=text;
+ if(!head.querySelector('.draft-view-switch')){const controls=document.createElement('div');controls.className='field-view-switch draft-view-switch';controls.setAttribute('aria-label','드래프트 표시 방식');controls.innerHTML='<button type="button" data-number-mode="false">기본</button><button type="button" data-number-mode="true">등번호</button>';controls.onclick=e=>{const b=e.target.closest('button');if(!b)return;draftNumberMode=b.dataset.numberMode==='true';try{localStorage.setItem('lily-draft-number-mode',String(draftNumberMode))}catch(_){}syncDraftNumberMode();};head.append(controls);}
+ head.querySelectorAll('[data-number-mode]').forEach(b=>{const active=(b.dataset.numberMode==='true')===draftNumberMode;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
+ list.classList.remove('draft-number-mode');rows.forEach(row=>{row.style.removeProperty('height');row.style.removeProperty('min-height');row.querySelectorAll('[data-draft-meta]').forEach(n=>{n.style.cssText=n.dataset.draftMeta;delete n.dataset.draftMeta;});row.querySelector('.draft-number-art')?.remove();});
+ if(!draftNumberMode)return;
+ const players=rows.map(row=>{const p=currentSeason.players.find(p=>p[0]===row.querySelector('.prepick-name').dataset.englishName);return buildPlayerObject(p[0],p[1],p[2],currentSeason.name);});
+ buildDraftNumberSources(players);
+ rows.forEach((row,i)=>{const box=row.getBoundingClientRect();row.style.setProperty('height',box.height+'px','important');row.style.setProperty('min-height',box.height+'px','important');row.style.position='relative';const meta=['.prepick-nationality','.prepick-season','.prepick-status'].map(s=>{const node=row.querySelector(s);return {node,b:node.getBoundingClientRect()};});for(const {node,b}of meta){node.dataset.draftMeta=node.style.cssText;node.style.cssText+=';position:absolute;grid-column:auto!important;grid-row:auto!important;align-self:start!important;left:'+(b.left-box.left-1)+'px;top:'+(b.top-box.top-1)+'px;width:'+b.width+'px;height:'+b.height+'px;margin:0!important;';}
+  const data=draftNumberCache.get(players[i].name+'|'+players[i].season+'|'+draftNumberReferenceWidth()),art=document.createElement('div');art.className='draft-number-art';const height=Math.max(28,box.height-36);art.style.height=height+'px';
+  if(data.fallback){art.classList.add('draft-number-unknown');art.style.color=data.ink;art.innerHTML='<span>'+escapeProfileHtml(data.name)+'</span><strong aria-label="등번호 정보 없음">—</strong>';}
+  else{const scale=height/(data.bottom-data.top);art.style.width=data.width*scale+'px';art.innerHTML=data.html;const source=art.firstElementChild;source.style.transform='scale('+scale+')';source.style.transformOrigin='0 0';source.style.top=-data.top*scale+'px';source.style.left='0';}
+  row.append(art);
+ });list.classList.add('draft-number-mode');
+}
+function scheduleDraftNumberMode(){if(!draftNumberFrame)draftNumberFrame=requestAnimationFrame(()=>{draftNumberFrame=0;syncDraftNumberMode();});}
+window.addEventListener('resize',scheduleDraftNumberMode);
+document.fonts.ready.then(()=>{draftNumberCache.clear();scheduleDraftNumberMode();});
 function draftedCount(){ return drafted.filter(Boolean).length; }
 
 function canSpinSeasonRoulette(){
@@ -14888,6 +14930,7 @@ function renderPlayers(){
     wrap.appendChild(el);
   });
 
+  syncDraftNumberMode();
   deadSeasonNoSelectable = selectableCount === 0;
 
   if(deadSeasonNoSelectable){
@@ -23304,7 +23347,7 @@ let queued=false;new MutationObserver(es=>{if(es.every(e=>e.type==='attributes'&
 (()=>{
 'use strict';
 const el=id=>document.getElementById(id),esc=escapeProfileHtml;
-const PATCHES=[{"id":"v1.9-release","version":"v1.9","title":"선수 사진 추가 (80%) · 성능 최적화","date":"릴리즈","tag":"v1.9","major":[["추가","선수 사진 추가 (80%)","시즌별 선수 사진 · 상세 카드 표시"],["추가","선수 사진 모드","카드/사진 전환 기능 · 선택 모드로 스냅샷 저장"],["추가","카드 클릭 기능","필드·스냅샷·도감 등 카드 클릭 가능 · 클릭 시 상세정보 확인"],["개편","카드 도감 디자인","도감 디자인 리뉴얼"],["추가","자동 로그인","로그인 유지 기능. 로그아웃 시 해제"],["추가","시즌도감 신설","유니폼 등번호 모양의 신규 카드 디자인"],["개선","선수 60종 추가","유의미 시즌의 선수들 추가 생성 (요렌테 등)"],["추가","팀케미 1종 추가","\"베일의 유산\" 추가"]],"minor":[["수정","튕김현상 핫픽스","애니메이션 효과 과다로 인한 튕김 개선"],["수정","칭호 획득 표시 오류","포메이션 관련 칭호에서 오류 수정"],["개선","모바일·태블릿 룰렛 효과 경량화","애니메이션 최적화"],["추가","전체 유저 검색","최근 플레이어에 탭에서 검색 가능"],["추가","선수 등번호","시즌별 등번호 정보 수록"],["수정","모바일 스냅샷 저장 개선","효과가 깨져보이는 것을 수정"],["개선","빌보드 개선","시인성 개선, 명예의 전당 순위 확대"],["개선","팀 능력치 추가 표시","소수점 둘째 자리까지 표시"],["추가","건의 이미지 첨부","건의에 이미지 첨부 · 미리보기와 개별/전체 다운로드 지원"]]},{"id":"v1.8-release","version":"v1.8","title":"룰렛 디자인 · 카드 애니메이션 개선 및 가이드 · 단축키 추가","date":"","tag":"v1.8","major":[["개선","룰렛 디자인","회전감·금빛 스파크 강화 · 상태등·선수 카운터 통합."],["개선","카드 애니메이션","카드별 연출·테두리 광택·음각 효과 개선."],["추가","게임 가이드 · PC 단축키","플레이·능력치·겨울 이적시장 가이드 및 PC 단축키 추가."],["추가","새로운 카드 팀케미","「새로운 물결」·「트로이카」 2종 추가."],["추가","도전과제 다수 추가","시즌·스쿼드·이적시장·카드 수집 도전과제 추가."],["개선","겨울 이적시장 진행","교체 결과·팀케미 변동 확인 후 버튼으로 후반기 재개."],["개선","도전과제 · 컬렉션 분류","도전과제·컬렉션 분류 소제목 추가."],["추가","알림확인기능","새 획득·달성 내역 확인 및 해당 항목 바로 이동."]],"minor":[["추가","프로필 빌보드 최고순위","수집 시작 이후 빌보드 최고순위 표시."],["추가","스쿼드 완성 · 감독 선임 연출","11명 선발 완료·감독 선임 연출 추가."],["개선","카드 팀케미 디자인","특수카드 테마색 적용 · 목록 순서 통일."],["추가","팀케미 설명","팀케미 문구 추가 · 발동 조건과 구분."],["개선","자동 스크롤","룰렛·선수 선택·배치 시 스크롤 위치 조정."],["개선","포메이션 배치","메인·스냅샷 선수 위치와 간격 정리."],["추가","리롤 플로팅 버튼","우측 하단 리롤 버튼 추가 · 룰렛 이동 연결."],["개선","도전과제 표시","전술가 노트·택틱스 마스터의 포메이션별 완료 표시."],["개선","시즌 스냅샷 기록","득·실·GD 분리 · 확인 가능한 득점자 도움 표시."],["개선","최다득점자 판정","득점 동률 시 도움·평점 순으로 1명 선정."],["개선","빌보드 기록 보완","동일 시즌 기록으로 누락 정보 보완 · TOP 30 득·실·GD 표시."],["추가","우승 시즌 팀 기록 랭킹","팀 득점·최소 실점 TOP 3 추가."],["개선","선호 포메이션 집계","승점 88점 이상 기록으로 집계 기준 변경."]]},{"id":"v1.722-release-20261004","version":"v1.7","title":"프로필과 라운지 대폭 개선","date":"","tag":"v1.7","major":[["추가","프로필 탭","칭호·배지 / 시즌 기록 / 카드 도감 / 팀케미 / 도전과제 구성."],["추가","프로필 공개와 교류","프로필·탭 공개 설정 · 따봉 · 공개 프로필 바로 보기 추가."],["추가","라운지","최근 플레이어·패치노트·건의함 통합 · 최근 플레이어 로그인 후 이용."],["추가","건의함","시즌 3회 완주 후 이용 · 하루 3건·5분 간격 · 처리 상태·운영자 답변 확인."],["변경","메뉴와 게임 시작","우측 고정 메뉴 통합 · 새 시즌 시작 시 포메이션 선택."],["추가","카드·케미 누적 기록","카드별 시즌·골·도움 및 케미별 시즌 기록 · v1.6 수집 시작 이후 완주분 집계."],["추가","최다 기용 카드 TOP 5","선수·시즌별 카드 TOP 5 · 특수카드 테마 배지 표시."],["개선","드래프트 목록 정렬","선택 가능한 선수 우선 · 그룹 내 기존 포지션·능력치 순서 유지."]],"minor":[["개선","칭호 표시","닉네임 아래 칭호 강조 · 클릭 시 상세 카드 표시."],["개선","새 기록 알림","새 기록·패치노트 노란 느낌표 · 항목 확인 시 읽음 처리."],["개선","카드 도감 정리","종류별 소제목·필터 추가 · 수집 필터·검색 유지."],["개선","명예의 전당 표시","선수명 한글화 · 기용 선수·카드·포메이션 순서 정리."],["개선","미수집 카드 표시","미수집 시즌명 가림 · LEGACY XI 시즌명 공개."],["수정","드래프트 배치 강조","드래그 취소·터치 종료 후 가능한 빈자리 강조 유지."]]},{"id":"v1.6","version":"v1.6","title":"플레이 환경 개선","date":"","tag":"v1.6","major":[["개선","UI·모바일 플레이","플로팅 룰렛 버튼 등 UI·모바일 플레이 환경 개선."],["추가","완주 기록 수집","승·무·패, 카드 기용·골·도움, 케미 시즌 기록 수집 시작 · 이전 기록 소급 제외."]],"minor":[["개선","경기 시뮬레이션 표시","경기 진행 정보 가독성 개선."],["개선","스쿼드 스냅샷 패널","시즌 종료 스냅샷 패널 구성 개선."]]},{"id":"v1.5","version":"v1.5","title":"스쿼드와 팀케미 확장","date":"","tag":"v1.5","major":[["추가","스쿼드 스냅샷","최종 스쿼드·팀케미·ATT/MID/DEF/OVR 확인."],["확장","빌보드 스쿼드 보기","빌보드 포메이션·스쿼드 보기 · v1.5 이후 등록분 제공."],["개편","명예의 전당","무패우승 최초 달성·승점 90+ 포메이션 통계 추가."],["확장","팀케미","팀케미 추가 · 정보창·팝업 개편 · 개별 테마 적용."],["추가","특수카드 2종","THE UNSUNG·PASS MASTER 추가."],["확장","포메이션 선택","쓰리백·무작위 포메이션 선택 추가."]],"minor":[["개선","특수카드 연출","카드 등장·애니메이션 효과 개선."],["개선","플레이 속도","시즌 룰렛·일반 경기 시간 단축."],["개선","경기 시뮬레이션 표시","경기 진행 정보 가독성 개선."],["개선","명예의 전당 표시","명예의 전당 기록 표시 개선."],["수정","무패우승 판정","승무패 미확인 기록의 무패우승 판정 제외."]]},{"id":"v1.0","version":"v1.0","title":"첫 킥오프","date":"","tag":"첫 출시","major":[["출시","게임 출시","THE LILYWHITES LEGACY 출시."]],"minor":[]}];
+const PATCHES=[{"id":"v1.9-release","version":"v1.9","title":"선수 사진 추가 (80%) · 성능 최적화","date":"릴리즈","tag":"v1.9","major":[["추가","선수 사진 추가 (80%)","시즌별 선수 사진 · 상세 카드 표시"],["추가","선수 사진 모드","카드/사진 전환 기능 · 선택 모드로 스냅샷 저장"],["추가","카드 클릭 기능","필드·스냅샷·도감 등 카드 클릭 가능 · 클릭 시 상세정보 확인"],["개편","카드 도감 디자인","도감 디자인 리뉴얼"],["추가","자동 로그인","로그인 유지 기능. 로그아웃 시 해제"],["추가","시즌도감 신설","유니폼 등번호 모양의 신규 카드 디자인"],["개선","선수 60종 추가","유의미 시즌의 선수들 추가 생성 (요렌테 등)"],["추가","팀케미 1종 추가","\"베일의 유산\" 추가"]],"minor":[["수정","튕김현상 핫픽스","애니메이션 효과 과다로 인한 튕김 개선"],["수정","칭호 획득 표시 오류","포메이션 관련 칭호에서 오류 수정"],["개선","모바일·태블릿 룰렛 효과 경량화","애니메이션 최적화"],["추가","전체 유저 검색","최근 플레이어에 탭에서 검색 가능"],["추가","선수 등번호","시즌별 등번호 정보 수록"],["수정","모바일 스냅샷 저장 개선","효과가 깨져보이는 것을 수정"],["개선","빌보드 개선","시인성 개선, 명예의 전당 순위 확대"],["개선","팀 능력치 추가 표시","소수점 둘째 자리까지 표시"],["추가","건의 이미지 첨부","건의에 이미지 첨부 · 미리보기와 개별/전체 다운로드 지원"],["추가","룰렛 드래프트 목록 등번호 모드 신설","기본 / 등번호 토글 · 시즌도감의 유니폼 이름과 등번호 표시"]]},{"id":"v1.8-release","version":"v1.8","title":"룰렛 디자인 · 카드 애니메이션 개선 및 가이드 · 단축키 추가","date":"","tag":"v1.8","major":[["개선","룰렛 디자인","회전감·금빛 스파크 강화 · 상태등·선수 카운터 통합."],["개선","카드 애니메이션","카드별 연출·테두리 광택·음각 효과 개선."],["추가","게임 가이드 · PC 단축키","플레이·능력치·겨울 이적시장 가이드 및 PC 단축키 추가."],["추가","새로운 카드 팀케미","「새로운 물결」·「트로이카」 2종 추가."],["추가","도전과제 다수 추가","시즌·스쿼드·이적시장·카드 수집 도전과제 추가."],["개선","겨울 이적시장 진행","교체 결과·팀케미 변동 확인 후 버튼으로 후반기 재개."],["개선","도전과제 · 컬렉션 분류","도전과제·컬렉션 분류 소제목 추가."],["추가","알림확인기능","새 획득·달성 내역 확인 및 해당 항목 바로 이동."]],"minor":[["추가","프로필 빌보드 최고순위","수집 시작 이후 빌보드 최고순위 표시."],["추가","스쿼드 완성 · 감독 선임 연출","11명 선발 완료·감독 선임 연출 추가."],["개선","카드 팀케미 디자인","특수카드 테마색 적용 · 목록 순서 통일."],["추가","팀케미 설명","팀케미 문구 추가 · 발동 조건과 구분."],["개선","자동 스크롤","룰렛·선수 선택·배치 시 스크롤 위치 조정."],["개선","포메이션 배치","메인·스냅샷 선수 위치와 간격 정리."],["추가","리롤 플로팅 버튼","우측 하단 리롤 버튼 추가 · 룰렛 이동 연결."],["개선","도전과제 표시","전술가 노트·택틱스 마스터의 포메이션별 완료 표시."],["개선","시즌 스냅샷 기록","득·실·GD 분리 · 확인 가능한 득점자 도움 표시."],["개선","최다득점자 판정","득점 동률 시 도움·평점 순으로 1명 선정."],["개선","빌보드 기록 보완","동일 시즌 기록으로 누락 정보 보완 · TOP 30 득·실·GD 표시."],["추가","우승 시즌 팀 기록 랭킹","팀 득점·최소 실점 TOP 3 추가."],["개선","선호 포메이션 집계","승점 88점 이상 기록으로 집계 기준 변경."]]},{"id":"v1.722-release-20261004","version":"v1.7","title":"프로필과 라운지 대폭 개선","date":"","tag":"v1.7","major":[["추가","프로필 탭","칭호·배지 / 시즌 기록 / 카드 도감 / 팀케미 / 도전과제 구성."],["추가","프로필 공개와 교류","프로필·탭 공개 설정 · 따봉 · 공개 프로필 바로 보기 추가."],["추가","라운지","최근 플레이어·패치노트·건의함 통합 · 최근 플레이어 로그인 후 이용."],["추가","건의함","시즌 3회 완주 후 이용 · 하루 3건·5분 간격 · 처리 상태·운영자 답변 확인."],["변경","메뉴와 게임 시작","우측 고정 메뉴 통합 · 새 시즌 시작 시 포메이션 선택."],["추가","카드·케미 누적 기록","카드별 시즌·골·도움 및 케미별 시즌 기록 · v1.6 수집 시작 이후 완주분 집계."],["추가","최다 기용 카드 TOP 5","선수·시즌별 카드 TOP 5 · 특수카드 테마 배지 표시."],["개선","드래프트 목록 정렬","선택 가능한 선수 우선 · 그룹 내 기존 포지션·능력치 순서 유지."]],"minor":[["개선","칭호 표시","닉네임 아래 칭호 강조 · 클릭 시 상세 카드 표시."],["개선","새 기록 알림","새 기록·패치노트 노란 느낌표 · 항목 확인 시 읽음 처리."],["개선","카드 도감 정리","종류별 소제목·필터 추가 · 수집 필터·검색 유지."],["개선","명예의 전당 표시","선수명 한글화 · 기용 선수·카드·포메이션 순서 정리."],["개선","미수집 카드 표시","미수집 시즌명 가림 · LEGACY XI 시즌명 공개."],["수정","드래프트 배치 강조","드래그 취소·터치 종료 후 가능한 빈자리 강조 유지."]]},{"id":"v1.6","version":"v1.6","title":"플레이 환경 개선","date":"","tag":"v1.6","major":[["개선","UI·모바일 플레이","플로팅 룰렛 버튼 등 UI·모바일 플레이 환경 개선."],["추가","완주 기록 수집","승·무·패, 카드 기용·골·도움, 케미 시즌 기록 수집 시작 · 이전 기록 소급 제외."]],"minor":[["개선","경기 시뮬레이션 표시","경기 진행 정보 가독성 개선."],["개선","스쿼드 스냅샷 패널","시즌 종료 스냅샷 패널 구성 개선."]]},{"id":"v1.5","version":"v1.5","title":"스쿼드와 팀케미 확장","date":"","tag":"v1.5","major":[["추가","스쿼드 스냅샷","최종 스쿼드·팀케미·ATT/MID/DEF/OVR 확인."],["확장","빌보드 스쿼드 보기","빌보드 포메이션·스쿼드 보기 · v1.5 이후 등록분 제공."],["개편","명예의 전당","무패우승 최초 달성·승점 90+ 포메이션 통계 추가."],["확장","팀케미","팀케미 추가 · 정보창·팝업 개편 · 개별 테마 적용."],["추가","특수카드 2종","THE UNSUNG·PASS MASTER 추가."],["확장","포메이션 선택","쓰리백·무작위 포메이션 선택 추가."]],"minor":[["개선","특수카드 연출","카드 등장·애니메이션 효과 개선."],["개선","플레이 속도","시즌 룰렛·일반 경기 시간 단축."],["개선","경기 시뮬레이션 표시","경기 진행 정보 가독성 개선."],["개선","명예의 전당 표시","명예의 전당 기록 표시 개선."],["수정","무패우승 판정","승무패 미확인 기록의 무패우승 판정 제외."]]},{"id":"v1.0","version":"v1.0","title":"첫 킥오프","date":"","tag":"첫 출시","major":[["출시","게임 출시","THE LILYWHITES LEGACY 출시."]],"minor":[]}];
 let currentPatchVersion='v1.9';
 const cats={content:'콘텐츠',card:'특수카드',chemistry:'팀케미',bug:'불편사항 / 오류',other:'기타'};
 const statuses={received:'접수',reviewing:'검토 중',planned:'반영 예정',done:'반영 완료',held:'보류'};
@@ -24210,6 +24253,13 @@ function closePlayerCardDetail(){const o=document.getElementById('playerCardDeta
  .roulette-box.roulette-click-step .roulette-pointer,
  .roulette-box.roulette-lock-step .roulette-pointer{animation:none!important}
 }
+.candidate-season{display:flex;justify-content:space-between;align-items:center;gap:10px}.candidate-season .draft-view-switch{position:static;flex:none}
+.draft-number-art{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.draft-number-mode .prepick-row{position:relative}.draft-number-mode .prepick-name,.draft-number-mode .prepick-season{visibility:hidden}
+.draft-number-mode .prepick-positions{position:absolute;left:10px;top:6px;height:auto!important;display:flex!important;flex-direction:column;align-items:flex-start!important;gap:0!important;padding:0!important;line-height:1.02!important;white-space:normal;font-size:0!important}.draft-number-mode .prepick-positions span{display:block;font-size:12px!important}
+.draft-number-art>.draft-jersey-source.season-field-card{position:absolute!important;display:block!important;container-type:inline-size;background:none!important;border-color:transparent!important;box-shadow:none!important;outline:none!important;padding:0!important;margin:0!important;pointer-events:none}
+.draft-number-art>.draft-jersey-source.season-field-card::before,.draft-number-art>.draft-jersey-source.season-field-card::after{display:none!important}
+.draft-number-unknown{display:flex;flex-direction:column;align-items:center;justify-content:center;max-width:48%;font-family:LilySpursNumber,sans-serif}.draft-number-unknown span{font-size:14px;text-align:center;line-height:1.1}.draft-number-unknown strong{font-size:32px;line-height:1.1;font-weight:400}
 </style>
 <style id="draft-footer-alignment">.prepick-row>.prepick-nationality,.prepick-row>.prepick-status{align-self:center!important;display:flex;align-items:center;min-height:18px;line-height:18px}.prepick-row>.prepick-status{justify-content:flex-end}.prepick-row .prepick-tenure{margin:0!important;line-height:18px!important}.prepick-row .draft-nation-badge{display:inline-flex;align-items:center;line-height:18px}</style><style>#profileTitleOverlay.title-acquisition .title-detail-card{animation:titleAwardFadeIn .3s ease-out}#profileTitleOverlay.title-acquisition .title-detail-kicker{color:#ecd493;font-size:13px;letter-spacing:1px}@keyframes titleAwardFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@media(prefers-reduced-motion:reduce){#profileTitleOverlay.title-acquisition .title-detail-card{animation:none}}</style><script>const titleAcquisitionMemory=new Map();
 let titleAcquisitionActive=null,titleAcquisitionReadyAt=0;
