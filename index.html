@@ -10524,7 +10524,7 @@ body:has(#startupModal.show) #gameMenuButton{visibility:hidden}
 .profile-remember-nickname{display:flex;align-items:center;gap:8px;width:fit-content;margin:12px 0 4px;color:#b7c8e0;font-size:13px;cursor:pointer;user-select:none}.profile-remember-nickname input{width:16px;height:16px;margin:0;accent-color:#d7b66e;cursor:pointer}
 </style>
 <script id="game-build-version">
-const LILY_BUILD_VERSION="v1.957";
+const LILY_BUILD_VERSION="v1.958";
 // 제작 식별 기록: 토트넘 공식 팬카페 릴리화이트 웅이
 const LILY_CREATION_ID = Object.freeze({
   origin: "토트넘 공식 팬카페 릴리화이트 웅이",
@@ -11601,7 +11601,7 @@ card.classList.add('field-effects-reveal');card.prepend(art);
   <div class="hero">
     <div class="brand">
       <img class="brand-logo" data-lily-asset="asset12" alt="THE LILYWHITES LEGACY" />
-      <p class="game-version-line"><span id="gameBuildVersion" class="game-version-badge">v1.957</span><span>토트넘 시즌 드래프트 비영리 팬게임</span></p>
+      <p class="game-version-line"><span id="gameBuildVersion" class="game-version-badge">v1.958</span><span>토트넘 시즌 드래프트 비영리 팬게임</span></p>
     </div>
     <div class="hero-account-actions">
       <button id="profileFab" class="profile-fab" type="button">MY PROFILE · LOGIN</button>
@@ -11615,7 +11615,7 @@ card.classList.add('field-effects-reveal');card.prepend(art);
   </div>
   <div id="startupModal" class="formation-modal show" aria-hidden="false">
     <div class="formation-modal-card startup-modal-card">
-      <div id="startupLogoSlot" class="startup-logo-slot"></div><div style="text-align:center;margin:4px 0 12px"><span id="startupBuildVersion" class="game-version-badge">v1.957</span></div>
+      <div id="startupLogoSlot" class="startup-logo-slot"></div><div style="text-align:center;margin:4px 0 12px"><span id="startupBuildVersion" class="game-version-badge">v1.958</span></div>
       <div class="formation-disclaimer startup-guide">
         <strong>안내</strong>
         <p>본 게임은 토트넘팬이 만든 <strong class="guide-accent-blue">비영리 팬메이드 게임</strong>입니다.</p>
@@ -22083,7 +22083,7 @@ function beginStartupGuest(){
 
 // Only explicit new-game actions check for a deployment; never interrupt a season.
 const lilyDeploymentUpdate=(()=>{
- const deployment='3c80a85cdb20e610049d1978',pendingKey='lily-update-new-game',attemptKey='lily-update-attempt';
+ const deployment='f43dc617b0fb6528472c3f7e',pendingKey='lily-update-new-game',attemptKey='lily-update-attempt';
  let checking=null;
  function enabled(){return !window.LILY_PHOTO_LAYOUT_EDITOR&&!window.LILY_CATALOG_PREVIEW_CAPTURE&&location.protocol==='https:'&&location.hostname==='woong14.github.io'&&['/the-lilywhites-38/','/the-lilywhites-38/index.html'].includes(location.pathname)}
  function notice(){
@@ -22097,7 +22097,7 @@ const lilyDeploymentUpdate=(()=>{
    const url=new URL('update-manifest.json',location.href);url.searchParams.set('check',Date.now());
    const response=await fetch(url,{cache:'no-store',signal:controller.signal});if(!response.ok)return false;
    const latest=await response.json();
-   if(!/^v\d+\.\d{3}$/.test(latest.version)||!/^\d{4}-\d{2}-\d{2}T/.test(latest.builtAt)||!/^[a-f0-9]{24}$/.test(latest.deployment)||latest.deployment===deployment||Number(latest.version.slice(1))<Number('v1.957'.slice(1)))return false;
+   if(!/^v\d+\.\d{3}$/.test(latest.version)||!/^\d{4}-\d{2}-\d{2}T/.test(latest.builtAt)||!/^[a-f0-9]{24}$/.test(latest.deployment)||latest.deployment===deployment||Number(latest.version.slice(1))<Number('v1.958'.slice(1)))return false;
    const last=JSON.parse(sessionStorage.getItem(attemptKey)||'null');if(last?.deployment===latest.deployment&&Date.now()-last.time<60000)return false;
    sessionStorage.setItem(pendingKey,JSON.stringify({time:Date.now()}));sessionStorage.setItem(attemptKey,JSON.stringify({deployment:latest.deployment,time:Date.now()}));
    const target=new URL(location.href);target.searchParams.set('lily-update',latest.deployment);notice();
@@ -22107,7 +22107,8 @@ const lilyDeploymentUpdate=(()=>{
   }catch(_){return false}finally{clearTimeout(timer)}
  }
  return {beforeStart(){if(!enabled())return Promise.resolve(false);if(!checking)checking=check().finally(()=>{checking=null});return checking},
-  resume(){if(!enabled())return;try{sessionStorage.removeItem(pendingKey);const url=new URL(location.href);if(url.searchParams.has('lily-update')){url.searchParams.delete('lily-update');history.replaceState(null,'',url.href)}}catch(_){}},deployment};
+  // Keep the deployment URL so a later browser reload uses the same cache key.
+  resume(){if(!enabled())return;try{sessionStorage.removeItem(pendingKey)}catch(_){}},deployment};
 })();
 let lilyNewGameStarting=false;
 async function reset(skipUpdate=false){
