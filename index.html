@@ -15154,8 +15154,14 @@ const LILY_PLAYER_SHIRT_NAMES=Object.freeze({
   "Yves Bissouma": "BISSOUMA",
   "Øyvind Leonhardsen": "LEONHARDSEN"
 });
-function playerShirtNumber(player){return LILY_PLAYER_SHIRT_NUMBERS[player.name+'::'+player.season]??null}
-function playerShirtName(player){if(player.name==='Dele Alli'&&player.season==='2015/16')return 'ALLI';return LILY_PLAYER_SHIRT_NAMES[player.name]||player.name.toUpperCase()}
+// Shirt details are optional. Missing player/season data (including managers) never blocks a card.
+function playerShirtNumber(player){
+ if(!player||typeof player.name!=='string'||!player.name||typeof player.season!=='string'||!player.season)return null;
+ const number=LILY_PLAYER_SHIRT_NUMBERS[player.name+'::'+player.season];
+ if(typeof number==='number')return Number.isSafeInteger(number)&&number>=0?number:null;
+ return typeof number==='string'&&/^\d+$/.test(number)?number:null;
+}
+function playerShirtName(player){if(!player||typeof player.name!=='string')return '';if(player.name==='Dele Alli'&&player.season==='2015/16')return 'ALLI';return LILY_PLAYER_SHIRT_NAMES[player.name]||player.name.toUpperCase()}
 function playerShirtNumberHtml(player,compact=false){const number=playerShirtNumber(player);if(number==null)return '';return compact?`<span class="season-card-number" aria-label="등번호 ${number}">${number}</span>`:`<div class="player-shirt-number" aria-label="등번호 ${number}"><small>NO.</small><b>${number}</b></div>`}
 function getTierClass(ovr, prime=false, wonder=false, legend=false, passmaster=false, toty=false, goldenBoot=false, unsung=false, hero=false, winner=false, sol=false, captain=false, debut=false){
   if(sol) return "tier-sol";
